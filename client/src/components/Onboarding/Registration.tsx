@@ -148,7 +148,11 @@ export default function Registration() {
         </div>
 
         <div className="pt-4 w-[70%] mx-auto">
-          <button type="submit" className="btn" disabled={isSubmitting}>
+          <button
+            type="submit"
+            className="btn cursor-pointer"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? "Creating Account..." : "Create Account"}
           </button>
 
