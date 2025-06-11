@@ -102,7 +102,11 @@ export const LoginIn = () => {
         </div>
 
         <div className="pt-4 w-[70%]  mx-auto">
-          <button type="submit" className="btn w-full" disabled={isSubmitting}>
+          <button
+            type="submit"
+            className="btn w-full cursor-pointer"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? "Logging in..." : "Login"}
           </button>
 
