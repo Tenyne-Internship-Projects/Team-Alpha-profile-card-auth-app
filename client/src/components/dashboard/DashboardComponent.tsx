@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Menu,
   X,
@@ -20,8 +21,12 @@ import {
   Sun,
 } from "lucide-react";
 import UploadDocument from "./UploadDocument";
+import { useAuth } from "../../hooks/useAuth";
+import type { AuthContextType } from "../../types/user";
 
 const DashboardComponent = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth() as AuthContextType;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -48,7 +53,7 @@ const DashboardComponent = () => {
     // { icon: Calendar, label: "Calendar" },
     // { icon: Mail, label: "Messages" },
     { icon: Settings, label: "Settings" },
-    { icon: Power, label: "Logout" },
+    // { icon: Power, label: "Logout" },
   ];
 
   const toggleSidebar = () => {
@@ -57,6 +62,11 @@ const DashboardComponent = () => {
     } else {
       setSidebarCollapsed(!sidebarCollapsed);
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
   };
 
   return (
@@ -155,6 +165,15 @@ const DashboardComponent = () => {
                 </a>
               );
             })}
+
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="flex items-center px-3 py-3 rounded-lg text-sm font-medium text-white hover:bg-gray-50 hover:text-gray-900 transition-all duration-200"
+            >
+              <Power className="w-5 h-5 mr-3" />
+              Logout
+            </button>
           </nav>
 
           {/* User Profile */}

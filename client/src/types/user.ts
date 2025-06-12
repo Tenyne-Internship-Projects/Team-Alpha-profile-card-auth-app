@@ -12,13 +12,13 @@ export interface User {
 export interface AuthContextType {
   user: User | null;
   token: string | null;
-  refreshToken: string | null;
-  isLoading: boolean;
+  // refreshToken: string | null;
+  // isLoading: boolean;
   isAuthenticated: boolean;
-  login: (credentials: LoginCredentials) => Promise<void>;
-  register: (userData: RegisterData) => Promise<void>;
+  login: (token: string) => Promise<void>;
+  register: (token: string) => Promise<void>;
   logout: () => void;
-  refreshAuthToken: () => Promise<void>;
+  // refreshAuthToken: () => Promise<void>;
 }
 
 export interface LoginCredentials {
@@ -31,8 +31,8 @@ export interface RegisterData {
   name: string;
   email: string;
   password: string;
-  confirmPassword: string;
-  acceptTerms?: boolean;
+  // confirmPassword: string;
+  // acceptTerms?: boolean;
 }
 
 export interface ApiResponse<T> {
@@ -46,4 +46,13 @@ export interface AuthResponse {
   token: string;
   refreshToken: string;
   expiresIn: number;
+}
+
+export interface ApiError {
+  response?: {
+    data?: {
+      message: string;
+    };
+  };
+  message: string;
 }

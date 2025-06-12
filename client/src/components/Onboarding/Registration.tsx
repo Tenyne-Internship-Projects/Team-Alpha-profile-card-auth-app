@@ -1,17 +1,22 @@
 import { useForm } from "react-hook-form";
-import axios from "../../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
+// import { useAuth } from "../../hooks/useAuth";
+import axios from "../../services/axiosInstance";
+// import type { AuthContextType } from "../../types/user";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 interface RegisterForm {
   fullname: string;
   email: string;
   password: string;
-  confirmPassword: string;
-  terms: boolean;
+  // confirmPassword: string;
+  // terms: boolean;
 }
 
 export default function Registration() {
   const navigate = useNavigate();
+  // const { register: registerUser } = useAuth() as AuthContextType;
 
   const {
     register,
@@ -23,23 +28,30 @@ export default function Registration() {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      await axios.post("/register", data);
-      alert(
+      const res = await axios.post("/register", data);
+      register(res.data.token);
+      toast.success(
         "✅ Registration successful. Please check your email to verify your account."
       );
+      // alert(
+      //   "✅ Registration successful. Please check your email to verify your account."
+      // );
       reset();
+      navigate(`/proceed-to-email?email=${data.email}`);
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
 
-      // Navigate to check-email page with email as state
-      navigate(`/verify-email?email=${data.email}`);
-    } catch (err: any) {
-      alert("❌ " + (err.response?.data?.message || "Something went wrong."));
+      const errorMessage =
+        error.response?.data?.message || "Invalid credentials.";
+
+      toast.error("❌ " + errorMessage);
     }
   };
 
   // const password = watch("password");
 
   return (
-    <div className="grid h-screen max-lg:pt-16 bg-gray-100 lg:bg-purple-950 md:flex justify-between ">
+    <div className="grid h-screen pt-5 lg:pt-16 bg-gray-100 lg:bg-purple-950 md:flex lg:justify-between">
       <div className="text-center lg:w-1/2 grid place-content-center">
         <h3 className="h3 lg:text-white">Welcome to Freebio</h3>
         <p className="p1 mt-3 lg:text-white">Sign Up and start freelancing</p>
@@ -47,9 +59,9 @@ export default function Registration() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white flex flex-col items-center justify-center   lg:w-1/2  pt-10 px-5 rounded-l-[40px] max-lg:rounded-t-[40px] shadow-md w-full h-full md:w-[80%] max-lg:mx-auto space-y-4"
+        className="bg-white flex flex-col justify-between lg:justify-center lg:w-1/2  py-10 px-5 lg:rounded-l-[40px] max-lg:rounded-t-[20px] shadow-md w-full h-full md:w-[80%] max-lg:mx-auto space-y-4"
       >
-        <div className="space-y-4 w-[70%]  mx-auto  ">
+        <div className="space-y-4 lg:w-[70%]  lg:mx-auto">
           {/* Full Name */}
           <div className="w-full">
             <input
@@ -147,7 +159,7 @@ export default function Registration() {
           )} */}
         </div>
 
-        <div className="pt-4 w-[70%] mx-auto">
+        <div className="pt-4 w-full  lg:w-[70%]  mx-auto">
           <button
             type="submit"
             className="btn cursor-pointer"

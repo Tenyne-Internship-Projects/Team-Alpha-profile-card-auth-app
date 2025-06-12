@@ -3,9 +3,12 @@ import type { ReactNode } from "react";
 import type {
   AuthContextType,
   User,
-  RegisterData,
-  LoginCredentials,
+  // RegisterData,
+  // LoginCredentials,
 } from "../types/user";
+// import axios from "axios";
+// import axiosInstance from "../services/axiosInstance";
+// import axios from "../services/axiosInstance";
 // import type { IFreelancerProfile } from "../types/profile";
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -19,8 +22,8 @@ interface AuthProviderProps {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  // const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  // const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
   useEffect(() => {
@@ -32,16 +35,41 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   }, []);
 
-  const login = async (credentials: LoginCredentials) => {
-    // Implement login logic
-    credentials;
+  const login = async (token: string) => {
+    localStorage.setItem("token", token);
+    setToken(token);
+    setIsAuthenticated(true);
+    // You might want to fetch user info here using the token
+    setUser({ id: "", email: "", name: "" }); // Placeholder, should fetch user info
   };
 
-  const register = async (userData: RegisterData) => {
-    // Implement register logic
-    userData;
-    setIsLoading(true);
-    setRefreshToken("666");
+  const register = async (token: string) => {
+    localStorage.setItem("token", token);
+    setToken(token);
+    setIsAuthenticated(true);
+    // You might want to fetch user info here using the token
+    setUser({ id: "", email: "", name: "" }); // Placeholder, should fetch user info
+    // try {
+    //   setIsLoading(true);
+    //   const response = await axios.post("/register", userData);
+    //   const { token } = response.data;
+
+    //    Store token and update auth state
+    //   localStorage.setItem("token", token);
+    //   setToken(token);
+    //   setIsAuthenticated(true);
+    //   setUser({ id: "", email: "", name: "" });  Placeholder, should fetch user info
+
+    //   return response.data;
+    // } catch (error: any) {
+    //   console.error(
+    //     "Registration error:",
+    //     error.response?.data || error.message
+    //   );
+    //   throw error;
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   const logout = () => {
@@ -51,22 +79,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsAuthenticated(false);
   };
 
-  const refreshAuthToken = async () => {
-    // Implement token refresh logic
-  };
+  // const refreshAuthToken = async () => {
+  //    Implement token refresh logic
+  // };
 
   return (
     <AuthContext.Provider
       value={{
         user,
         token,
-        refreshToken,
-        isLoading,
+        // refreshToken,
+        // isLoading,
         isAuthenticated,
         login,
         register,
         logout,
-        refreshAuthToken,
+        // refreshAuthToken,
       }}
     >
       {children}
