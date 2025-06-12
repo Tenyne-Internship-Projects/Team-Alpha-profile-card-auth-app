@@ -9,26 +9,37 @@ export default function VerifyEmail() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white p-6 rounded-xl shadow-md w-full max-w-md text-center space-y-4">
-        <h2 className="text-2xl font-semibold text-gray-800">
-          Check Your Email
-        </h2>
-        <p className="text-gray-600">A verification link has been sent to:</p>
-        <p className="font-semibold text-blue-600">{email}</p>
+    <div className="grid h-screen pt-5 lg:pt-16 bg-gray-100 lg:bg-purple-950 md:flex lg:justify-between">
+      <div className="text-center lg:w-1/2 grid place-content-center">
+        <h3 className="h3 lg:text-white">Login into your Account</h3>
+        <p className="p1 mt-3 lg:text-white">Sign In and start freelancing</p>
+      </div>
 
-        <a
-          href={getInboxLink(email)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-        >
-          Open Email Inbox
-        </a>
+      <div className="bg-white  text-center flex flex-col justify-between lg:justify-center lg:w-1/2  py-10 px-5 lg:rounded-l-[40px] max-lg:rounded-t-[20px] shadow-md w-full h-full md:w-[80%] max-lg:mx-auto space-y-4">
+        <div className="w-full lg:w-[70%] mx-auto">
+          <img
+            src="/onboarding/emailIcon.png"
+            alt=""
+            className="w-[104px] mx-auto"
+          />
+          <p className="text-gray-600">A verification link has been sent to:</p>
+          <p className="font-semibold text-[#552EA4]">{email}</p>
+        </div>
 
-        <p className="text-sm text-gray-500 mt-2">
-          Didn’t get the email? Check your spam folder or try again.
-        </p>
+        <div className="w-full lg:w-[70%] mx-auto">
+          <a
+            href={getInboxLink(email)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block w-full mt-4 px-4 py-2 bg-[#552EA4] text-white rounded hover:bg-[#552EA4]/60 transition"
+          >
+            Verify Email
+          </a>
+
+          <p className="text-sm text-gray-500 mt-2">
+            Didn’t get the email? Check your spam folder or try again.
+          </p>
+        </div>
       </div>
     </div>
   );

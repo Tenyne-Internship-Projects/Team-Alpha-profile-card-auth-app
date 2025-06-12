@@ -1,13 +1,18 @@
+import { Navigate } from "react-router-dom";
 import Registration from "../components/Onboarding/Registration";
+import { useAuth } from "../hooks/useAuth";
+import { AuthContextType } from "../types/user";
 
 const Register = () => {
-  return (
-    <section>
-      <div>
-        <Registration />
-      </div>
-    </section>
-  );
+  const { user } = useAuth() as AuthContextType;
+  return user ? <Navigate to="/dashboard" /> : <Registration />;
+  // return (
+  //   <section>
+  //     <div>
+  //       <Registration />
+  //     </div>
+  //   </section>
+  // );
 };
 
 export default Register;

@@ -2,6 +2,8 @@ import { useState, useEffect, type ChangeEvent, type FormEvent } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import type { AuthContextType } from "../../types/user";
 import axios from "../../services/axiosInstance";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 interface DashboardProfileForm {
   name: string;
@@ -59,7 +61,12 @@ export const ProfileForm = () => {
       });
       setMessage("✅ Profile saved!");
     } catch (err) {
-      setMessage("❌ Error saving profile.");
+      const error = err as AxiosError<{ message: string }>;
+
+      const errorMessage =
+        error.response?.data?.message || "Invalid credentials.";
+
+      toast.error("❌ " + errorMessage);
     }
     setLoading(false);
   };

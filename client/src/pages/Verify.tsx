@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "../services/axiosInstance";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
 export default function VerifyPage() {
   const navigate = useNavigate();
@@ -18,8 +20,13 @@ export default function VerifyPage() {
         setTimeout(() => {
           navigate("/login");
         }, 3000);
-      } catch (err: any) {
-        setStatus("❌ Verification failed. Link may be invalid or expired.");
+      } catch (err) {
+        const error = err as AxiosError<{ message: string }>;
+
+        const errorMessage =
+          error.response?.data?.message || "Invalid credentials.";
+
+        toast.error("❌ " + errorMessage);
       }
     };
 

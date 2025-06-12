@@ -21,7 +21,7 @@
   }
 
   input {
-    @apply border outline-none w-full border-[#552EA4] text-base px-5 md:px-10 py-2 md:py-4;
+    @apply border rounded-xl outline-none w-full border-[#552EA4] text-base px-5 md:px-10 py-3 md:py-4;
   }
 
   .btn {
