@@ -10,6 +10,8 @@ import Home from "./pages/Home";
 import Welcome from "./pages/Welcome";
 import { Toaster } from "react-hot-toast";
 import VerifyPage from "./pages/Verify";
+// import UserDetail from "./components/home/UserDetails";
+import UserDetails from "./pages/UserDetail";
 
 function App() {
   return (
@@ -23,6 +25,7 @@ function App() {
           <Route path="/welcome" element={<Welcome />} />
           <Route path="/verify-email" element={<VerifyPage />} />
           <Route path="/proceed-to-email" element={<VerifyEmail />} />
+          <Route path="/users/:id" element={<UserDetails />} />
           {/* <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
           </Route> */}

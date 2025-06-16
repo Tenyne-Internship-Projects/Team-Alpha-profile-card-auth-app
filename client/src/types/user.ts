@@ -15,8 +15,8 @@ export interface AuthContextType {
   // refreshToken: string | null;
   // isLoading: boolean;
   isAuthenticated: boolean;
-  login: (token: string) => Promise<void>;
-  register: (token: string) => Promise<void>;
+  login: (token: string, userData: User) => Promise<void>;
+  register: (token: string, userData: User) => Promise<void>;
   logout: () => void;
   // refreshAuthToken: () => Promise<void>;
 }
@@ -56,3 +56,59 @@ export interface ApiError {
   };
   message: string;
 }
+
+export interface IUserProfile {
+  id: string;
+  fullname: string;
+  email: string;
+  password: string;
+  createdAt: string;
+  avatarUrl: string;
+  bio: string;
+  dateOfBirth: string;
+  documents: string[];
+  fullName: string;
+  gender: string;
+  github: string | null;
+  // id: string;
+  isAvailable: boolean;
+  linkedIn: string | null;
+  location: string;
+  phoneNumber: string;
+  primaryEmail: string;
+  profession: string;
+  salaryExpectation: number | null;
+  skills: string[];
+  specialization: string;
+  updatedAt: string;
+  userId: string;
+}
+
+// export interface IUserProfile {
+//   id: string;
+//   fullname: string;
+//   email: string;
+//   password: string;
+//   createdAt: string;
+//   profile: {
+//     avatarUrl: string;
+//     bio: string;
+//     dateOfBirth: string;
+//     documents: string[];
+//     fullName: string;
+//     gender: string;
+//     github: string | null;
+//     id: string;
+//     isAvailable: boolean;
+//     linkedIn: string | null;
+//     location: string;
+//     phoneNumber: string;
+//     primaryEmail: string;
+//     profession: string;
+//     salaryExpectation: number | null;
+//     skills: string[];
+//     specialization: string;
+//     updatedAt: string;
+//     userId: string;
+//   };
+// }

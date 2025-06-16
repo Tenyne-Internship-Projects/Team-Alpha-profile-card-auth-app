@@ -1,6 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../../services/axiosInstance";
+import { useAuth } from "../../hooks/useAuth";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
+import type { AuthContextType } from "../../types/user";
 
 const SettingsContent = () => {
+  const navigate = useNavigate();
+  const { logout, user } = useAuth() as AuthContextType;
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const [settings, setSettings] = useState({
     emailNotifications: true,
     smsNotifications: false,
@@ -15,6 +25,36 @@ const SettingsContent = () => {
       ...prev,
       [setting]: !prev[setting],
     }));
+  };
+
+  const handleDeleteAccount = async () => {
+    if (
+      !confirm(
+        "Are you sure you want to delete your account? This action cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    if (!user?.id) {
+      toast.error("❌ User ID not found. Please try logging in again.");
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      await axios.delete(`/profile/${user.id}`);
+      toast.success("Account deleted successfully");
+      logout();
+      navigate("/");
+    } catch (error) {
+      const axiosError = error as AxiosError<{ message: string }>;
+      const errorMessage =
+        axiosError.response?.data?.message || "Failed to delete account";
+      toast.error("❌ " + errorMessage);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -118,18 +158,11 @@ const SettingsContent = () => {
                 </p>
               </div>
               <button
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                onClick={() => {
-                  if (
-                    confirm(
-                      "Are you sure you want to delete your account? This action cannot be undone."
-                    )
-                  ) {
-                    alert("Account deletion process initiated.");
-                  }
-                }}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={handleDeleteAccount}
+                disabled={isDeleting}
               >
-                Delete Account
+                {isDeleting ? "Deleting..." : "Delete Account"}
               </button>
             </div>
           </div>

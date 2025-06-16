@@ -1,3 +1,4 @@
+import UserList from "../components/home/UserLists";
 import Navbar from "../components/Navbar";
 import ProfilePage from "../components/ProfilePage";
 
@@ -6,6 +7,7 @@ const Home = () => {
     <div>
       <Navbar isAuthenticated={false} onLogout={() => {}} />
       <ProfilePage />
+      <UserList />
     </div>
   );
 };
