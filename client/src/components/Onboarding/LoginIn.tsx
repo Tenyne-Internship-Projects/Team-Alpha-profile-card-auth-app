@@ -195,7 +195,7 @@ export const LoginIn = () => {
           </button>
 
           <p className="text-sm mt-4 text-center text-black/70">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <span
               onClick={() => navigate("/register")}
               className="text-[#552EA4] cursor-pointer underline"

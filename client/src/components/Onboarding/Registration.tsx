@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import axios from "../../services/axiosInstance";
-import toast from "react-hot-toast";
+// import toast from "react-hot-toast";
 import { AxiosError } from "axios";
 
 interface RegisterForm {
@@ -33,21 +33,36 @@ export default function Registration() {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
+      // console.log("Attempting registration with:", {
+      //   ...data,
+      //   password: "***",
+      // });
       const res = await axios.post("/auth/register", data);
-      register(res.data.token, res.data.user);
-      toast.success(
-        "✅ Registration successful. Please check your email to verify your account."
-      );
+      // console.log("Registration response:", res.data);
+      // console.log(res.data.token);
 
-      reset();
-      navigate(`/proceed-to-email?email=${data.email}`);
+      if (res.data.token) {
+        register(res.data.token);
+        // toast.success(
+        //   "✅ Registration successful. Please check your email to verify your account."
+        // );
+        reset();
+        navigate(`/proceed-to-email?email=${data.email}`);
+      } else {
+        throw new Error("No token received from server");
+      }
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
+      console.error("Registration error:", {
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message,
+      });
 
-      const errorMessage =
-        error.response?.data?.message || "Invalid credentials.";
-
-      toast.error("❌ " + errorMessage);
+      // const errorMessage =
+      //   error.response?.data?.message ||
+      //   "Registration failed. Please try again.";
+      // toast.error("❌ " + errorMessage);
     }
   };
 

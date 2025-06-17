@@ -71,15 +71,15 @@ const ProfilePage: React.FC = () => {
         <div className="p-6">
           {/* Welcome Text */}
           <div className="text-center mb-4">
-            <p className="text-purple-600 font-medium text-sm mb-1">Welcome</p>
-            <h1 className="text-2xl font-bold text-purple-800 mb-1">
+            <p className="text-[#5A399D] font-medium text-sm mb-1">Welcome</p>
+            <h1 className="text-2xl font-bold text-[#5A399D] mb-1">
               {userData.name}
             </h1>
             <p className="text-gray-600 text-sm">{userData.title}</p>
 
             {/* Verified Badge */}
             <div className="flex items-center justify-center mt-2">
-              <div className="flex items-center bg-purple-600 text-white px-3 py-1 rounded-full text-xs">
+              <div className="flex items-center bg-[#5A399D] text-white px-3 py-1 rounded-full text-xs">
                 <Check className="w-3 h-3 mr-1" />
                 Verified
               </div>
@@ -88,14 +88,14 @@ const ProfilePage: React.FC = () => {
 
           {/* Action Buttons */}
           <div className="flex gap-2 mb-6">
-            <button className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex-1">
+            <button className="bg-[#5A399D] text-white px-4 py-2 rounded-lg text-sm font-medium flex-1">
               HIRE ME
             </button>
-            <button className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1">
+            <button className="bg-[#5A399D] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1">
               <Share className="w-4 h-4" />
               SHARE
             </button>
-            <button className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1">
+            <button className="bg-[#5A399D] text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-1">
               <MessageCircle className="w-4 h-4" />
               MESSAGES
             </button>
@@ -107,7 +107,7 @@ const ProfilePage: React.FC = () => {
           <div className="bg-gray-50 rounded-xl p-4">
             {/* Bio Section */}
             <div className="mb-6">
-              <button className="bg-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium mb-4">
+              <button className="bg-[#5A399D] text-white px-4 py-2 rounded-lg text-sm font-medium mb-4">
                 BIO SUMMARY
               </button>
               <p className="text-gray-700 text-sm leading-relaxed">
@@ -143,23 +143,21 @@ const ProfilePage: React.FC = () => {
 
               {/* Email */}
               <div className="flex items-center justify-center mb-4">
-                <Mail className="w-5 h-5 text-purple-600 mr-2" />
-                <span className="text-purple-600 text-sm">
-                  {userData.email}
-                </span>
+                <Mail className="w-5 h-5 text-[#5A399D] mr-2" />
+                <span className="text-[#5A399D] text-sm">{userData.email}</span>
               </div>
 
               {/* Social Media */}
               <div>
                 <h4 className="font-bold text-gray-800 mb-3">Social Media</h4>
                 <div className="flex justify-center gap-4">
-                  <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-[#5A399D] rounded-lg flex items-center justify-center">
                     <Instagram className="w-5 h-5 text-white" />
                   </div>
-                  <div className="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-[#5A399D] rounded-lg flex items-center justify-center">
                     <Twitter className="w-5 h-5 text-white" />
                   </div>
-                  <div className="w-8 h-8 bg-blue-700 rounded-lg flex items-center justify-center">
+                  <div className="w-8 h-8 bg-[#5A399D] rounded-lg flex items-center justify-center">
                     <svg
                       className="w-5 h-5 text-white"
                       fill="currentColor"

@@ -1,24 +1,24 @@
 import { useForm } from "react-hook-form";
-import axiosInstance from "../../services/axiosInstance";
+// import axios from "../../services/axiosInstance";
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { AuthContextType } from "../../types/user";
+import axios, { AxiosError } from "axios";
+// import SkillsForm from "../ui/SkillField";
 
 interface FormData {
-  fullName: string;
+  fullname: string;
   gender: string;
   dateOfBirth: string;
-  email: string;
+  primaryEmail: string;
   profession: string;
   specialization: string;
   location: string;
   bio: string;
-  skills: string;
+  skills: string[];
   linkedIn?: string;
   github?: string;
   phoneNumber: string;
-  avatar: FileList;
-  documents: FileList;
 }
 
 export default function ProfileForm() {
@@ -27,44 +27,58 @@ export default function ProfileForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+    watch,
+    setValue,
+  } = useForm<FormData>({
+    defaultValues: {
+      skills: [],
+    },
+  });
 
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmitProfile = async (data: FormData) => {
     setLoading(true);
     setMessage("");
 
-    const formData = new FormData();
-    formData.append("fullName", data.fullName);
-    formData.append("gender", data.gender);
-    formData.append("dateOfBirth", data.dateOfBirth);
-    formData.append("profession", data.profession);
-    formData.append("emial", data.email);
-    formData.append("specialization", data.specialization);
-    formData.append("location", data.location);
-    formData.append("bio", data.bio);
-    formData.append("skills", data.skills);
-    formData.append("phoneNumber", data.phoneNumber);
-    if (data.linkedIn) formData.append("linkedIn", data.linkedIn);
-    if (data.github) formData.append("github", data.github);
-    formData.append("avatar", data.avatar[0]);
-    formData.append("documents", data.documents[0]); // assuming one doc for now
-
     try {
-      const response = await axiosInstance.put(
-        `/profile/${user?.id}`,
-        formData
+      console.log("Submitting data:", data);
+      const response = await axios.put(
+        `https://team-alpha-profile-card-auth-api.onrender.com/api/profile/${user?.id}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
       );
-      setMessage("Profile created successfully!");
-      console.log(response.data);
+      console.log("Response:", response.data);
+      setMessage("Profile updated successfully");
     } catch (err) {
-      setMessage("Failed to submit profile.");
-      console.error(err);
+      const error = err as AxiosError<{ message: string }>;
+      console.error("Error details:", error.response?.data);
+      setMessage(error.response?.data?.message || "Failed to submit profile.");
     } finally {
       setLoading(false);
     }
+  };
+
+  const [input, setInput] = useState("");
+  const skills = watch("skills");
+
+  const addSkill = () => {
+    const trimmed = input.trim();
+    if (!trimmed || skills.includes(trimmed)) return;
+
+    const updated = [...skills, trimmed];
+    setValue("skills", updated);
+    setInput("");
+  };
+
+  const removeSkill = (skill: string) => {
+    const updated = skills.filter((s) => s !== skill);
+    setValue("skills", updated);
   };
 
   return (
@@ -77,15 +91,15 @@ export default function ProfileForm() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmitProfile)} className="space-y-4">
         <div>
           <label className="block mb-1">Full Name</label>
           <input
             type="text"
-            {...register("fullName", { required: true })}
+            {...register("fullname", { required: true })}
             className="w-full px-3 py-2 border rounded"
           />
-          {errors.fullName && <p className="text-red-500 text-sm">Required</p>}
+          {errors.fullname && <p className="text-red-500 text-sm">Required</p>}
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -126,10 +140,10 @@ export default function ProfileForm() {
         </div>
 
         <div>
-          <label className="block mb-1">email</label>
+          <label className="block mb-1">Email</label>
           <input
             type="email"
-            {...register("email", { required: true })}
+            {...register("primaryEmail", { required: true })}
             className="w-full px-3 py-2 border rounded"
           />
         </div>
@@ -160,14 +174,50 @@ export default function ProfileForm() {
           ></textarea>
         </div>
 
-        <div>
-          <label className="block mb-1">Skills (comma separated)</label>
-          <input
-            type="text"
-            {...register("skills", { required: true })}
-            placeholder="e.g. manual testing, postman"
-            className="w-full px-3 py-2 border rounded"
-          />
+        <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
+          <h2 className="text-xl font-bold mb-4">Enter Your Skills</h2>
+          <input type="hidden" {...register("skills")} />
+
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addSkill();
+                }
+              }}
+              placeholder="Type a skill"
+              className="flex-1 px-3 py-2 border rounded"
+            />
+            <button
+              type="button"
+              onClick={addSkill}
+              className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+            >
+              Add
+            </button>
+          </div>
+
+          <div className="flex flex-wrap gap-2 mt-4">
+            {skills.map((skill, idx) => (
+              <div
+                key={idx}
+                className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full flex items-center gap-2"
+              >
+                <span>{skill}</span>
+                <button
+                  type="button"
+                  onClick={() => removeSkill(skill)}
+                  className="text-red-500 font-bold"
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
 
         <div>
@@ -195,32 +245,6 @@ export default function ProfileForm() {
             {...register("github")}
             className="w-full px-3 py-2 border rounded"
           />
-        </div>
-
-        <div>
-          <label className="block mb-1">Avatar Image (required)</label>
-          <input
-            type="file"
-            accept="image/*"
-            {...register("avatar", { required: true })}
-            className="w-full"
-          />
-          {errors.avatar && (
-            <p className="text-red-500 text-sm">Avatar is required</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block mb-1">Document Upload (required)</label>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            {...register("documents", { required: true })}
-            className="w-full"
-          />
-          {errors.documents && (
-            <p className="text-red-500 text-sm">Document is required</p>
-          )}
         </div>
 
         <button

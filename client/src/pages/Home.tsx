@@ -1,12 +1,12 @@
 import UserList from "../components/home/UserLists";
 import Navbar from "../components/Navbar";
-import ProfilePage from "../components/ProfilePage";
+// import ProfilePage from "../components/ProfilePage";
 
 const Home = () => {
   return (
     <div>
       <Navbar isAuthenticated={false} onLogout={() => {}} />
-      <ProfilePage />
+      {/* <ProfilePage /> */}
       <UserList />
     </div>
   );

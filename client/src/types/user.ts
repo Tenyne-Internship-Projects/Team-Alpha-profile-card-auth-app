@@ -84,31 +84,31 @@ export interface IUserProfile {
   userId: string;
 }
 
-// export interface IUserProfile {
-//   id: string;
-//   fullname: string;
-//   email: string;
-//   password: string;
-//   createdAt: string;
-//   profile: {
-//     avatarUrl: string;
-//     bio: string;
-//     dateOfBirth: string;
-//     documents: string[];
-//     fullName: string;
-//     gender: string;
-//     github: string | null;
-//     id: string;
-//     isAvailable: boolean;
-//     linkedIn: string | null;
-//     location: string;
-//     phoneNumber: string;
-//     primaryEmail: string;
-//     profession: string;
-//     salaryExpectation: number | null;
-//     skills: string[];
-//     specialization: string;
-//     updatedAt: string;
-//     userId: string;
-//   };
-// }
+export interface IUserProfileFetch {
+  id: string;
+  fullname: string;
+  email: string;
+  password: string;
+  createdAt: string;
+  profile: {
+    avatarUrl: string;
+    bio: string;
+    dateOfBirth: string;
+    documents: string[];
+    fullName: string;
+    gender: string;
+    github: string | null;
+    id: string;
+    isAvailable: boolean;
+    linkedIn: string | null;
+    location: string;
+    phoneNumber: string;
+    primaryEmail: string;
+    profession: string;
+    salaryExpectation: number | null;
+    skills: string[];
+    specialization: string;
+    updatedAt: string;
+    userId: string;
+  };
+}
