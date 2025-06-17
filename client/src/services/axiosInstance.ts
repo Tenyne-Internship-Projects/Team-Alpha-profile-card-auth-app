@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "https://team-alpha-profile-card-auth-api.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },

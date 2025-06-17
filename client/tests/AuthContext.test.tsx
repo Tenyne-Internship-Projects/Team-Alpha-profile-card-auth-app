@@ -19,6 +19,12 @@ const TestComponent = () => {
   );
 };
 
+const mockUser = {
+  id: "123",
+  email: "test@example.com",
+  name: "Test User",
+};
+
 describe("AuthContext", () => {
   beforeEach(() => {
     localStorage.clear();
@@ -33,8 +39,9 @@ describe("AuthContext", () => {
     expect(screen.getByText("Logged Out")).toBeTruthy();
   });
 
-  it("should show 'Logged In' when token is in localStorage", () => {
+  it("should show 'Logged In' when token and user data are in localStorage", () => {
     localStorage.setItem("token", "dummy-token");
+    localStorage.setItem("user", JSON.stringify(mockUser));
     render(
       <AuthProvider>
         <TestComponent />
@@ -43,8 +50,9 @@ describe("AuthContext", () => {
     expect(screen.getByText("Logged In")).toBeTruthy();
   });
 
-  it("should logout the user", async () => {
+  it("should logout the user and clear both token and user data", async () => {
     localStorage.setItem("token", "dummy-token");
+    localStorage.setItem("user", JSON.stringify(mockUser));
     render(
       <AuthProvider>
         <TestComponent />
@@ -57,6 +65,18 @@ describe("AuthContext", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Logged Out")).toBeTruthy();
+      expect(localStorage.getItem("token")).toBeNull();
+      expect(localStorage.getItem("user")).toBeNull();
     });
+  });
+
+  it("should not authenticate with only token but no user data", () => {
+    localStorage.setItem("token", "dummy-token");
+    render(
+      <AuthProvider>
+        <TestComponent />
+      </AuthProvider>
+    );
+    expect(screen.getByText("Logged Out")).toBeTruthy();
   });
 });

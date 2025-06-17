@@ -6,7 +6,7 @@ import type {
   // RegisterData,
   // LoginCredentials,
 } from "../types/user";
-// import axios from "axios";
+// import axios from "../services/axiosInstance";
 // import axiosInstance from "../services/axiosInstance";
 // import axios from "../services/axiosInstance";
 // import type { IFreelancerProfile } from "../types/profile";
@@ -28,52 +28,33 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      setUser({ id: "", email: "", name: "" }); // Placeholder, should fetch user info
+    const userData = localStorage.getItem("user");
+    if (token && userData) {
+      setUser(JSON.parse(userData));
       setToken(token);
       setIsAuthenticated(true);
     }
   }, []);
 
-  const login = async (token: string) => {
+  const login = async (token: string, userData: User) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
     setToken(token);
+    setUser(userData);
     setIsAuthenticated(true);
-    // You might want to fetch user info here using the token
-    setUser({ id: "", email: "", name: "" }); // Placeholder, should fetch user info
   };
 
-  const register = async (token: string) => {
+  const register = async (token: string, userData: User): Promise<void> => {
     localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
     setToken(token);
+    setUser(userData);
     setIsAuthenticated(true);
-    // You might want to fetch user info here using the token
-    setUser({ id: "", email: "", name: "" }); // Placeholder, should fetch user info
-    // try {
-    //   setIsLoading(true);
-    //   const response = await axios.post("/register", userData);
-    //   const { token } = response.data;
-
-    //    Store token and update auth state
-    //   localStorage.setItem("token", token);
-    //   setToken(token);
-    //   setIsAuthenticated(true);
-    //   setUser({ id: "", email: "", name: "" });  Placeholder, should fetch user info
-
-    //   return response.data;
-    // } catch (error: any) {
-    //   console.error(
-    //     "Registration error:",
-    //     error.response?.data || error.message
-    //   );
-    //   throw error;
-    // } finally {
-    //   setIsLoading(false);
-    // }
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
     setToken(null);
     setIsAuthenticated(false);

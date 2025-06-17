@@ -22,6 +22,9 @@ import {
 import SettingsContent from "./SettingsContent";
 import HomeContent from "./HomeContent";
 import ProfileUpload from "./ProfileUpload";
+import { AuthContextType } from "../../types/user";
+import { useAuth } from "../../hooks/useAuth";
+
 // import ProfileUpdate from "./ProfileUpload";
 
 const DashboardComponent = () => {
@@ -30,6 +33,7 @@ const DashboardComponent = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [activeSection, setActiveSection] = useState("Home");
   const [darkMode, setDarkMode] = useState(false);
+  const { logout } = useAuth() as AuthContextType;
 
   // Check if screen is mobile size
   useEffect(() => {
@@ -62,8 +66,8 @@ const DashboardComponent = () => {
 
   const handleLogout = () => {
     if (confirm("Are you sure you want to logout?")) {
-      alert("Logged out successfully!");
-      // Add your logout logic here
+      // alert("Logged out successfully!");
+      logout();
     }
   };
 
@@ -151,7 +155,7 @@ const DashboardComponent = () => {
           </div>
 
           {/* Navigation Menu */}
-          <nav className="flex-1 lg:px-4 mt-16 py-6 space-y-2 text-white">
+          <nav className="flex-1 px-2 lg:px-4 mt-16 py-6 space-y-2 text-white">
             {menuItems.map((item, index) => {
               const Icon = item.icon;
               const isActive = activeSection === item.key;
@@ -209,7 +213,7 @@ const DashboardComponent = () => {
                 <Menu className="w-5 h-5 text-gray-600" />
               </button>
               <div className="text-xl font-bold text-[#552EA4]">
-                FreeBio Dashboard
+                <img src="/FreebioLogoDark.png" alt="" />
               </div>
             </div>
 
