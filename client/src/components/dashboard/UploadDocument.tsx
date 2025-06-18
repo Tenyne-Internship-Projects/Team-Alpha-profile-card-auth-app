@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
 
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { AuthContextType } from "../../types/user";
 import { apiUrl } from "../../services/axiosInstance";
 
@@ -66,13 +66,16 @@ const UploadDocument: React.FC = () => {
 
       console.log("Upload response:", response.data);
       alert("All files uploaded!");
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
       console.error("Upload error details:", {
-        message: err.message,
-        response: err.response?.data,
-        status: err.response?.status,
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
       });
-      alert(err.response?.data?.message || "Upload failed. Please try again.");
+      alert(
+        error.response?.data?.message || "Upload failed. Please try again."
+      );
     }
   };
 

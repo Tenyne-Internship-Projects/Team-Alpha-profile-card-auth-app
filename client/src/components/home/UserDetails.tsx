@@ -51,7 +51,7 @@ export default function UserDetail() {
             <p className="text-[#5A399D] font-medium text-sm mb-1">Welcome</p>
             <h1 className="text-2xl font-bold text-[#5A399D] mb-1">
               <p>picture</p>
-              
+
               <img
                 src={profile.profile.avatarUrl}
                 alt={profile.profile.fullName}
@@ -105,9 +105,12 @@ export default function UserDetail() {
                   SKILLS
                 </button>
                 <div className="flex gap-5 mt-10">
-                  {profile.profile.skills.map((skill) => {
+                  {profile.profile.skills.map((skill, index) => {
                     return (
-                      <div className="bg-purple-900 py-1 px-5 text-white rounded-lg">
+                      <div
+                        key={index}
+                        className="bg-purple-900 py-1 px-5 text-white rounded-lg"
+                      >
                         {skill}
                       </div>
                     );
