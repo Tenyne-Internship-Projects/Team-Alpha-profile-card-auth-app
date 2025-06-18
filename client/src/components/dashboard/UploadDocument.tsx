@@ -1,164 +1,187 @@
-import React, { useState } from "react";
-// import { Upload, X, User } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { useAuth } from "../../hooks/useAuth";
 
-interface UploadInterfaceProps {
-  type: "resume" | "profile";
+import axios from "axios";
+import { AuthContextType } from "../../types/user";
+import { apiUrl } from "../../services/axiosInstance";
+
+type Step = "resume" | "profile";
+
+interface FormData {
+  avatar: FileList;
+  documents: FileList;
 }
 
-const UploadInterface: React.FC<UploadInterfaceProps> = ({ type }) => {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-      if (type === "profile" && file.type.startsWith("image/")) {
-        const url = URL.createObjectURL(file);
-        setPreviewUrl(url);
-      }
-    }
-  };
-
-  const handleCancel = () => {
-    setSelectedFile(null);
-    setPreviewUrl(null);
-  };
-
-  const handleUpload = () => {
-    if (selectedFile) {
-      console.log("Uploading file:", selectedFile.name);
-      // Your upload logic
-    }
-  };
-
-  return (
-    <div className="w-full max-w-md mx-auto bg-white p-6">
-      {/* File Upload Input */}
-      <div className="flex gap-2 mb-8">
-        <label className="flex-1">
-          <input
-            type="file"
-            accept={type === "resume" ? ".pdf,.doc,.docx" : "image/*"}
-            onChange={handleFileSelect}
-            className="hidden"
-          />
-          <div className="w-full px-4 py-3 bg-purple-600 text-white text-center rounded-lg font-medium cursor-pointer hover:bg-purple-700 transition-colors">
-            {type === "resume" ? "Upload Resume" : "Upload Picture"}
-          </div>
-        </label>
-      </div>
-
-      {/* Profile Image Preview */}
-      {type === "profile" && (
-        <div className="flex justify-center mb-8">
-          <div className="w-32 h-32 rounded-full border-4 border-purple-600 overflow-hidden bg-gray-100 flex items-center justify-center">
-            {previewUrl ? (
-              <img
-                src={previewUrl}
-                alt="Profile preview"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face&auto=format"
-                alt="Default profile"
-                className="w-full h-full object-cover"
-              />
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Action Buttons */}
-      <div className="space-y-3">
-        <button className="w-full py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors">
-          {type === "resume" ? "SAVE RESUME" : "SAVE PROFILE IMAGE"}
-        </button>
-        <button className="w-full py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors">
-          {type === "resume" ? "DELETE RESUME" : "DELETE IMAGE FILE"}
-        </button>
-        <button className="w-full py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors">
-          {type === "resume"
-            ? "CHOOSE RESUME UPLOAD"
-            : "CHOOSE PROFILE IMAGE UPLOAD"}
-        </button>
-      </div>
-
-      {/* Bottom Buttons */}
-      <div className="flex gap-3 mt-6">
-        <button
-          onClick={handleCancel}
-          className="w-full py-3 border-2 border-gray-300 text-gray-600 rounded-lg font-medium hover:border-gray-400 transition-colors"
-        >
-          CANCEL
-        </button>
-        <button
-          onClick={handleUpload}
-          className="w-full py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors"
-        >
-          UPLOAD
-        </button>
-      </div>
-    </div>
-  );
-};
-
 const UploadDocument: React.FC = () => {
-  const [currentView, setCurrentView] = useState<"resume" | "profile">(
-    "resume"
-  );
+  const [step, setStep] = useState<Step>("resume");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormData>({ mode: "onChange" });
+  const { user } = useAuth() as AuthContextType;
+
+  const watchedResume = watch("documents");
+  const watchedProfile = watch("avatar");
+
+  useEffect(() => {
+    if (step === "profile" && watchedProfile?.[0]) {
+      const url = URL.createObjectURL(watchedProfile[0]);
+      setPreviewUrl(url);
+      return () => URL.revokeObjectURL(url);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [watchedProfile, step]);
+
+  // const handleNext = () => {
+  //   if (watchedResume?.[0]) {
+  //     setStep("profile");
+  //   }
+  // };
+
+  const onSubmit = async (data: FormData) => {
+    const formData = new FormData();
+    formData.append("documents", data.documents[0]);
+    formData.append("avatar", data.avatar[0]);
+
+    try {
+      console.log("Sending files:", {
+        resume: data.documents[0]?.name,
+        profile: data.avatar[0]?.name,
+      });
+
+      const response = await axios.post(
+        `${apiUrl}/profile/uploads-files/${user?.id}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("Upload response:", response.data);
+      alert("All files uploaded!");
+    } catch (err: any) {
+      console.error("Upload error details:", {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status,
+      });
+      alert(err.response?.data?.message || "Upload failed. Please try again.");
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-2xl mx-auto">
-        {/* View Toggle */}
-        <div className="flex justify-center gap-4 mb-8">
-          {["resume", "profile"].map((view) => (
-            <button
-              key={view}
-              onClick={() => setCurrentView(view as "resume" | "profile")}
-              className={`px-6 py-2 rounded-lg font-medium transition-colors ${
-                currentView === view
-                  ? "bg-purple-600 text-white"
-                  : "bg-white text-gray-600 border border-gray-300 hover:border-gray-400"
-              }`}
-            >
-              {view === "resume" ? "Resume Upload" : "Profile Upload"}
-            </button>
-          ))}
-        </div>
-
-        {/* Upload Interface */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6 text-center">
-            {currentView === "resume"
-              ? "Resume Upload Interface"
-              : "Profile Image Upload Interface"}
-          </h2>
-          <UploadInterface type={currentView} />
-        </div>
-
-        {/* Features List */}
-        <div className="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Features</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
-            {[
-              "File type validation",
-              "Image preview functionality",
-              "Responsive design",
-              "Clean, modern interface",
-              "Hover effects and transitions",
-              "Consistent purple theme",
-            ].map((feature) => (
-              <div key={feature} className="flex items-center space-x-2">
-                <div className="w-2 h-2 bg-purple-600 rounded-full" />
-                <span>{feature}</span>
-              </div>
-            ))}
+    <div className="max-w-xl mx-auto py-10">
+      {/* Top step indicator */}
+      <div className="flex justify-center gap-4 mb-6">
+        {["resume", "profile"].map((item) => (
+          <div
+            key={item}
+            className={`px-4 py-2 rounded-full text-sm font-semibold ${
+              step === item
+                ? "bg-purple-600 text-white"
+                : "bg-gray-200 text-gray-500"
+            }`}
+          >
+            {item === "resume" ? "Resume Upload" : "Profile Upload"}
           </div>
-        </div>
+        ))}
       </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {step === "resume" && (
+          <>
+            <label className="block">
+              <input
+                type="file"
+                {...register("documents", {
+                  required: "Resume is required",
+                  validate: (files) =>
+                    ["application/pdf", "application/msword"].includes(
+                      files?.[0]?.type
+                    ) || "Only PDF/DOC allowed",
+                })}
+                accept=".pdf,.doc,.docx"
+                className="hidden"
+              />
+              <div className="cursor-pointer bg-purple-600 text-white p-3 rounded-lg text-center">
+                {watchedResume?.[0] ? watchedResume[0].name : "Upload Resume"}
+              </div>
+            </label>
+            {errors.documents && (
+              <p className="text-red-500 text-sm">{errors.documents.message}</p>
+            )}
+          </>
+        )}
+
+        {step === "profile" && (
+          <>
+            <label className="block">
+              <input
+                type="file"
+                {...register("avatar", {
+                  required: "Profile image is required",
+                  validate: (files) =>
+                    files?.[0]?.type.startsWith("image/") ||
+                    "Only images allowed",
+                })}
+                accept="image/*"
+                className="hidden"
+              />
+              <div className="cursor-pointer bg-purple-600 text-white p-3 rounded-lg text-center">
+                {watchedProfile?.[0]
+                  ? watchedProfile[0].name
+                  : "Upload Profile Picture"}
+              </div>
+            </label>
+            {errors.avatar && (
+              <p className="text-red-500 text-sm">{errors.avatar.message}</p>
+            )}
+
+            {previewUrl && (
+              <div className="w-24 h-24 rounded-full overflow-hidden mx-auto my-4">
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+          </>
+        )}
+
+        <button
+          type="button"
+          className="w-full bg-purple-600 text-white p-3 rounded-lg font-medium"
+          onClick={() => setStep("profile")}
+          // disabled={!watchedResume?.length}
+        >
+          Next
+        </button>
+
+        <div className="flex justify-between gap-4">
+          <button
+            type="button"
+            onClick={() => setStep("resume")}
+            className="w-full border border-gray-300 text-gray-700 p-3 rounded-lg"
+          >
+            Previous
+          </button>
+          <button
+            type="submit"
+            className="w-full bg-purple-600 text-white p-3 rounded-lg font-medium"
+          >
+            Submit
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

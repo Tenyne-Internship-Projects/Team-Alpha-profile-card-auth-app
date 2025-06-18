@@ -1,8 +1,10 @@
 // services/axiosInstance.js
 import axios from "axios";
 
+export const apiUrl = import.meta.env.VITE_API_URL;
+
 const instance = axios.create({
-  baseURL: "https://team-alpha-profile-card-auth-api.onrender.com/api",
+  baseURL: apiUrl,
   headers: {
     "Content-Type": "application/json",
   },

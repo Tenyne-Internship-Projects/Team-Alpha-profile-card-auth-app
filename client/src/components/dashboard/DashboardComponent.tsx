@@ -12,6 +12,7 @@ import {
   // Upload,
   Sun,
   Moon,
+  Upload,
   // BarChart3,
   // FileText,
   // Calendar,
@@ -24,6 +25,7 @@ import HomeContent from "./HomeContent";
 import ProfileUpload from "./ProfileUpload";
 import { AuthContextType } from "../../types/user";
 import { useAuth } from "../../hooks/useAuth";
+import UploadDocument from "./UploadDocument";
 
 // import ProfileUpdate from "./ProfileUpload";
 
@@ -51,7 +53,7 @@ const DashboardComponent = () => {
 
   const menuItems = [
     { icon: Home, label: "Home", key: "Home" },
-    // { icon: Upload, label: "Profile Upload", key: "Upload" },
+    { icon: Upload, label: "Profile Upload", key: "upload" },
     { icon: User, label: "Profile Details", key: "Profile" },
     { icon: Settings, label: "Settings", key: "Settings" },
   ];
@@ -82,14 +84,14 @@ const DashboardComponent = () => {
     switch (activeSection) {
       case "Home":
         return <HomeContent />;
-      // case "Upload":
-      //   return <ProfileUpdate />;
+      case "upload":
+        return <UploadDocument />;
       case "Profile":
         return <ProfileUpload />;
       case "Settings":
         return <SettingsContent />;
       default:
-        return <HomeContent />;
+      // return <HomeContent />;
     }
   };
 
