@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "../../services/axiosInstance";
 // import toast from "react-hot-toast";
 import { AxiosError } from "axios";
+import toast from "react-hot-toast";
 
 interface RegisterForm {
   fullname: string;
@@ -40,17 +41,18 @@ export default function Registration() {
       const res = await axios.post("/auth/register", data);
       // console.log("Registration response:", res.data);
       // console.log(res.data.token);
+      console.log(res.data.token);
+      // if (res.data.token) {
+      register(res.data.token);
 
-      if (res.data.token) {
-        register(res.data.token);
-        // toast.success(
-        //   "✅ Registration successful. Please check your email to verify your account."
-        // );
-        reset();
-        navigate(`/proceed-to-email?email=${data.email}`);
-      } else {
-        throw new Error("No token received from server");
-      }
+      //   // toast.success(
+      //   //   "✅ Registration successful. Please check your email to verify your account."
+      //   // );
+      reset();
+      navigate(`/proceed-to-email?email=${data.email}`);
+      // } else {
+      //   throw new Error("No token received from server");
+      // }
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       console.error("Registration error:", {
@@ -59,10 +61,9 @@ export default function Registration() {
         message: error.message,
       });
 
-      // const errorMessage =
-      //   error.response?.data?.message ||
-      //   "Registration failed. Please try again.";
-      // toast.error("❌ " + errorMessage);
+      const errorMessage = error.response?.data?.message;
+      // "Registration failed. Please try again.";
+      toast.error("❌ " + errorMessage);
     }
   };
 

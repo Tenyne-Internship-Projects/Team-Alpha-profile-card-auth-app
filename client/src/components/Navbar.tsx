@@ -36,12 +36,12 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
             } md:flex space-x-4 md:space-x-6 md:items-center w-full md:w-auto mt-3 md:mt-0`}
           >
             <div className="absolute bg-white py-5 px-10 rounded-2xl shadow-2xl z-30 right-5">
-              <Link
+              {/* <Link
                 to="/"
                 className="block text-gray-700 hover:text-orange-600"
               >
                 Home
-              </Link>
+              </Link> */}
 
               {!isAuthenticated ? (
                 <>
@@ -79,9 +79,9 @@ const Navbar: React.FC<NavbarProps> = ({ isAuthenticated, onLogout }) => {
         </div>
 
         <div className="hidden lg:flex gap-5 py-5 ">
-          <Link to="/" className="block text-gray-700 hover:text-orange-600">
+          {/* <Link to="/" className="block text-gray-700 hover:text-orange-600">
             Home
-          </Link>
+          </Link> */}
 
           {!isAuthenticated ? (
             <>

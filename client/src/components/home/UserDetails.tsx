@@ -50,6 +50,12 @@ export default function UserDetail() {
           <div className="text-center mb-4">
             <p className="text-[#5A399D] font-medium text-sm mb-1">Welcome</p>
             <h1 className="text-2xl font-bold text-[#5A399D] mb-1">
+              <p>picture</p>
+
+              <img
+                src={profile.profile.avatarUrl}
+                alt={profile.profile.fullName}
+              />
               {user.fullname}
             </h1>
             {/* <p className="text-gray-600 text-sm">{userData.title}</p> */}
@@ -98,6 +104,18 @@ export default function UserDetail() {
                 <button className="bg-white border-2 border-gray-300 text-gray-700 px-6 py-2 rounded-lg text-sm font-medium">
                   SKILLS
                 </button>
+                <div className="flex gap-5 mt-10">
+                  {profile.profile.skills.map((skill, index) => {
+                    return (
+                      <div
+                        key={index}
+                        className="bg-purple-900 py-1 px-5 text-white rounded-lg"
+                      >
+                        {skill}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* <div className="flex flex-wrap gap-2 justify-center">
@@ -116,7 +134,9 @@ export default function UserDetail() {
 
             {/* Contact Section */}
             <div className="text-center">
-              <h3 className="font-bold text-gray-800 mb-3">CONTACT ME</h3>
+              <h3 className="font-bold text-lg text-gray-800 mb-3">
+                CONTACT ME
+              </h3>
 
               {/* Email */}
               <div className="flex items-center justify-center mb-4">

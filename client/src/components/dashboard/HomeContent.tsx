@@ -1,12 +1,12 @@
-import {
-  Activity,
-  Calendar,
-  FileText,
-  Settings,
-  TrendingUp,
-  User,
-  Users,
-} from "lucide-react";
+// import {
+//   Activity,
+//   Calendar,
+//   FileText,
+//   Settings,
+//   TrendingUp,
+//   User,
+//   Users,
+// } from "lucide-react";
 
 // Complete HomeContent component
 const HomeContent = () => (
@@ -21,7 +21,7 @@ const HomeContent = () => (
     </div>
 
     {/* Stats Cards */}
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="flex items-center justify-between">
           <div>
@@ -65,10 +65,10 @@ const HomeContent = () => (
         </div>
         <p className="text-xs text-green-600 mt-2">+15% from last hour</p>
       </div>
-    </div>
+    </div> */}
 
     {/* Recent Activity */}
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h3 className="text-lg font-semibold mb-4">Recent Activity</h3>
         <div className="space-y-4">
@@ -100,7 +100,7 @@ const HomeContent = () => (
             </div>
           </div>
         </div>
-      </div>
+      </div> 
 
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h3 className="text-lg font-semibold mb-4">Upcoming Events</h3>
@@ -134,7 +134,7 @@ const HomeContent = () => (
           </div>
         </div>
       </div>
-    </div>
+    </div> */}
   </div>
 );
 

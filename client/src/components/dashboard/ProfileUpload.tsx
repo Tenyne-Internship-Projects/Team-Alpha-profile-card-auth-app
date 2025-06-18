@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { AuthContextType } from "../../types/user";
 import axios, { AxiosError } from "axios";
+import { apiUrl } from "../../services/axiosInstance";
 // import SkillsForm from "../ui/SkillField";
 
 interface FormData {
@@ -16,8 +17,8 @@ interface FormData {
   location: string;
   bio: string;
   skills: string[];
-  linkedIn?: string;
-  github?: string;
+  linkedIn: string;
+  github: string;
   phoneNumber: string;
 }
 
@@ -43,16 +44,14 @@ export default function ProfileForm() {
     setMessage("");
 
     try {
-      console.log("Submitting data:", data);
-      const response = await axios.put(
-        `https://team-alpha-profile-card-auth-api.onrender.com/api/profile/${user?.id}`,
-        data,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      // Convert skills array to JSON array string
+      const formattedData = {
+        ...data,
+        skills: JSON.stringify(data.skills),
+      };
+
+      console.log("Submitting data:", formattedData);
+      const response = await axios.put(`${apiUrl}/${user?.id}`, formattedData);
       console.log("Response:", response.data);
       setMessage("Profile updated successfully");
     } catch (err) {
@@ -121,7 +120,7 @@ export default function ProfileForm() {
             <label className="block mb-1">Date of Birth</label>
             <input
               type="date"
-              {...register("dateOfBirth", { required: true })}
+              {...register("dateOfBirth")}
               className="w-full px-3 py-2 border rounded"
             />
             {errors.dateOfBirth && (
@@ -169,9 +168,22 @@ export default function ProfileForm() {
         <div>
           <label className="block mb-1">Bio</label>
           <textarea
-            {...register("bio", { required: true })}
+            {...register("bio", {
+              required: true,
+              minLength: {
+                value: 50,
+                message: "Minimum of 50 words",
+              },
+              maxLength: {
+                value: 500,
+                message: "Maximum of 500 words",
+              },
+            })}
             className="w-full px-3 py-2 border rounded"
           ></textarea>
+          {errors.bio && (
+            <p className="text-sm text-red-600">{errors.bio.message}</p>
+          )}
         </div>
 
         <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
