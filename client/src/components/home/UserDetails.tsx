@@ -34,9 +34,9 @@ export default function UserDetail() {
     };
 
     fetchUser();
-  }, []);
+  }, [id]);
 
-  if (!user || !user) return <div className="p-6 text-white">Loading...</div>;
+  if (!user) return <div className="p-6 text-white">Loading...</div>;
 
   const profile = user;
   console.log(profile);
@@ -117,19 +117,6 @@ export default function UserDetail() {
                   })}
                 </div>
               </div>
-
-              {/* <div className="flex flex-wrap gap-2 justify-center">
-                {userData.skills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className={`${getSkillBgColor(
-                      skill.category
-                    )} text-white px-3 py-1 rounded text-xs font-medium`}
-                  >
-                    {skill.name}
-                  </span>
-                ))}
-              </div> */}
             </div>
 
             {/* Contact Section */}
@@ -145,6 +132,35 @@ export default function UserDetail() {
                   {profile.profile.primaryEmail}
                 </span>
               </div>
+
+              {profile.profile.avatarUrl && (
+                <img
+                  src={profile.profile.avatarUrl}
+                  alt="Profile"
+                  className="w-32 h-32 rounded-full object-cover"
+                />
+              )}
+              {profile.profile.documents &&
+              profile.profile.documents.length > 0 ? (
+                <ul className="list-disc list-inside">
+                  {profile.profile.documents.map(
+                    (docUrl: string, index: number) => (
+                      <li key={index}>
+                        <a
+                          href={docUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-500 underline"
+                        >
+                          View Document {index + 1}
+                        </a>
+                      </li>
+                    )
+                  )}
+                </ul>
+              ) : (
+                <p>No documents uploaded.</p>
+              )}
 
               {/* Social Media */}
               <div>
@@ -172,105 +188,5 @@ export default function UserDetail() {
         </div>
       </div>
     </div>
-    // <div className="max-w-3xl mx-auto p-6 rounded-xl shadow-md">
-    //   <Link to="/" className="text-blue-500 underline mb-4 inline-block">
-    //     ← Back
-    //   </Link>
-
-    //   <div className="flex items-center gap-6">
-    //     <img
-    //       // src={profile.profile.avatarUrl}
-    //       // alt={user.fullname}
-    //       className="w-32 h-32 rounded-full object-cover"
-    //     />
-    //     <div>
-    //       <h1 className="text-2xl font-bold">{profile.fullname}</h1>
-    //       <p className="text-gray-400">
-    //         {profile.profile.profession} - {profile.profile.specialization}
-    //       </p>
-    //       <p className="text-sm text-gray-500">{profile.profile.location}</p>
-    //     </div>
-    //   </div>
-
-    //   <div className="mt-6 space-y-2">
-    //     <p>
-    //       <strong>Bio:</strong> {profile.profile.bio || "N/A"}
-    //     </p>
-    //     <p>
-    //       <strong>Skills:</strong> {profile.profile.skills?.join(", ") || "N/A"}
-    //     </p>
-    //     <p>
-    //       <strong>Phone:</strong> {profile.profile.phoneNumber}
-    //     </p>
-    //     <p>
-    //       <strong>Email:</strong> {profile.profile.primaryEmail}
-    //     </p>
-    //     <p>
-    //       <strong>Gender:</strong> {profile.profile.gender}
-    //     </p>
-
-    //     <p>
-    //       <strong>Available for Work:</strong>{" "}
-    //       {profile.profile.isAvailable ? "Yes" : "No"}
-    //     </p>
-    //     <p>
-    //       <strong>Salary Expectation:</strong>{" "}
-    //       {profile.profile.salaryExpectation
-    //         ? `$${profile.profile.salaryExpectation}`
-    //         : "N/A"}
-    //     </p>
-    //     <p>
-    //       <strong>LinkedIn:</strong>{" "}
-    //       {profile.profile.linkedIn ? (
-    //         <a
-    //           href={profile.profile.linkedIn}
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //           className="text-blue-400"
-    //         >
-    //           {profile.profile.linkedIn}
-    //         </a>
-    //       ) : (
-    //         "N/A"
-    //       )}
-    //     </p>
-    //     <p>
-    //       <strong>GitHub:</strong>{" "}
-    //       {profile.profile.github ? (
-    //         <a
-    //           href={profile.profile.github}
-    //           target="_blank"
-    //           rel="noopener noreferrer"
-    //           className="text-blue-400"
-    //         >
-    //           {profile.profile.github}
-    //         </a>
-    //       ) : (
-    //         "N/A"
-    //       )}
-    //     </p>
-    //     <p>
-    //       <strong>Documents:</strong>{" "}
-    //       {profile.profile.documents && profile.profile.documents.length > 0 ? (
-    //         <ul className="list-disc list-inside">
-    //           {profile.profile.documents.map((doc, idx) => (
-    //             <li key={idx}>
-    //               <a
-    //                 href={doc}
-    //                 target="_blank"
-    //                 rel="noopener noreferrer"
-    //                 className="text-blue-400"
-    //               >
-    //                 View Document {idx + 1}
-    //               </a>
-    //             </li>
-    //           ))}
-    //         </ul>
-    //       ) : (
-    //         "No documents uploaded"
-    //       )}
-    //     </p>
-    //   </div>
-    // </div>
   );
 }
