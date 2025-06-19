@@ -52,22 +52,26 @@ export const LoginIn = () => {
   };
 
   return (
-    <div className="grid h-screen max-md:pt-5  bg-gray-100 lg:bg-purple-950 md:flex lg:justify-between">
-      <div className="text-center lg:w-1/2 grid place-content-center">
-        <h3 className="h3 lg:text-white">Login into your Account</h3>
-        <p className="p1 mt-3 lg:text-white">Sign In and start freelancing</p>
+    <div className="grid h-screen max-md:pt-5  bg-gray-100 md:bg-purple-950 md:flex lg:justify-between">
+      <div className="md:w-3/6 lg:w-1/2 grid place-content-center">
+        <div className="md:w-[200px] lg:w-[300px] mx-auto">
+          <h3 className="h3 lg:text-white">Login into your Account</h3>
+          <p className="p1 mt-3 md:text-white lg:w-[70%] md:mt-8">
+            Sign In and start freelancing
+          </p>
+        </div>
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white flex flex-col justify-between lg:justify-center lg:w-4/6  py-10 px-5 lg:rounded-l-[40px] max-lg:rounded-t-[20px] shadow-md w-full h-full md:w-[80%] max-lg:mx-auto space-y-4"
+        className="bg-white flex flex-col max-md:pb-5 md:py-20 justify-between lg:justify-center md:w-3/6 lg:w-4/6  pt-10 px-5 md:rounded-l-[40px]  shadow-md w-full h-full  max-lg:mx-auto space-y-4"
       >
-        <div className="space-y-4 lg:w-[60%]  lg:mx-auto">
+        <div className="space-y-3 w-full sm:w-[70%] md:w-[80%]  lg:w-[60%] gap-20  mx-auto">
           {/* Email */}
-          <div>
+          <div className="relative">
             <FaStarOfLife
               fontSize={10}
-              className="text-red-600 absolute right-0 top-1"
+              className="text-red-600 absolute right-0 -top-2"
             />
             <input
               type="email"
@@ -91,6 +95,10 @@ export const LoginIn = () => {
 
           {/* Password with visibility toggle */}
           <div className="relative">
+            <FaStarOfLife
+              fontSize={10}
+              className="text-red-600 absolute right-0 -top-2"
+            />
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Password"
@@ -191,7 +199,7 @@ export const LoginIn = () => {
           </div>
         </div>
 
-        <div className="pt-4 w-full lg:w-[60%]  mx-auto">
+        <div className="pt-4 w-full sm:w-[70%] md:w-[80%]  lg:w-[60%]   mx-auto">
           <button
             type="submit"
             className="btn w-full cursor-pointer"

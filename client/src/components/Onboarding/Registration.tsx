@@ -4,6 +4,7 @@ import axios from "../../services/axiosInstance";
 // import toast from "react-hot-toast";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
+import { FaStarOfLife } from "react-icons/fa6";
 
 interface RegisterForm {
   fullname: string;
@@ -34,25 +35,13 @@ export default function Registration() {
 
   const onSubmit = async (data: RegisterForm) => {
     try {
-      // console.log("Attempting registration with:", {
-      //   ...data,
-      //   password: "***",
-      // });
       const res = await axios.post("/auth/register", data);
-      // console.log("Registration response:", res.data);
-      // console.log(res.data.token);
-      console.log(res.data.token);
-      // if (res.data.token) {
-      register(res.data.token);
 
-      //   // toast.success(
-      //   //   "✅ Registration successful. Please check your email to verify your account."
-      //   // );
-      reset();
-      navigate(`/proceed-to-email?email=${data.email}`);
-      // } else {
-      //   throw new Error("No token received from server");
-      // }
+      if (res.status === 201) {
+        toast.success("Verify email");
+        reset();
+        navigate(`/proceed-to-email?email=${data.email}`);
+      }
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
       console.error("Registration error:", {
@@ -62,25 +51,33 @@ export default function Registration() {
       });
 
       const errorMessage = error.response?.data?.message;
-      // "Registration failed. Please try again.";
+
       toast.error("❌ " + errorMessage);
     }
   };
 
   return (
-    <div className="grid h-screen max-md:pt-5  bg-gray-100 lg:bg-purple-950 md:flex lg:justify-between">
-      <div className="text-center lg:w-1/2 grid place-content-center">
-        <h3 className="h3 lg:text-white">Welcome to Freebio</h3>
-        <p className="p1 mt-3 lg:text-white">Sign Up and start freelancing</p>
+    <div className="grid h-screen max-md:pt-5  bg-gray-100 md:bg-purple-950 md:flex lg:justify-between">
+      <div className="md:w-3/6 lg:w-1/2 grid place-content-center">
+        <div className="md:w-[200px] lg:w-[300px] mx-auto">
+          <h3 className="h3 md:text-white">Welcome to Freebio</h3>
+          <p className="p1 mt-3 md:text-white lg:w-[70%] md:mt-8">
+            Sign Up and start freelancing
+          </p>
+        </div>
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white flex flex-col justify-between lg:justify-center lg:w-4/6  py-10 px-5 lg:rounded-l-[40px] max-lg:rounded-t-[20px] shadow-md w-full h-full md:w-[80%] max-lg:mx-auto space-y-4"
+        className="bg-white flex flex-col max-md:pb-5 md:py-20 justify-between lg:justify-center md:w-3/6 lg:w-4/6  pt-10 px-5 md:rounded-l-[40px]  shadow-md w-full h-full  max-lg:mx-auto space-y-4"
       >
-        <div className="space-y-4 lg:w-[60%]  lg:mx-auto">
+        <div className="space-y-3 w-full sm:w-[70%] md:w-[80%]  lg:w-[60%] gap-20  mx-auto">
           {/* Full Name */}
-          <div className="w-full">
+          <div className="w-full relative">
+            <FaStarOfLife
+              fontSize={10}
+              className="text-red-600 absolute right-0 -top-2"
+            />
             <input
               {...register("fullname", {
                 required: "Full name is required",
@@ -99,7 +96,11 @@ export default function Registration() {
           </div>
 
           {/* Email */}
-          <div>
+          <div className="relative">
+            <FaStarOfLife
+              fontSize={10}
+              className="text-red-600 absolute right-0 -top-2"
+            />
             <input
               {...register("email", {
                 required: "Email is required",
@@ -118,7 +119,11 @@ export default function Registration() {
           </div>
 
           {/* Password */}
-          <div>
+          <div className="relative">
+            <FaStarOfLife
+              fontSize={10}
+              className="text-red-600 absolute right-0 -top-2"
+            />
             <input
               {...register("password", {
                 required: "Password is required",
@@ -200,7 +205,7 @@ export default function Registration() {
           </div>
         </div>
 
-        <div className="pt-4 w-full  lg:w-[60%]  mx-auto">
+        <div className="pt-4 w-full sm:w-[70%]y md:w-[80%]  lg:w-[60%]   mx-auto">
           <button
             type="submit"
             className="btn cursor-pointer"

@@ -1,17 +1,15 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
-// import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import VerifyEmail from "./pages/VerifyEmail";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
-import Welcome from "./pages/Welcome";
 import { Toaster } from "react-hot-toast";
 import VerifyPage from "./pages/Verify";
-// import UserDetail from "./components/home/UserDetails";
 import UserDetails from "./pages/UserDetail";
+import RegisterWelcome from "./pages/RegisterWelcome";
 
 function App() {
   return (
@@ -20,15 +18,13 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/get-started" element={<RegisterWelcome />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/welcome" element={<Welcome />} />
+
           <Route path="/verify-email" element={<VerifyPage />} />
           <Route path="/proceed-to-email" element={<VerifyEmail />} />
           <Route path="/users/:id" element={<UserDetails />} />
-          {/* <Route element={<ProtectedRoute />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-          </Route> */}
 
           <Route
             path="/dashboard"
