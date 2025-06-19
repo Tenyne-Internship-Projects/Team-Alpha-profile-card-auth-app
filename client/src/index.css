@@ -13,15 +13,15 @@
   }
 
   h3 {
-    @apply text-2xl md:text-5xl font-semibold text-[#5A399D];
+    @apply text-2xl md:text-4xl lg:text-5xl font-semibold text-[#5A399D];
   }
 
   .p1 {
-    @apply font-normal text-[14px] md:text-xl text-[#5A399D];
+    @apply font-normal text-[14px] md:text-xl max-md:text-[#5A399D];
   }
 
   input {
-    @apply border rounded-xl outline-none w-full border-[#552EA4] text-base px-5 md:px-10 py-3 md:py-4;
+    @apply border rounded-xl outline-none w-full border-[#552EA4] text-base px-4 py-2;
   }
 
   .btn {

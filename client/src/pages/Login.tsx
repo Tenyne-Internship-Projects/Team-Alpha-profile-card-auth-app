@@ -6,12 +6,6 @@ import { AuthContextType } from "../types/user";
 const Login = () => {
   const { user } = useAuth() as AuthContextType;
   return user ? <Navigate to="/dashboard" /> : <LoginIn />;
-
-  // return (
-  //   <div>
-  //     <LoginIn />
-  //   </div>
-  // );
 };
 
 export default Login;
