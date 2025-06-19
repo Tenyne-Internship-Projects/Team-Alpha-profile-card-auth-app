@@ -1,12 +1,4 @@
-// import {
-//   Activity,
-//   Calendar,
-//   FileText,
-//   Settings,
-//   TrendingUp,
-//   User,
-//   Users,
-// } from "lucide-react";
+import ProfileDetail from "../home/ProfileDetail";
 
 // Complete HomeContent component
 const HomeContent = () => (
@@ -18,6 +10,10 @@ const HomeContent = () => (
       <p className="text-gray-600">
         Welcome back! Here&apos;s what&apos;s happening today.
       </p>
+    </div>
+
+    <div>
+      <ProfileDetail />
     </div>
 
     {/* Stats Cards */}

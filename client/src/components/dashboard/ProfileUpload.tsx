@@ -51,7 +51,10 @@ export default function ProfileForm() {
       };
 
       console.log("Submitting data:", formattedData);
-      const response = await axios.put(`${apiUrl}/${user?.id}`, formattedData);
+      const response = await axios.put(
+        `${apiUrl}/profile/${user?.id}`,
+        formattedData
+      );
       console.log("Response:", response.data);
       setMessage("Profile updated successfully");
     } catch (err) {

@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "../../services/axiosInstance";
 import { useAuth } from "../../hooks/useAuth";
 import type { AuthContextType } from "../../types/user";
 import toast from "react-hot-toast";
 import { AxiosError } from "axios";
+import { FaStarOfLife } from "react-icons/fa6";
 
 export interface LoginForm {
   email: string;
@@ -64,6 +65,10 @@ export const LoginIn = () => {
         <div className="space-y-4 lg:w-[60%]  lg:mx-auto">
           {/* Email */}
           <div>
+            <FaStarOfLife
+              fontSize={10}
+              className="text-red-600 absolute right-0 top-1"
+            />
             <input
               type="email"
               placeholder="Email"
@@ -76,6 +81,7 @@ export const LoginIn = () => {
                 },
               })}
             />
+
             {errors.email && (
               <p className="text-sm text-red-600 mt-1">
                 {errors.email.message}
@@ -197,10 +203,10 @@ export const LoginIn = () => {
           <p className="text-sm mt-4 text-center text-black/70">
             Don&apos;t have an account?{" "}
             <span
-              onClick={() => navigate("/register")}
+              // onClick={() => navigate("/register")}
               className="text-[#552EA4] cursor-pointer underline"
             >
-              <a href="/register">Create Account</a>
+              <Link to="/register">Register</Link>
             </span>
           </p>
         </div>

@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "../../services/axiosInstance";
 // import toast from "react-hot-toast";
 import { AxiosError } from "axios";
@@ -198,45 +198,6 @@ export default function Registration() {
               </p>
             </div>
           </div>
-
-          {/* Confirm Password */}
-          {/* <div>
-            <input
-              {...register("confirmPassword", {
-                required: "Please confirm your password",
-                validate: (value) =>
-                  value === password || "Passwords do not match",
-              })}
-              type="password"
-              placeholder="Confirm Password"
-              className="w-full border rounded-lg px-4 py-2"
-            />
-            {errors.confirmPassword && (
-              <p className="text-sm text-red-600">
-                {errors.confirmPassword.message}
-              </p>
-            )}
-          </div> */}
-
-          {/* Terms & Conditions */}
-          {/* <div className=" flex gap-5">
-            <input
-              type="checkbox"
-              {...register("terms", {
-                required: "You must agree to the terms and conditions",
-              })}
-              className="mt-1 w-fit"
-            />
-            <label className="text-sm text-black">
-              I agree to the{" "}
-              <span className="underline cursor-pointer text-purple-700">
-                terms and conditions
-              </span>
-            </label>
-          </div> */}
-          {/* {errors.terms && (
-            <p className="text-sm text-red-600">{errors.terms.message}</p>
-          )} */}
         </div>
 
         <div className="pt-4 w-full  lg:w-[60%]  mx-auto">
@@ -251,10 +212,10 @@ export default function Registration() {
           <p className="text-sm mt-4 text-center  text-black/70">
             Already have an account?{" "}
             <span
-              onClick={() => navigate("/login")}
+              // onClick={() => navigate("/login")}
               className="text-[#552EA4] cursor-pointer underline"
             >
-              <a href="/login">Login</a>
+              <Link to="/login">Login</Link>
             </span>
           </p>
         </div>
