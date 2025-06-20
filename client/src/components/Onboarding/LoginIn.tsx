@@ -39,8 +39,8 @@ export const LoginIn = () => {
     try {
       const res = await axios.post("/auth/login", data);
       login(res.data.token, res.data.user); // Pass both token and user data
-      toast.success("Successfully logged in");
       navigate("/dashboard");
+      toast.success("Successfully logged in");
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
 
@@ -70,8 +70,8 @@ export const LoginIn = () => {
           {/* Email */}
           <div className="relative">
             <FaStarOfLife
-              fontSize={10}
-              className="text-red-600 absolute right-0 -top-2"
+              fontSize={8}
+              className="text-red-600 absolute right-2 top-1"
             />
             <input
               type="email"
@@ -96,8 +96,8 @@ export const LoginIn = () => {
           {/* Password with visibility toggle */}
           <div className="relative">
             <FaStarOfLife
-              fontSize={10}
-              className="text-red-600 absolute right-0 -top-2"
+              fontSize={8}
+              className="text-red-600 absolute right-2 top-1"
             />
             <input
               type={showPassword ? "text" : "password"}
@@ -129,7 +129,7 @@ export const LoginIn = () => {
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute top-4 right-3 text-sm text-purple-700"
+              className="absolute top-3 right-4 text-[12px] text-purple-700"
             >
               {showPassword ? "Hide" : "Show"}
             </button>
@@ -141,7 +141,7 @@ export const LoginIn = () => {
             )}
             <div className="text-right mt-2">
               <a
-                href="/forgot-password"
+                href=""
                 className="text-sm text-purple-700 underline hover:text-purple-900"
               >
                 Forgot Password?

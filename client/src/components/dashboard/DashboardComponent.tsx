@@ -53,8 +53,8 @@ const DashboardComponent = () => {
 
   const menuItems = [
     { icon: Home, label: "Home", key: "Home" },
-    { icon: Upload, label: "Profile Upload", key: "upload" },
     { icon: User, label: "Profile Details", key: "Profile" },
+    { icon: Upload, label: " Uploads", key: "upload" },
     { icon: Settings, label: "Settings", key: "Settings" },
   ];
 
@@ -116,7 +116,7 @@ const DashboardComponent = () => {
         }
       `}
       >
-        <div className="flex flex-col h-full border-b border-[#552EA4] bg-[#552EA4]">
+        <div className="flex flex-col h-full bg-gradient-to-b from-[#552EA4] to-[#201437]">
           {/* Sidebar Header */}
           <div className="flex items-center justify-between h-16 px-4">
             <div
@@ -166,18 +166,18 @@ const DashboardComponent = () => {
                   key={index}
                   onClick={() => handleMenuClick(item.key)}
                   className={`
-                    w-full flex items-center lg:px-3 py-3 rounded-lg text-sm font-medium transition-all duration-200
+                    w-full flex gap-3 items-center justify-center lg:px-3 py-2 rounded-lg  text-[#5A399D]  text-center font-black text-base border hover:bg-transparent hover:text-white hover:border border-white  transition-all duration-200
                     ${
                       isActive
-                        ? " bg-opacity-20 text-white border-r-4 border-white"
-                        : "text-white  hover:bg-opacity-10"
+                        ? " bg-transparent text-white"
+                        : "text-[text-[#5A399D]]  bg-white"
                     }
                     ${sidebarCollapsed && !isMobile ? "justify-center" : ""}
                   `}
                 >
                   <Icon
                     className={`w-5 h-5 ${
-                      !sidebarCollapsed || isMobile ? "mr-3" : ""
+                      !sidebarCollapsed || isMobile ? "" : ""
                     }`}
                   />
                   {(!sidebarCollapsed || isMobile) && <span>{item.label}</span>}
@@ -188,7 +188,7 @@ const DashboardComponent = () => {
             <button
               type="button"
               onClick={handleLogout}
-              className="w-full flex items-center px-3 py-3 rounded-lg text-sm font-medium text-white hover:bg-white hover:bg-opacity-10 transition-all duration-200 mt-8"
+              className="w-full flex gap-3 items-center justify-center px-3 py-1 rounded-lg  bg-white text-[#5A399D]  text-center font-black text-base border hover:bg-transparent hover:text-white hover:border border-white transition-all duration-300 mt-8"
             >
               <Power
                 className={`w-5 h-5 ${
@@ -204,7 +204,7 @@ const DashboardComponent = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Navigation Bar */}
-        <header className="bg-white shadow-md border-b border-[#552EA4] py-2 h-16">
+        <header className="bg-white shadow-md border-b border-[#201437] py-2 h-16">
           <div className="flex items-center justify-between h-full px-4">
             {/* Left side - Hamburger menu and title */}
             <div className="flex items-center space-x-4">

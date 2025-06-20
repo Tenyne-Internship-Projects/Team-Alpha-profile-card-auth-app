@@ -121,6 +121,14 @@ const UploadDocument: React.FC = () => {
             {errors.documents && (
               <p className="text-red-500 text-sm">{errors.documents.message}</p>
             )}
+            <button
+              type="button"
+              className="w-full bg-purple-600 text-white p-3 rounded-lg font-medium"
+              onClick={() => setStep("profile")}
+              // disabled={!watchedResume?.length}
+            >
+              NEXT
+            </button>
           </>
         )}
 
@@ -157,33 +165,23 @@ const UploadDocument: React.FC = () => {
                 />
               </div>
             )}
+            <div className="flex justify-between gap-4">
+              <button
+                type="button"
+                onClick={() => setStep("resume")}
+                className="w-full border border-gray-300 text-gray-700 p-3 rounded-lg"
+              >
+                PREVIOUS
+              </button>
+              <button
+                type="submit"
+                className="w-full bg-purple-600 text-white p-3 rounded-lg font-medium"
+              >
+                UPLOAD
+              </button>
+            </div>
           </>
         )}
-
-        <button
-          type="button"
-          className="w-full bg-purple-600 text-white p-3 rounded-lg font-medium"
-          onClick={() => setStep("profile")}
-          // disabled={!watchedResume?.length}
-        >
-          Next
-        </button>
-
-        <div className="flex justify-between gap-4">
-          <button
-            type="button"
-            onClick={() => setStep("resume")}
-            className="w-full border border-gray-300 text-gray-700 p-3 rounded-lg"
-          >
-            Previous
-          </button>
-          <button
-            type="submit"
-            className="w-full bg-purple-600 text-white p-3 rounded-lg font-medium"
-          >
-            Submit
-          </button>
-        </div>
       </form>
     </div>
   );
