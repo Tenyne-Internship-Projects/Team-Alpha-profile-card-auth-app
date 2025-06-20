@@ -23,7 +23,7 @@ export default function ProfileDetail() {
       try {
         const response = await axios.get(`/profile/${user?.id}`);
         setUsers(response.data);
-
+        console.log(response.data);
         toast.success("User loaded successfully");
       } catch (error) {
         const axiosError = error as AxiosError<{ message: string }>;

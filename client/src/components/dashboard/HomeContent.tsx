@@ -14,7 +14,11 @@ const HomeContent = () => {
         <p className="text-gray-600"></p>
       </div>
 
-      <div>{user?.profile && <ProfileDetail />}</div>
+      <div>
+        <ProfileDetail />
+      </div>
+
+      {/* {user && user.profile ? <ProfileDetail /> : <p>Loading profile...</p>} */}
     </div>
   );
 };

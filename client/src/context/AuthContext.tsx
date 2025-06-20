@@ -37,8 +37,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   }, []);
 
   const login = async (token: string, userData: User) => {
-    // localStorage.setItem("token", token);
-    // localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
     setToken(token);
     setUser(userData);
     setIsAuthenticated(true);
