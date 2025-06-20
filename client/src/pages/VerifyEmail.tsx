@@ -4,9 +4,9 @@ export default function VerifyEmail() {
   const [searchParams] = useSearchParams();
   const email = searchParams.get("email");
 
-  const getInboxLink = (email: string | null) => {
-    return `mailto:${email}`; // fallback
-  };
+  // const getInboxLink = (email: string | null) => {
+  //   return `mailto:${email}`; // fallback
+  // };
 
   return (
     <div className="grid h-screen pt-5 lg:pt-16 bg-gray-100 lg:bg-purple-950 md:flex lg:justify-between">
@@ -28,7 +28,7 @@ export default function VerifyEmail() {
 
         <div className="w-full lg:w-[70%] mx-auto">
           <a
-            href={getInboxLink(email)}
+            href="https://mail.google.com"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block w-full mt-4 px-4 py-2 bg-[#552EA4] text-white rounded hover:bg-[#552EA4]/60 transition"

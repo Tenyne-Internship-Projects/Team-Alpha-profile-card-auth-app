@@ -5,6 +5,7 @@ import axios from "../../services/axiosInstance";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { FaStarOfLife } from "react-icons/fa6";
+import { useState } from "react";
 
 interface RegisterForm {
   fullname: string;
@@ -14,6 +15,7 @@ interface RegisterForm {
 
 export default function Registration() {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -75,8 +77,8 @@ export default function Registration() {
           {/* Full Name */}
           <div className="w-full relative">
             <FaStarOfLife
-              fontSize={10}
-              className="text-red-600 absolute right-0 -top-2"
+              fontSize={8}
+              className="text-red-600 absolute right-2 top-1"
             />
             <input
               {...register("fullname", {
@@ -98,8 +100,8 @@ export default function Registration() {
           {/* Email */}
           <div className="relative">
             <FaStarOfLife
-              fontSize={10}
-              className="text-red-600 absolute right-0 -top-2"
+              fontSize={8}
+              className="text-red-600 absolute right-2 top-1"
             />
             <input
               {...register("email", {
@@ -121,8 +123,8 @@ export default function Registration() {
           {/* Password */}
           <div className="relative">
             <FaStarOfLife
-              fontSize={10}
-              className="text-red-600 absolute right-0 -top-2"
+              fontSize={8}
+              className="text-red-600 absolute right-2 top-1"
             />
             <input
               {...register("password", {
@@ -146,10 +148,17 @@ export default function Registration() {
                     "Password must include a special letter",
                 },
               })}
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               className="w-full border rounded-lg px-4 py-2"
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute top-3 right-4 text-[12px] text-purple-700"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
             {errors.password && (
               <p className="text-sm text-red-600">{errors.password.message}</p>
             )}

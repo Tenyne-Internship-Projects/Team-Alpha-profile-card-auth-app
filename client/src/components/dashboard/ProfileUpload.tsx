@@ -1,11 +1,9 @@
 import { useForm } from "react-hook-form";
-// import axios from "../../services/axiosInstance";
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { AuthContextType } from "../../types/user";
 import axios, { AxiosError } from "axios";
 import { apiUrl } from "../../services/axiosInstance";
-// import SkillsForm from "../ui/SkillField";
 
 interface FormData {
   fullname: string;
@@ -24,6 +22,7 @@ interface FormData {
 
 export default function ProfileForm() {
   const { user } = useAuth() as AuthContextType;
+  const [step, setStep] = useState("step1");
   const {
     register,
     handleSubmit,
@@ -85,8 +84,6 @@ export default function ProfileForm() {
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white shadow rounded-lg">
-      <h2 className="text-2xl font-bold mb-4">Create Profile</h2>
-
       {message && (
         <div className="mb-4 text-sm text-center text-white bg-purple-500 py-2 rounded">
           {message}
@@ -94,181 +91,232 @@ export default function ProfileForm() {
       )}
 
       <form onSubmit={handleSubmit(onSubmitProfile)} className="space-y-4">
-        <div>
-          <label className="block mb-1">Full Name</label>
-          <input
-            type="text"
-            {...register("fullname", { required: true })}
-            className="w-full px-3 py-2 border rounded"
-          />
-          {errors.fullname && <p className="text-red-500 text-sm">Required</p>}
-        </div>
+        {step === "step1" && (
+          <div className="space-y-5">
+            <div className="grid grid-cols-2  gap-4">
+              <div>
+                {/* <label className="block mb-1">Full Name</label> */}
+                <input
+                  type="text"
+                  placeholder="Enter Fullname"
+                  {...register("fullname", { required: true })}
+                  className="w-full px-3 py-2 border rounded"
+                />
+                {errors.fullname && (
+                  <p className="text-red-500 text-sm">Required</p>
+                )}
+              </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block mb-1">Gender</label>
-            <select
-              {...register("gender", { required: true })}
-              className="w-full px-3 py-2 border rounded"
-            >
-              <option value="">Select</option>
-              <option value="female">Female</option>
-              <option value="male">Male</option>
-              <option value="other">Other</option>
-            </select>
-            {errors.gender && <p className="text-red-500 text-sm">Required</p>}
-          </div>
+              <div>
+                {/* <label className="block mb-1">Profession</label> */}
+                <input
+                  type="text"
+                  placeholder="Profession"
+                  {...register("profession", { required: true })}
+                  className="w-full px-3 py-2 border rounded"
+                />
+              </div>
+            </div>
 
-          <div>
-            <label className="block mb-1">Date of Birth</label>
-            <input
-              type="date"
-              {...register("dateOfBirth")}
-              className="w-full px-3 py-2 border rounded"
-            />
-            {errors.dateOfBirth && (
-              <p className="text-red-500 text-sm">Required</p>
-            )}
-          </div>
-        </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                {/* <label className="block mb-1">Gender</label> */}
+                <select
+                  {...register("gender", { required: true })}
+                  className="w-full px-3 py-2 border rounded"
+                >
+                  <option value="">Select Gender</option>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
+                  <option value="other">Other</option>
+                </select>
+                {errors.gender && (
+                  <p className="text-red-500 text-sm">Required</p>
+                )}
+              </div>
 
-        <div>
-          <label className="block mb-1">Profession</label>
-          <input
-            type="text"
-            {...register("profession", { required: true })}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
+              <div>
+                {/* <label className="block mb-1">Date of Birth</label> */}
+                <input
+                  type="date"
+                  {...register("dateOfBirth")}
+                  className="w-full px-3 py-2 border rounded"
+                />
+                {errors.dateOfBirth && (
+                  <p className="text-red-500 text-sm">Required</p>
+                )}
+              </div>
+            </div>
 
-        <div>
-          <label className="block mb-1">Email</label>
-          <input
-            type="email"
-            {...register("primaryEmail", { required: true })}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
+            <div>
+              {/* <label className="block mb-1">Email</label> */}
+              <input
+                type="email"
+                placeholder="Enter Email"
+                {...register("primaryEmail", { required: true })}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
 
-        <div>
-          <label className="block mb-1">Specialization</label>
-          <input
-            type="text"
-            {...register("specialization", { required: true })}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
+            <div>
+              {/* <label className="block mb-1">Phone Number</label> */}
+              <input
+                type="tel"
+                placeholder="Enter Phone No"
+                {...register("phoneNumber", { required: true })}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
 
-        <div>
-          <label className="block mb-1">Location</label>
-          <input
-            type="text"
-            {...register("location", { required: true })}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                {/* <label className="block mb-1">Specialization</label> */}
+                <input
+                  type="text"
+                  placeholder="Specialization"
+                  {...register("specialization", { required: true })}
+                  className="w-full px-3 py-2 border rounded"
+                />
+              </div>
 
-        <div>
-          <label className="block mb-1">Bio</label>
-          <textarea
-            {...register("bio", {
-              required: true,
-              minLength: {
-                value: 50,
-                message: "Minimum of 50 words",
-              },
-              maxLength: {
-                value: 500,
-                message: "Maximum of 500 words",
-              },
-            })}
-            className="w-full px-3 py-2 border rounded"
-          ></textarea>
-          {errors.bio && (
-            <p className="text-sm text-red-600">{errors.bio.message}</p>
-          )}
-        </div>
+              <div>
+                {/* <label className="block mb-1">Location</label> */}
+                <input
+                  type="text"
+                  placeholder="Location"
+                  {...register("location", { required: true })}
+                  className="w-full px-3 py-2 border rounded"
+                />
+              </div>
+            </div>
 
-        <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded">
-          <h2 className="text-xl font-bold mb-4">Enter Your Skills</h2>
-          <input type="hidden" {...register("skills")} />
-
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  addSkill();
-                }
-              }}
-              placeholder="Type a skill"
-              className="flex-1 px-3 py-2 border rounded"
-            />
-            <button
-              type="button"
-              onClick={addSkill}
-              className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
-            >
-              Add
-            </button>
-          </div>
-
-          <div className="flex flex-wrap gap-2 mt-4">
-            {skills.map((skill, idx) => (
-              <div
-                key={idx}
-                className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full flex items-center gap-2"
+            <div className="flex justify-between">
+              <button
+                type="button"
+                onClick={() => setStep("step")}
+                className="py-2 px-5 w-fit text-[#5A399D] font-bold border rounded-md border-[#5A399D]"
               >
-                <span>{skill}</span>
+                CANCEL
+              </button>
+              <button
+                type="button"
+                onClick={() => setStep("step2")}
+                className="w-fit px-5 py-2 bg-[#5A399D] text-white font-semibold rounded-md hover:bg-purple-700 transition"
+              >
+                NEXT
+              </button>
+            </div>
+          </div>
+        )}
+
+        {step === "step2" && (
+          <div className="space-y-5">
+            <div>
+              {/* <label className="block mb-1">Bio</label> */}
+              <textarea
+                placeholder="Bio"
+                {...register("bio", {
+                  required: true,
+                  minLength: {
+                    value: 50,
+                    message: "Minimum of 50 words",
+                  },
+                  maxLength: {
+                    value: 500,
+                    message: "Maximum of 500 words",
+                  },
+                })}
+                className="w-full px-3 py-2 border rounded"
+              ></textarea>
+              {errors.bio && (
+                <p className="text-sm text-red-600">{errors.bio.message}</p>
+              )}
+            </div>
+            <div className=" mx-auto p-3 md:p-6 bg-white shadow rounded">
+              {/* <h2 className="text-xl font-bold mb-4">Enter Your Skills</h2> */}
+              <input type="hidden" {...register("skills")} />
+
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addSkill();
+                    }
+                  }}
+                  placeholder="Type a skill"
+                  className="flex-1 px-3 py-2 border rounded"
+                />
                 <button
                   type="button"
-                  onClick={() => removeSkill(skill)}
-                  className="text-red-500 font-bold"
+                  onClick={addSkill}
+                  className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
                 >
-                  ×
+                  Add
                 </button>
               </div>
-            ))}
+
+              <div className="flex flex-wrap gap-2 mt-4">
+                {skills.map((skill, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full flex items-center gap-2"
+                  >
+                    <span>{skill}</span>
+                    <button
+                      type="button"
+                      onClick={() => removeSkill(skill)}
+                      className="text-red-500 font-bold"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              {/* <label className="block mb-1">LinkedIn (optional)</label> */}
+              <input
+                type="url"
+                placeholder="LinkedIn (optional)"
+                {...register("linkedIn")}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+
+            <div>
+              {/* <label className="block mb-1">GitHub (optional)</label> */}
+              <input
+                type="url"
+                placeholder="GitHub (optional)"
+                {...register("github")}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+
+            <div className="flex justify-between text-base font-bold mt-5">
+              <button
+                type="button"
+                onClick={() => setStep("step1")}
+                className="py-2 px-5 w-fit text-[#5A399D] font-bold border rounded-md border-[#5A399D]"
+              >
+                PREVIOUS
+              </button>
+
+              <button
+                type="submit"
+                className="w-fit px-5 py-2 bg-[#5A399D] text-white font-semibold rounded-md hover:bg-purple-700 transition"
+                disabled={loading}
+              >
+                {loading ? "Submitting..." : "Submit Profile"}
+              </button>
+            </div>
           </div>
-        </div>
-
-        <div>
-          <label className="block mb-1">Phone Number</label>
-          <input
-            type="tel"
-            {...register("phoneNumber", { required: true })}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1">LinkedIn (optional)</label>
-          <input
-            type="url"
-            {...register("linkedIn")}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block mb-1">GitHub (optional)</label>
-          <input
-            type="url"
-            {...register("github")}
-            className="w-full px-3 py-2 border rounded"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full py-2 bg-purple-600 text-white font-semibold rounded hover:bg-purple-700 transition"
-          disabled={loading}
-        >
-          {loading ? "Submitting..." : "Submit Profile"}
-        </button>
+        )}
       </form>
     </div>
   );
