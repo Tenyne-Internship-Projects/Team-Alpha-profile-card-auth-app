@@ -28,6 +28,7 @@ export default function ProfileForm() {
     handleSubmit,
     formState: { errors },
     watch,
+
     setValue,
   } = useForm<FormData>({
     defaultValues: {
@@ -83,7 +84,7 @@ export default function ProfileForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6  rounded-lg">
+    <div className="w-[90%] md:w-2xl mx-auto p-6  rounded-lg">
       {message && (
         <div className="mb-4 text-sm text-center text-white bg-purple-500 py-2 rounded">
           {message}

@@ -7,6 +7,7 @@ export interface User {
   avatar?: string;
   createdAt?: string;
   updatedAt?: string;
+  profile: string;
 }
 
 export interface AuthContextType {

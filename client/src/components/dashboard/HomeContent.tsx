@@ -14,9 +14,7 @@ const HomeContent = () => {
         <p className="text-gray-600"></p>
       </div>
 
-      <div>
-        <ProfileDetail />
-      </div>
+      <div>{user?.profile && <ProfileDetail />}</div>
     </div>
   );
 };

@@ -5,6 +5,7 @@ const Dashboard = () => {
     <div>
       <div>
         <DashboardComponent />
+        {/* <p className="bg-blue-700">Dashboard is working</p> */}
       </div>
     </div>
   );
