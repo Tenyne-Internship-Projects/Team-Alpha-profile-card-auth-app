@@ -208,7 +208,7 @@ const DashboardComponent = () => {
                 <Menu className="w-5 h-5 text-gray-600" />
               </button>
               <div className="text-xl font-bold text-[#552EA4]">
-                <img src="/freebioLogo.png" alt="" />
+                <img src="/freebioLogo.png" alt="" className="h-[50px]" />
               </div>
             </div>
 
