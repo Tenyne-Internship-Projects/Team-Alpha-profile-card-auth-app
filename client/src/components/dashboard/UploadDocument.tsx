@@ -86,13 +86,13 @@ const UploadDocument: React.FC = () => {
         {["resume", "profile"].map((item) => (
           <div
             key={item}
-            className={`px-4 py-2 rounded-full text-sm font-semibold ${
+            className={`px-4 py-2 rounded-lg shadow-xl text-sm font-semibold ${
               step === item
-                ? "bg-purple-600 text-white"
+                ? "bg-[#5A399D] text-white"
                 : "bg-gray-200 text-gray-500"
             }`}
           >
-            {item === "resume" ? "Resume Upload" : "Profile Upload"}
+            {item === "resume" ? " Upload Resume" : " Upload Picture"}
           </div>
         ))}
       </div>
@@ -114,8 +114,10 @@ const UploadDocument: React.FC = () => {
                 accept=".pdf,.doc,.docx"
                 className="hidden"
               />
-              <div className="cursor-pointer bg-purple-600 text-white p-3 rounded-lg text-center">
-                {watchedResume?.[0] ? watchedResume[0].name : "Upload Resume"}
+              <div className="cursor-pointer bg-[#5A399D] shadow-xl text-white p-3 rounded-lg text-center">
+                {watchedResume?.[0]
+                  ? watchedResume[0].name
+                  : "CHOOSE RESUME UPLOAD"}
               </div>
             </label>
             {errors.documents && (
@@ -123,7 +125,7 @@ const UploadDocument: React.FC = () => {
             )}
             <button
               type="button"
-              className="w-full bg-purple-600 text-white p-3 rounded-lg font-medium"
+              className="w-full bg-[#5A399D] cursor-pointer text-white p-3 shadowxl rounded-lg font-semibold"
               onClick={() => setStep("profile")}
               // disabled={!watchedResume?.length}
             >
@@ -146,10 +148,10 @@ const UploadDocument: React.FC = () => {
                 accept="image/*"
                 className="hidden"
               />
-              <div className="cursor-pointer bg-purple-600 text-white p-3 rounded-lg text-center">
+              <div className="cursor-pointer bg-[#5A399D] text-gray-100 p-3 rounded-lg text-center">
                 {watchedProfile?.[0]
                   ? watchedProfile[0].name
-                  : "Upload Profile Picture"}
+                  : "CHOOSE PROFILE IMAGE UPLOAD"}
               </div>
             </label>
             {errors.avatar && (
@@ -169,13 +171,13 @@ const UploadDocument: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setStep("resume")}
-                className="w-full border border-gray-300 text-gray-700 p-3 rounded-lg"
+                className="w-full border border-[#5A399D] cursor-pointer text-[#5A399D] font-semibold p-3 rounded-lg"
               >
                 PREVIOUS
               </button>
               <button
                 type="submit"
-                className="w-full bg-purple-600 text-white p-3 rounded-lg font-medium"
+                className="w-full bg-[#5A399D] text-white cursor-pointer p-3 rounded-lg font-semibold"
               >
                 UPLOAD
               </button>

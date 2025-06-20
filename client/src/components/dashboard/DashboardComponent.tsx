@@ -9,16 +9,9 @@ import {
   ChevronLeft,
   ChevronRight,
   Power,
-  // Upload,
   Sun,
   Moon,
   Upload,
-  // BarChart3,
-  // FileText,
-  // Calendar,
-  // TrendingUp,
-  // Users,
-  // Activity,
 } from "lucide-react";
 import SettingsContent from "./SettingsContent";
 import HomeContent from "./HomeContent";
@@ -215,7 +208,7 @@ const DashboardComponent = () => {
                 <Menu className="w-5 h-5 text-gray-600" />
               </button>
               <div className="text-xl font-bold text-[#552EA4]">
-                <img src="/FreebioLogoDark.png" alt="" />
+                <img src="/freebioLogo.png" alt="" />
               </div>
             </div>
 

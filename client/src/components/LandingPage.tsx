@@ -6,14 +6,14 @@ const LandingPage = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="relative max-h-screen bg-cover  bg-no-repeat bg-[url('/freebioHeroImg.png')]">
+    <div className="relative h-screen bg-cover  bg-no-repeat bg-[url('/homeHeroBg.png')]">
       {/* Dark overlay to improve text readability */}
       <div className="absolute inset-0 bg-black/70  z-0"></div>
 
       <div className="relative z-10 px-4 sm:px-8 md:px-16 lg:px-24 py-8 text-white">
         {/* Header */}
         <div className="flex justify-between items-center mb-10">
-          <img src="/FreebioLogoDark.png" alt="Freebio Logo" className="h-10" />
+          <img src="/freebioLogo.png" alt="Freebio Logo" className="h-10" />
           <div className="hidden lg:flex gap-4 ">
             <button
               onClick={() => navigate("/login")}
@@ -24,7 +24,7 @@ const LandingPage = () => {
             <button
               type="button"
               onClick={() => navigate("/register")}
-              className="text-lg md:text-xl font-bold px-6 py-2 cursor-pointer bg-[#723EDA] border-b-4 rounded-xl border-[#FFE01ACC] hover:bg-[#5a2fc0] transition"
+              className="text-lg md:text-xl font-bold px-6 py-2 cursor-pointer bg-[#723EDA] border-b-2 rounded-xl border-[#FFE01ACC] hover:bg-[#5a2fc0] transition"
             >
               Sign up
             </button>
@@ -76,7 +76,7 @@ const LandingPage = () => {
           <button
             type="button"
             onClick={() => navigate("/get-started")}
-            className="text-lg md:text-xl font-bold px-6 py-2 cursor-pointer bg-[#723EDA] border-b-4 rounded-xl border-[#FFE01ACC] hover:bg-[#5a2fc0] transition"
+            className="text-lg md:text-xl font-bold px-6 py-2 cursor-pointer bg-[#723EDA] border-b-2 rounded-xl border-[#FFE01ACC] hover:bg-[#5a2fc0] transition"
           >
             Get Started
           </button>

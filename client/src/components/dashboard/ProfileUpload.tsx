@@ -83,7 +83,7 @@ export default function ProfileForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow rounded-lg">
+    <div className="max-w-2xl mx-auto p-6  rounded-lg">
       {message && (
         <div className="mb-4 text-sm text-center text-white bg-purple-500 py-2 rounded">
           {message}
@@ -100,7 +100,7 @@ export default function ProfileForm() {
                   type="text"
                   placeholder="Enter Fullname"
                   {...register("fullname", { required: true })}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 />
                 {errors.fullname && (
                   <p className="text-red-500 text-sm">Required</p>
@@ -113,7 +113,7 @@ export default function ProfileForm() {
                   type="text"
                   placeholder="Profession"
                   {...register("profession", { required: true })}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 />
               </div>
             </div>
@@ -123,7 +123,7 @@ export default function ProfileForm() {
                 {/* <label className="block mb-1">Gender</label> */}
                 <select
                   {...register("gender", { required: true })}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 >
                   <option value="">Select Gender</option>
                   <option value="female">Female</option>
@@ -140,7 +140,7 @@ export default function ProfileForm() {
                 <input
                   type="date"
                   {...register("dateOfBirth")}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 />
                 {errors.dateOfBirth && (
                   <p className="text-red-500 text-sm">Required</p>
@@ -154,7 +154,7 @@ export default function ProfileForm() {
                 type="email"
                 placeholder="Enter Email"
                 {...register("primaryEmail", { required: true })}
-                className="w-full px-3 py-2 border rounded"
+                className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
               />
             </div>
 
@@ -164,7 +164,7 @@ export default function ProfileForm() {
                 type="tel"
                 placeholder="Enter Phone No"
                 {...register("phoneNumber", { required: true })}
-                className="w-full px-3 py-2 border rounded"
+                className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
               />
             </div>
 
@@ -175,7 +175,7 @@ export default function ProfileForm() {
                   type="text"
                   placeholder="Specialization"
                   {...register("specialization", { required: true })}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 />
               </div>
 
@@ -185,7 +185,7 @@ export default function ProfileForm() {
                   type="text"
                   placeholder="Location"
                   {...register("location", { required: true })}
-                  className="w-full px-3 py-2 border rounded"
+                  className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 />
               </div>
             </div>
@@ -226,7 +226,7 @@ export default function ProfileForm() {
                     message: "Maximum of 500 words",
                   },
                 })}
-                className="w-full px-3 py-2 border rounded"
+                className="w-full px-3 py-2 outline:none bg-[#5A399D] text-white shadow-2xl rounded"
               ></textarea>
               {errors.bio && (
                 <p className="text-sm text-red-600">{errors.bio.message}</p>
@@ -248,12 +248,12 @@ export default function ProfileForm() {
                     }
                   }}
                   placeholder="Type a skill"
-                  className="flex-1 px-3 py-2 border rounded"
+                  className="flex-1 px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 />
                 <button
                   type="button"
                   onClick={addSkill}
-                  className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+                  className="bg-[#5A399D] text-white px-4 py-2 rounded hover:bg-[#5A399D]/90"
                 >
                   Add
                 </button>
@@ -284,7 +284,7 @@ export default function ProfileForm() {
                 type="url"
                 placeholder="LinkedIn (optional)"
                 {...register("linkedIn")}
-                className="w-full px-3 py-2 border rounded"
+                className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
               />
             </div>
 
@@ -294,7 +294,7 @@ export default function ProfileForm() {
                 type="url"
                 placeholder="GitHub (optional)"
                 {...register("github")}
-                className="w-full px-3 py-2 border rounded"
+                className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
               />
             </div>
 
@@ -309,7 +309,7 @@ export default function ProfileForm() {
 
               <button
                 type="submit"
-                className="w-fit px-5 py-2 bg-[#5A399D] text-white font-semibold rounded-md hover:bg-purple-700 transition"
+                className="w-fit px-5 py-2 bg-[#5A399D] text-white font-semibold rounded-md hover:bg-[#5A399D]/90 transition"
                 disabled={loading}
               >
                 {loading ? "Submitting..." : "Submit Profile"}

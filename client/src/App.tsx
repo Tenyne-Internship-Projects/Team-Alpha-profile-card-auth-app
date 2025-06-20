@@ -10,6 +10,7 @@ import { Toaster } from "react-hot-toast";
 import VerifyPage from "./pages/Verify";
 import UserDetails from "./pages/UserDetail";
 import RegisterWelcome from "./pages/RegisterWelcome";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -25,6 +26,9 @@ function App() {
           <Route path="/verify-email" element={<VerifyPage />} />
           <Route path="/proceed-to-email" element={<VerifyEmail />} />
           <Route path="/users/:id" element={<UserDetails />} />
+
+          {/* Catch ALL invalid routes */}
+          <Route path="*" element={<NotFound />} />
 
           <Route
             path="/dashboard"

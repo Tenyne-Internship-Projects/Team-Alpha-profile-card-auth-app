@@ -65,7 +65,7 @@ const SettingsContent = () => {
       </div>
 
       <div className="space-y-6">
-        <div className="bg-white rounded-lg shadow-md p-6">
+        {/* <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold mb-4">Account Settings</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -102,7 +102,7 @@ const SettingsContent = () => {
               </label>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold mb-4">Privacy Settings</h3>
