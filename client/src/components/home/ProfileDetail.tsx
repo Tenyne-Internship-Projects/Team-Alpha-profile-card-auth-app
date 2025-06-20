@@ -53,10 +53,10 @@ export default function ProfileDetail() {
             <h1 className="text-2xl font-bold text-[#5A399D] mb-1">
               <p>picture</p>
 
-              <img
+              {/* <img
                 src={profile.profile.avatarUrl}
                 alt={profile.profile.fullName}
-              />
+              /> */}
               {users.fullname}
             </h1>
             {/* <p className="text-gray-600 text-sm">{userData.title}</p> */}
