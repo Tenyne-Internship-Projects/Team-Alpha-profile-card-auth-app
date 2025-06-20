@@ -23,7 +23,7 @@ const RegisterWelcome = () => {
 
         <button
           onClick={() => navigate("/register")}
-          className="text-[#723EDA] font-semibold text-base bg-gradient-to-r from-white to-[#e1d9f0] py-3 w-full mt-16 cursor-pointer rounded-xl"
+          className="text-[#723EDA] font-semibold text-base bg-gradient-to-r from-white to-[#e1d9f0] py-3 w-full md:mt-16 cursor-pointer rounded-xl"
         >
           Sign up
         </button>

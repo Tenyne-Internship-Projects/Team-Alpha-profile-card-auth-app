@@ -28,7 +28,7 @@ export default function VerifyEmail() {
 
         <div className="w-full lg:w-[70%] mx-auto">
           <a
-            href="https://mail.google.com"
+            href="https://mail.google.com/mail/u/{email}/#inbox"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block w-full mt-4 px-4 py-2 bg-[#552EA4] text-white rounded hover:bg-[#552EA4]/60 transition"
