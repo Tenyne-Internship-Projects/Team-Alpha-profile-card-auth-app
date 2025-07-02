@@ -17,6 +17,7 @@ export default function VerifyPage() {
       try {
         await axios.post("/verify-email", { token });
         setStatus("✅ Email verified! Redirecting to login...");
+        toast.success("Email verified");
         setTimeout(() => {
           navigate("/login");
         }, 3000);

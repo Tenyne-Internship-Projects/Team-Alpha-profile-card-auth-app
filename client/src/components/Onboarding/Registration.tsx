@@ -11,6 +11,7 @@ interface RegisterForm {
   fullname: string;
   email: string;
   password: string;
+  role: "client" | "freelancer";
 }
 
 export default function Registration() {
@@ -117,6 +118,36 @@ export default function Registration() {
             />
             {errors.email && (
               <p className="text-sm text-red-600">{errors.email.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label className="block font-medium mb-2">Select Gender:</label>
+            <div className="flex items-center gap-4">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  value="client"
+                  {...register("role", { required: true })}
+                  className="form-radio text-blue-600"
+                />
+                <span>Client</span>
+              </label>
+
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  value="freelancer"
+                  {...register("role", { required: true })}
+                  className="form-radio text-pink-500"
+                />
+                <span>Freelancer</span>
+              </label>
+            </div>
+            {errors.role && (
+              <p className="text-red-500 text-sm mt-1">
+                Please select a gender.
+              </p>
             )}
           </div>
 
