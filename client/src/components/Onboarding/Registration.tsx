@@ -11,7 +11,7 @@ interface RegisterForm {
   fullname: string;
   email: string;
   password: string;
-  role: "client" | "freelancer";
+  role: string;
 }
 
 export default function Registration() {
@@ -37,8 +37,10 @@ export default function Registration() {
   };
 
   const onSubmit = async (data: RegisterForm) => {
+    console.log(data);
     try {
       const res = await axios.post("/auth/register", data);
+      console.log(data);
 
       if (res.status === 201) {
         toast.success("Verify email");
@@ -122,7 +124,7 @@ export default function Registration() {
           </div>
 
           <div>
-            <label className="block font-medium mb-2">Select Gender:</label>
+            <label className="block font-medium mb-2">Role:</label>
             <div className="flex items-center gap-4">
               <label className="flex items-center space-x-2">
                 <input
