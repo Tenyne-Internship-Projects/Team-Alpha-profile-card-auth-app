@@ -11,6 +11,8 @@ import VerifyPage from "./pages/Verify";
 import UserDetails from "./pages/UserDetail";
 import RegisterWelcome from "./pages/RegisterWelcome";
 import NotFound from "./pages/NotFound";
+import FreelancePage from "./pages/FreelancePage";
+import DashboardClient from "./components/clientHirer/Dashboard";
 
 function App() {
   return (
@@ -23,7 +25,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
 
-          <Route path="/verify-email" element={<VerifyPage />} />
+          <Route path="/email-verification" element={<VerifyPage />} />
           <Route path="/proceed-to-email" element={<VerifyEmail />} />
           <Route path="/users/:id" element={<UserDetails />} />
 
@@ -38,6 +40,10 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          {/* Freelance page  */}
+          <Route path="/jobs-listed" element={<FreelancePage />} />
+          <Route path="/job-list-dashboard" element={<DashboardClient />} />
         </Routes>
       </Router>
     </AuthProvider>
