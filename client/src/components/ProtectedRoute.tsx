@@ -25,7 +25,11 @@ ProtectedRouteProps) {
     user === null ||
     (allowedRoles && !allowedRoles.includes(user.role as UserRole))
   ) {
-    return <div>Permission denied</div>;
+    return (
+      <div>
+        <Navigate to="/login" />
+      </div>
+    );
   }
 
   if (!user) {
