@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import type { AuthContextType } from "../types/user";
 
@@ -16,6 +16,7 @@ export default function ProtectedRoute({
 }: // allowedRoles,
 ProtectedRouteProps) {
   const { user } = useAuth() as AuthContextType;
+  const navigate = useNavigate();
 
   if (user === undefined) {
     return <div>Loading...</div>;
@@ -27,7 +28,10 @@ ProtectedRouteProps) {
   ) {
     return (
       <div>
-        <Navigate to="/login" />
+        Permission denied
+        <button type="button" onClick={() => navigate("/login")}>
+          Go to Login
+        </button>
       </div>
     );
   }
