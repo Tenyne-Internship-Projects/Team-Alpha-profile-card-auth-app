@@ -5,8 +5,8 @@ import {
   Clock,
   // Users,
   Briefcase,
-  MoreHorizontal,
-  Share,
+  // MoreHorizontal,
+  // Share,
   Grid3X3,
   List,
 } from "lucide-react";
@@ -145,17 +145,7 @@ const ClientProject = () => {
         {project.tags.map((tag, index) => (
           <span
             key={index}
-            className={`px-2 py-1 rounded-full text-xs font-medium ${
-              tag === "Entry Level"
-                ? "bg-blue-100 text-blue-700"
-                : tag === "Intermediate"
-                ? "bg-green-100 text-green-700"
-                : tag === "Expert"
-                ? "bg-red-100 text-red-700"
-                : tag === "Urgent"
-                ? "bg-red-100 text-red-700"
-                : "bg-purple-100 text-purple-700"
-            }`}
+            className={`px-2 py-1 rounded-md bg-[#CEC4E2] text-xs font-medium `}
           >
             {tag}
           </span>
@@ -170,27 +160,28 @@ const ClientProject = () => {
 
   const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => (
     <div className="h-full bg-white">
-      <div className="p-6 border-b">
+      <div className="p-3 border-b">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">{project.title}</h2>
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <button className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100">
               <Share className="w-5 h-5" />
             </button>
             <button className="p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100">
               <MoreHorizontal className="w-5 h-5" />
             </button>
-          </div>
+          </div> */}
         </div>
 
-        <div className="flex items-center space-x-4 text-sm text-gray-600 mb-4">
+        <div className="flex flex-col space-x-4 text-sm text-gray-600 mb-4">
           <div className="flex items-center space-x-1">
-            <Clock className="w-4 h-4" />
-            <span>{project.duration}</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <Calendar className="w-4 h-4" />
+            {/* <Calendar className="w-4 h-4" /> */}
             <span>Posted {project.posted}</span>
+          </div>
+          <div className="flex flex-col space-x-3 mt-3">
+            {/* <Clock className="w-4 h-4" /> */}
+            <p className="font-semibold">Deadline</p>
+            <span>{project.duration}</span>
           </div>
         </div>
 
@@ -198,33 +189,17 @@ const ClientProject = () => {
           {project.tags.map((tag, index) => (
             <span
               key={index}
-              className={`px-3 py-1 rounded-full text-sm font-medium ${
-                tag === "Entry Level"
-                  ? "bg-blue-100 text-blue-700"
-                  : tag === "Intermediate"
-                  ? "bg-green-100 text-green-700"
-                  : tag === "Expert"
-                  ? "bg-red-100 text-red-700"
-                  : tag === "Urgent"
-                  ? "bg-red-100 text-red-700"
-                  : "bg-purple-100 text-purple-700"
-              }`}
+              className={`px-3 py-1 rounded-md bg-[#CEC4E2] text-sm font-medium
+                 
+              `}
             >
               {tag}
             </span>
           ))}
         </div>
-
-        <div className="text-2xl font-bold text-purple-600 mb-4">
-          Budget: {project.budget}
-        </div>
-
-        <button className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-purple-700 transition-colors">
-          Edit Project
-        </button>
       </div>
 
-      <div className="p-6 overflow-y-auto">
+      <div className="p-3 overflow-y-auto">
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-3">Project Description</h3>
           <p className="text-gray-700 leading-relaxed">{project.description}</p>
@@ -265,11 +240,19 @@ const ClientProject = () => {
           </div>
         </div>
       </div>
+
+      <div className="text-2xl font-bold text-purple-600 mb-4">
+        Budget: {project.budget}
+      </div>
+
+      <button className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-purple-700 transition-colors">
+        Edit Project
+      </button>
     </div>
   );
 
   const ComingSoon: React.FC = () => (
-    <div className="h-full flex items-center justify-center bg-gray-50">
+    <div className="h-full flex items-center justify-center bg-white">
       <div className="text-center">
         <div className="w-24 h-24 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <Briefcase className="w-12 h-12 text-purple-500" />
@@ -287,9 +270,9 @@ const ClientProject = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen ">
       {/* Top Header */}
-      <div className="bg-white border-b px-2 sm:px-4 md:px-6 py-2 sm:py-4">
+      <div className=" px-2 sm:px-4  mb-5">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-2 md:gap-0">
           <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-6 w-full md:w-auto">
             <div className="flex items-center space-x-2">
@@ -321,9 +304,9 @@ const ClientProject = () => {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row h-[calc(100vh-80px)] md:h-[calc(100vh-96px)]">
+      <div className="flex flex-col lg:flex-row gap-5 h-[calc(100vh-80px)] md:h-[calc(100vh-96px)]">
         {/* Project List */}
-        <div className="w-full lg:w-1/2 p-2 sm:p-4 md:p-6 overflow-y-auto max-h-[50vh] lg:max-h-full border-b lg:border-b-0 lg:border-r bg-white">
+        <div className="w-full lg:w-4/6 p-2 sm:p-4 md:p-6 overflow-y-auto max-h-[50vh] lg:max-h-full  rounded-2xl bg-white">
           <h1 className="text-2xl font-bold mb-6">Active Projects</h1>
           {projects.map((project) => (
             <ProjectCard
@@ -336,9 +319,11 @@ const ClientProject = () => {
         </div>
 
         {/* Project Details Sidebar */}
-        <div className="w-full lg:w-1/2 border-l bg-white flex-1 min-h-[300px] max-h-[60vh] lg:max-h-full overflow-y-auto">
+        <div className="w-full lg:w-2/6 rounded-2xl bg-white flex-1 min-h-[300px] max-h-[60vh] lg:max-h-full overflow-y-auto">
           {selectedProject ? (
-            <ProjectDetails project={selectedProject} />
+            <div className="">
+              <ProjectDetails project={selectedProject} />
+            </div>
           ) : (
             <ComingSoon />
           )}
