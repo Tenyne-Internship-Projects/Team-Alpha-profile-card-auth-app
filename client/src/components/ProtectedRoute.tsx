@@ -15,8 +15,14 @@ export default function ProtectedRoute({
   allowedRoles,
 }: // allowedRoles,
 ProtectedRouteProps) {
-  const { user } = useAuth() as AuthContextType;
+  const { logout, user } = useAuth() as AuthContextType;
   const navigate = useNavigate();
+  const handleLogout = () => {
+    if (confirm("Are you sure you want to logout?")) {
+      // alert("Logged out successfully!");
+      logout();
+    }
+  };
 
   if (user === undefined) {
     return <div>Loading...</div>;
@@ -31,6 +37,13 @@ ProtectedRouteProps) {
         Permission denied
         <button type="button" onClick={() => navigate("/login")}>
           Go to Login
+        </button>
+        <button
+          type="button"
+          onClick={handleLogout}
+          className=" flex gap-3  rounded-lg hover:bg-[#CEC4E2] p-4 w-fit text-black font-black text-base transition-all duration-300 mt-8"
+        >
+          Logout
         </button>
       </div>
     );
