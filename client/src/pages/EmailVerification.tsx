@@ -3,19 +3,19 @@ import { useParams } from "react-router-dom";
 import axios from "../services/axiosInstance";
 
 export default function VerifyEmail() {
-  const { token } = useParams(); // grabs token from URL path
+  const { code } = useParams(); // grabs token from URL path
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
   );
 
   useEffect(() => {
-    if (token) {
+    if (code) {
       axios
-        .post("/auth/verify-email", { token })
+        .post("/auth/verify-email", { code })
         .then(() => setStatus("success"))
         .catch(() => setStatus("error"));
     }
-  }, [token]);
+  }, [code]);
 
   return (
     <div className="text-center mt-20">
