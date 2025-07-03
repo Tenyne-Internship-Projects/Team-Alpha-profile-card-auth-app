@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axios from "../services/axiosInstance";
 
 export default function VerifyEmail() {
   const { token } = useParams(); // grabs token from URL path
@@ -11,7 +11,7 @@ export default function VerifyEmail() {
   useEffect(() => {
     if (token) {
       axios
-        .post("/api/verify-email", { token })
+        .post("/auth/verify-email", { token })
         .then(() => setStatus("success"))
         .catch(() => setStatus("error"));
     }
