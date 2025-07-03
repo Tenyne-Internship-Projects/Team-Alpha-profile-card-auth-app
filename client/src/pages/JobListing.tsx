@@ -1,6 +1,6 @@
 import JobBoard from "../components/freelancerComponent/FreelancePage";
 
-const FreelancePage = () => {
+const JobListing = () => {
   return (
     <div>
       <JobBoard />
@@ -8,4 +8,4 @@ const FreelancePage = () => {
   );
 };
 
-export default FreelancePage;
+export default JobListing;

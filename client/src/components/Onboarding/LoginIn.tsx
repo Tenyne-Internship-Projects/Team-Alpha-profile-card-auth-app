@@ -38,8 +38,19 @@ export const LoginIn = () => {
   const onSubmit = async (data: LoginForm) => {
     try {
       const res = await axios.post("/auth/login", data);
-      login(res.data.token, res.data.user); // Pass both token and user data
-      navigate("/dashboard");
+      const token = res.data.accessToken;
+      const role = res.data.user.role;
+
+      login(token, res.data.user); // Pass both token and user data
+      if (role === "freelancer") {
+        navigate("/dashboard");
+      } else if (res.data.user.role === "client") {
+        navigate("/job-list-dashboard");
+      } else {
+        navigate("/");
+      }
+      console.log(res.data);
+      // navigate("/dashboard");
       toast.success("Successfully logged in");
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;

@@ -1,7 +1,7 @@
 const ClientDashboard = () => {
   return (
     <div>
-      <div></div>
+      <div className="bg-black">client</div>
     </div>
   );
 };
