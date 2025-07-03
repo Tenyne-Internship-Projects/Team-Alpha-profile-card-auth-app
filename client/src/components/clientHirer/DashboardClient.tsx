@@ -3,22 +3,29 @@ import {
   Menu,
   X,
   Home,
-  Settings,
+  // Settings,
   Bell,
   User,
   ChevronLeft,
   ChevronRight,
+  LayoutGrid,
+  // CirclePlus,
   Power,
   Sun,
   Moon,
+  Users,
   Upload,
 } from "lucide-react";
-import SettingsContent from "../dashboard/SettingsContent";
-import HomeContent from "../dashboard/HomeContent";
-import ProfileUpload from "../dashboard/ProfileUpload";
+// import SettingsContent from "../dashboard/SettingsContent";
+// import HomeContent from "../dashboard/HomeContent";
+// import ProfileUpload from "../dashboard/ProfileUpload";
 import { AuthContextType } from "../../types/user";
 import { useAuth } from "../../hooks/useAuth";
-import UploadDocument from "../dashboard/UploadDocument";
+// import UploadDocument from "../dashboard/UploadDocument";
+import ClientHome from "./ClientHome";
+import ClientProject from "./ClientProject";
+import Employees from "./Employees";
+import AddProjects from "./AddProjects";
 
 // import ProfileUpdate from "./ProfileUpload";
 
@@ -45,10 +52,10 @@ const DashboardClient = () => {
   }, []);
 
   const menuItems = [
-    { icon: Home, label: "Home", key: "Home" },
-    { icon: User, label: "Profile Details", key: "Profile" },
-    { icon: Upload, label: " Uploads", key: "upload" },
-    { icon: Settings, label: "Settings", key: "Settings" },
+    { icon: Home, label: "Dashboard", key: "dashboard" },
+    { icon: LayoutGrid, label: "Projects", key: "projects" },
+    { icon: Users, label: "Employees", key: "employees" },
+    { icon: Upload, label: "Add Project", key: "addprojects" },
   ];
 
   const toggleSidebar = () => {
@@ -75,23 +82,23 @@ const DashboardClient = () => {
 
   const renderContent = () => {
     switch (activeSection) {
-      case "Home":
-        return <HomeContent />;
-      case "upload":
-        return <UploadDocument />;
-      case "Profile":
-        return <ProfileUpload />;
-      case "Settings":
-        return <SettingsContent />;
+      case "dashboard":
+        return <ClientHome />;
+      case "projects":
+        return <ClientProject />;
+      case "employees":
+        return <Employees />;
+      case "addprojects":
+        return <AddProjects />;
       default:
       // return <HomeContent />;
     }
   };
 
   return (
-    <div className="bg-[#E1DEE8] h-screen pt-5 pr-10">
+    <div className="bg-[#E1DEE8] min-h-screen h-screen w-full">
       {/* Top Navigation Bar */}
-      <header className="bg-transparent  py-2 h-16">
+      <header className="fixed top-0 left-0 w-full bg-transparent py-2 h-16 z-50">
         <div className="flex items-center justify-between h-full px-4">
           {/* Left side - Hamburger menu and title */}
           <div className="flex items-center space-x-4">
@@ -133,7 +140,11 @@ const DashboardClient = () => {
           </div>
         </div>
       </header>
-      <div className={`flex mt-5 ${darkMode ? "dark" : ""} `}>
+      <div
+        className={`relative flex w-full h-[calc(100vh-2rem)] md:h-[calc(100vh-2rem)] mt-5 ${
+          darkMode ? "dark" : ""
+        }`}
+      >
         {/* Mobile Overlay */}
         {isMobile && sidebarOpen && (
           <div
@@ -145,34 +156,23 @@ const DashboardClient = () => {
         {/* Sidebar */}
         <div
           className={`
-        fixed md:relative z-50 bg-white  rounded-t-2xl shadow-lg transition-all duration-300 ease-in-out
-        ${
-          isMobile
-            ? `${sidebarOpen ? "translate-x-0" : "-translate-x-full"} w-64`
-            : `${sidebarCollapsed ? "w-20" : "w-64"}`
-        }
-      `}
+            ${
+              isMobile
+                ? `fixed top-0 left-0 h-screen w-64 z-50 bg-white rounded-t-2xl shadow-lg transition-transform duration-300 ease-in-out ${
+                    sidebarOpen ? "translate-x-0" : "-translate-x-full"
+                  } overflow-y-auto`
+                : `fixed top-20 left-0 h-screen w-64 z-30 bg-white rounded-t-2xl shadow-lg transition-all duration-300 ease-in-out overflow-hidden`
+            }
+          `}
         >
-          <div className="flex flex-col h-full">
+          <div className="flex flex-col ">
             {/* Sidebar Header */}
-            <div className="flex items-center justify-between h-16 px-4">
-              {/* <div
-                className={`flex items-center w-full justify-center space-x-3 ${
-                  sidebarCollapsed && !isMobile ? "justify-center" : ""
-                }`}
-              >
-                {(!sidebarCollapsed || isMobile) && (
-                  <div className="w-[80px] h-[80px] bg-white rounded-full flex items-center justify-center mt-10 mx-auto">
-                    <User className="w-10 h-10 text-[#552EA4]" />
-                  </div>
-                )}
-              </div> */}
-
+            <div className="flex items-center justify-between px-4 pt-4">
               {/* Desktop collapse button */}
               {!isMobile && (
                 <button
                   onClick={toggleSidebar}
-                  className="p-1 rounded-lg  hover:bg-opacity-20 transition-colors"
+                  className="p-1 rounded-lg hover:bg-opacity-20 transition-colors"
                 >
                   {sidebarCollapsed ? (
                     <ChevronRight className="w-5 h-5 text-white" />
@@ -194,7 +194,7 @@ const DashboardClient = () => {
             </div>
 
             {/* Navigation Menu */}
-            <nav className="flex-1 px-2 lg:px-4 mt-16 py-6 space-y-2 text-white">
+            <nav className="flex-1 px-2 lg:px-4 space-y-2 text-white mt-8">
               {menuItems.map((item, index) => {
                 const Icon = item.icon;
                 const isActive = activeSection === item.key;
@@ -203,22 +203,18 @@ const DashboardClient = () => {
                     key={index}
                     onClick={() => handleMenuClick(item.key)}
                     className={`
-                    w-full flex gap-3 items-center justify-center lg:px-3 py-2 rounded-lg  text-[#5A399D]  text-center font-black text-base border hover:bg-transparent hover:text-white hover:border border-white  transition-all duration-200
-                    ${
-                      isActive
-                        ? " bg-transparent text-white"
-                        : "text-[text-[#5A399D]]  bg-white"
-                    }
+                     flex gap-3  lg:px-3 py-2 rounded-lg hover:bg-[#CEC4E2] p-4 w-fit   text-center font-semibold border border-white  transition-all duration-200
+                    ${isActive ? "  bg-[#CEC4E2]" : "  bg-transparent"}
                     ${sidebarCollapsed && !isMobile ? "justify-center" : ""}
                   `}
                   >
                     <Icon
-                      className={`w-5 h-5 ${
+                      className={`w-6 h-6 text-[#5A399D] ${
                         !sidebarCollapsed || isMobile ? "" : ""
                       }`}
                     />
                     {(!sidebarCollapsed || isMobile) && (
-                      <span>{item.label}</span>
+                      <span className="text-[#2C3134]">{item.label}</span>
                     )}
                   </button>
                 );
@@ -227,7 +223,7 @@ const DashboardClient = () => {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="w-full flex gap-3 items-center justify-center px-3 py-1 rounded-lg  bg-white text-[#5A399D]  text-center font-black text-base border hover:bg-transparent hover:text-white hover:border border-white transition-all duration-300 mt-8"
+                className=" flex gap-3  rounded-lg hover:bg-[#CEC4E2] p-4 w-fit text-black font-black text-base transition-all duration-300 mt-8"
               >
                 <Power
                   className={`w-5 h-5 ${
@@ -241,13 +237,19 @@ const DashboardClient = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div
+          className={`flex-1 flex flex-col overflow-hidden transition-all duration-300 ease-in-out
+            ${!isMobile ? "ml-0 md:ml-64" : ""}
+            h-screen min-h-0"
+          }`}
+        >
           {/* Main Content Area */}
-          <main className="flex-1 overflow-auto rounded-2xl bg-white ml-5  p-6">
+          <main className="flex-1 overflow-auto rounded-2xl bg-white m-2 md:ml-5 p-2 md:p-6 h-full">
             {renderContent()}
           </main>
         </div>
       </div>
+      y
     </div>
   );
 };
