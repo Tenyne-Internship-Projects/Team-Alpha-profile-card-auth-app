@@ -52,7 +52,7 @@ export default function App() {
             <Route path="/get-started" element={<RegisterWelcome />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/email-verification" element={<VerifyPage />} />
+            <Route path="/email-verification/:token" element={<VerifyPage />} />
             <Route path="/proceed-to-email" element={<VerifyEmail />} />
             <Route path="/users/:id" element={<UserDetails />} />
             <Route path="/jobs-listed" element={<JobListing />} />
