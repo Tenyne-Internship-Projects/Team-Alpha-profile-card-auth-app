@@ -124,7 +124,7 @@ const AddProjects = () => {
   };
 
   const renderStepIndicator = () => (
-    <div className="w-32 bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+    <div className="w-44 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
       {steps.map((step, index) => (
         <div
           key={step.number}
@@ -603,8 +603,8 @@ const AddProjects = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-2 sm:p-4 md:p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-white w-6/6 p-2 sm:p-4 md:p-6">
+      <div className="">
         <div className="flex flex-col lg:flex-row items-start gap-4 lg:gap-0">
           {/* Step Indicator Sidebar */}
           <div className="w-full lg:w-1/4 flex-shrink-0 mb-4 lg:mb-0">

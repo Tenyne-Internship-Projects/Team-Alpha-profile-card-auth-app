@@ -76,33 +76,6 @@ const Employees: React.FC = () => {
       experience: "4+",
       status: "pending",
     },
-    {
-      id: 8,
-      name: "Floyd Miles",
-      email: "floyd.miles7@example.com",
-      role: "Head of Operations",
-      skills: "Python, PostgreSQL",
-      experience: "5+",
-      status: "pending",
-    },
-    {
-      id: 9,
-      name: "Floyd Miles",
-      email: "floyd.miles8@example.com",
-      role: "Head of Content Operations",
-      skills: "Python, PostgreSQL",
-      experience: "5+",
-      status: "pending",
-    },
-    {
-      id: 10,
-      name: "Floyd Miles",
-      email: "floyd.miles9@example.com",
-      role: "Head of Content Operations",
-      skills: "Python, PostgreSQL",
-      experience: "5+",
-      status: "pending",
-    },
   ]);
 
   const handleViewProfile = (applicantId: number) => {
