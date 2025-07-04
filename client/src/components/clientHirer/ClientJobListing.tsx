@@ -8,12 +8,12 @@ import {
   ChevronDown,
   ChevronUp,
   X,
-  Bell,
-  Sun,
-  Heart,
+  //   Bell,
+  //   Sun,
+  //   Heart,
 } from "lucide-react";
-import axios from "../services/axiosInstance";
-import { useNavigate } from "react-router-dom";
+import axios from "../../services/axiosInstance";
+// import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 
 // Types based on your data structure
@@ -76,7 +76,7 @@ const budgetRanges = [
   { label: "$10000+", value: "10000+", min: 10000, max: null },
 ];
 
-const JobListing = () => {
+const ClientJobListing = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -87,8 +87,8 @@ const JobListing = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [applicationText, setApplicationText] = useState("");
-  const [jobs, setJobs] = useState(false);
-  const navigate = useNavigate();
+  //   const [jobs, setJobs] = useState(false);
+  //   const navigate = useNavigate();
 
   // Available tags (you can make this dynamic by fetching from API)
   // const availableTags = [
@@ -143,7 +143,7 @@ const JobListing = () => {
       params.append("page", queryParams.page.toString());
       params.append("limit", queryParams.limit.toString());
 
-      const url = `/project?${params.toString()}`;
+      const url = `/project/my-projects?${params.toString()}`;
       const response = await axios.get(url);
 
       // Adjust this if your API response shape is different
@@ -265,14 +265,22 @@ const JobListing = () => {
           </h3>
           <p className="text-gray-600 text-sm mb-2">{project.description}</p>
         </div>
-        <button
+        <div>
+          {/* <button
           onClick={() => setJobs((prev) => !prev)}
           className={`p-2 rounded-full ${
             jobs ? "text-red-500" : "text-[#5A399D] hover:text-red-500"
           }`}
         >
           <Heart className={`h-5 w-5 ${jobs ? "fill-current" : ""}`} />
-        </button>
+        </button> */}
+          <button
+            onClick={() => deleteProject(project.id)}
+            className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
+          >
+            Delete
+          </button>
+        </div>
         {/* <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${
             project.status === "open"
@@ -337,36 +345,51 @@ const JobListing = () => {
     handleFilterChange("page", newPage);
   };
 
-  const handleApplicationSubmit = async () => {
-    if (!applicationText.trim() || !selectedProject) {
-      alert("Please enter your profile link and select a project.");
-      return;
-    }
-    try {
-      await axios.post(`/applications/apply/${selectedProject.id}`, {
-        profileLink: applicationText,
-      });
-      alert("Application submitted!");
-      setShowApplyModal(false);
-      setApplicationText("");
-    } catch (error: unknown) {
-      const err = error as AxiosError;
-      alert(
-        (err.response?.data as { message?: string })?.message ||
-          "Failed to submit application. Please try again."
-      );
-    }
-  };
+  // const handleApplicationSubmit = async () => {
+  //   if (!applicationText.trim() || !selectedProject) {
+  //     alert("Please enter your profile link and select a project.");
+  //     return;
+  //   }
+  //   try {
+  //     await axios.post(`/applications/apply/${selectedProject.id}`, {
+  //       profileLink: applicationText,
+  //     });
+  //     alert("Application submitted!");
+  //     setShowApplyModal(false);
+  //     setApplicationText("");
+  //   } catch (error: any) {
+  //     alert(
+  //       error?.response?.data?.message ||
+  //         "Failed to submit application. Please try again."
+  //     );
+  //   }
+  // };
 
   //
 
   // MAIN PAGE SECTION
 
+  const deleteProject = async (projectId: string) => {
+    if (!window.confirm("Are you sure you want to delete this project?"))
+      return;
+    try {
+      await axios.delete(`/project/${projectId}`);
+      alert("Project deleted successfully!");
+      setProjects((prev) => prev.filter((p) => p.id !== projectId));
+    } catch (err) {
+      const error = err as AxiosError;
+      const errorMessage =
+        (error.response?.data as { message?: string })?.message ||
+        "Failed to delete project.";
+      alert(errorMessage);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#E1DEE8] p-4 px-16">
       <div className="">
         {/* Header */}
-        <header className="bg-transparent mb-10">
+        {/* <header className="bg-transparent mb-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16 ">
               <div className="flex items-center">
@@ -380,7 +403,7 @@ const JobListing = () => {
                 >
                   Home
                 </button>
-                {/* <button type="button">Dashboard</button> */}
+               
                 <button className="p-2 text-gray-400 hover:text-gray-600">
                   <Bell className="h-5 w-5" />
                 </button>
@@ -397,7 +420,7 @@ const JobListing = () => {
               </div>
             </div>
           </div>
-        </header>
+        </header> */}
 
         {/* Search and Filter Controls */}
         <div className="">
@@ -791,7 +814,7 @@ const JobListing = () => {
                           className="mt-6 w-full py-3 bg-gradient-to-r from-[#5A399D] to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:from-[#4a2e8e] hover:to-purple-700 transition-all duration-300"
                           onClick={() => setShowApplyModal(true)}
                         >
-                          Apply
+                          Edit
                         </button>
                       </div>
                     ) : (
@@ -905,8 +928,8 @@ const JobListing = () => {
               />
               <button
                 className=" bg-[#5A399D] py-2 px-3 rounded-lg w-fit text-white  hover:bg-[#5A399D]/70"
-                onClick={handleApplicationSubmit}
-                // onClick={() => alert("submitted")}
+                // onClick={handleApplicationSubmit}
+                onClick={() => alert("submitted")}
               >
                 Submit
               </button>
@@ -918,7 +941,7 @@ const JobListing = () => {
   );
 };
 
-export default JobListing;
+export default ClientJobListing;
 
 // import { useEffect, useState } from "react";
 // import JobBoard from "../components/freelancerComponent/FreelancePage";
