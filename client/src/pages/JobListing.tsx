@@ -3,15 +3,18 @@ import {
   Search,
   Filter,
   Calendar,
-  DollarSign,
-  Tag,
+  // DollarSign,
+  // Tag,
   ChevronDown,
   ChevronUp,
   X,
   Bell,
   Sun,
+  Heart,
 } from "lucide-react";
 import axios from "../services/axiosInstance";
+import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 // Types based on your data structure
 interface ClientProfile {
@@ -62,7 +65,16 @@ interface FilterState {
   sortOrder: "asc" | "desc";
   page: number;
   limit: number;
+  budgetRange: string;
 }
+
+const budgetRanges = [
+  { label: "Any", value: "any", min: null, max: null },
+  { label: "$0 - $999", value: "0-999", min: 0, max: 999 },
+  { label: "$1000 - $4999", value: "1000-4999", min: 1000, max: 4999 },
+  { label: "$5000 - $9999", value: "5000-9999", min: 5000, max: 9999 },
+  { label: "$10000+", value: "10000+", min: 10000, max: null },
+];
 
 const JobListing = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -71,24 +83,26 @@ const JobListing = () => {
   const [totalProjects, setTotalProjects] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
-  const [viewMode, setViewMode] = useState<"list" | "grid">("grid");
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [applicationText, setApplicationText] = useState("");
+  const [jobs, setJobs] = useState(false);
+  const navigate = useNavigate();
 
   // Available tags (you can make this dynamic by fetching from API)
-  const availableTags = [
-    "Food",
-    "Reservation",
-    "Delivery",
-    "API",
-    "Backend",
-    "Database",
-    "CRM",
-    "Salesforce",
-    "Chat",
-    "Mobile",
-  ];
+  // const availableTags = [
+  //   "Food",
+  //   "Reservation",
+  //   "Delivery",
+  //   "API",
+  //   "Backend",
+  //   "Database",
+  //   "CRM",
+  //   "Salesforce",
+  //   "Chat",
+  //   "Mobile",
+  // ];
 
   const [filters, setFilters] = useState<FilterState>({
     search: "",
@@ -100,7 +114,8 @@ const JobListing = () => {
     sortBy: "createdAt",
     sortOrder: "desc",
     page: 1,
-    limit: 6,
+    limit: 5,
+    budgetRange: "any",
   });
 
   // Fetch projects from API
@@ -141,8 +156,9 @@ const JobListing = () => {
       setTotalPages(
         response.data.pagination?.totalPages || response.data.totalPages || 1
       );
-    } catch (err: any) {
-      setError(err.message || "Failed to fetch projects. Please try again.");
+    } catch (err) {
+      const error = err as AxiosError;
+      setError(error.message || "Failed to fetch projects. Please try again.");
       setProjects([]);
       setTotalProjects(0);
       setTotalPages(1);
@@ -154,10 +170,12 @@ const JobListing = () => {
   // Fetch projects when filters change
   useEffect(() => {
     fetchProjects(filters);
-    // eslint-disable-next-line
   }, [filters]);
 
-  const handleFilterChange = (key: keyof FilterState, value: any) => {
+  const handleFilterChange = (
+    key: keyof FilterState,
+    value: string | number | string[] | "asc" | "desc"
+  ) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value,
@@ -165,15 +183,15 @@ const JobListing = () => {
     }));
   };
 
-  const handleTagToggle = (tag: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      tags: prev.tags.includes(tag)
-        ? prev.tags.filter((t) => t !== tag)
-        : [...prev.tags, tag],
-      page: 1,
-    }));
-  };
+  // const handleTagToggle = (tag: string) => {
+  //   setFilters((prev) => ({
+  //     ...prev,
+  //     tags: prev.tags.includes(tag)
+  //       ? prev.tags.filter((t) => t !== tag)
+  //       : [...prev.tags, tag],
+  //     page: 1,
+  //   }));
+  // };
 
   const clearFilters = () => {
     setFilters({
@@ -186,7 +204,8 @@ const JobListing = () => {
       sortBy: "createdAt",
       sortOrder: "desc",
       page: 1,
-      limit: 6,
+      limit: 5,
+      budgetRange: "any",
     });
   };
 
@@ -206,6 +225,21 @@ const JobListing = () => {
     }).format(budget);
   };
 
+  const getBudgetRange = (rangeValue: string) => {
+    const found = budgetRanges.find((r) => r.value === rangeValue);
+    return found
+      ? { min: found.min, max: found.max }
+      : { min: null, max: null };
+  };
+
+  const filteredProjects = projects.filter((project) => {
+    const { min, max } = getBudgetRange(filters.budgetRange);
+    if (min !== null && project.budget < min) return false;
+    if (max !== null && project.budget > max) return false;
+    // ...other filter conditions
+    return true;
+  });
+
   const ProjectCard = ({
     project,
     onClick,
@@ -224,7 +258,15 @@ const JobListing = () => {
           </h3>
           <p className="text-gray-600 text-sm mb-2">{project.description}</p>
         </div>
-        <span
+        <button
+          onClick={() => setJobs((prev) => !prev)}
+          className={`p-2 rounded-full ${
+            jobs ? "text-red-500" : "text-[#5A399D] hover:text-red-500"
+          }`}
+        >
+          <Heart className={`h-5 w-5 ${jobs ? "fill-current" : ""}`} />
+        </button>
+        {/* <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${
             project.status === "open"
               ? "bg-green-100 text-green-800"
@@ -232,7 +274,7 @@ const JobListing = () => {
           }`}
         >
           {project.status}
-        </span>
+        </span> */}
       </div>
 
       <div className="space-y-3">
@@ -283,6 +325,33 @@ const JobListing = () => {
     </div>
   );
 
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    handleFilterChange("page", newPage);
+  };
+
+  // const handleApplicationSubmit = async () => {
+  //   if (!applicationText.trim() || !selectedProject) {
+  //     alert("Please enter your profile link and select a project.");
+  //     return;
+  //   }
+  //   try {
+  //     await axios.post(`/applications/apply/${selectedProject.id}`, {
+  //       profileLink: applicationText,
+  //     });
+  //     alert("Application submitted!");
+  //     setShowApplyModal(false);
+  //     setApplicationText("");
+  //   } catch (error: any) {
+  //     alert(
+  //       error?.response?.data?.message ||
+  //         "Failed to submit application. Please try again."
+  //     );
+  //   }
+  // };
+
+  //
+
   // MAIN PAGE SECTION
 
   return (
@@ -296,6 +365,14 @@ const JobListing = () => {
                 <img src="/freebioLogo.png" alt="logo" className=" h-[50px]" />
               </div>
               <div className="flex items-center space-x-4">
+                <button
+                  type="button"
+                  onClick={() => navigate("/")}
+                  className="text-lg md:text-xl font-bold px-6 py-2 cursor-pointer bg-[#723EDA] border-b-2 rounded-xl border-[#FFE01ACC] hover:bg-[#5a2fc0] transition"
+                >
+                  Home
+                </button>
+                {/* <button type="button">Dashboard</button> */}
                 <button className="p-2 text-gray-400 hover:text-gray-600">
                   <Bell className="h-5 w-5" />
                 </button>
@@ -388,29 +465,46 @@ const JobListing = () => {
                 <div className="grid  gap-4 pt-4 ">
                   {/* Budget Range */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <DollarSign className="inline w-4 h-4 mr-1" />
-                      Budget Range
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      {/* <DollarSign className="inline w-4 h-4 mr-1" /> */}
+                      Budget
                     </label>
-                    <div className="flex flex-col gap-2">
-                      <input
-                        type="number"
-                        placeholder="Min"
-                        value={filters.minBudget}
-                        onChange={(e) =>
-                          handleFilterChange("minBudget", e.target.value)
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      />
-                      <input
-                        type="number"
-                        placeholder="Max"
-                        value={filters.maxBudget}
-                        onChange={(e) =>
-                          handleFilterChange("maxBudget", e.target.value)
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      />
+                    <div className="grid gap-2">
+                      {budgetRanges.map((range) => (
+                        <label
+                          key={range.value}
+                          className={`
+                            flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition
+                            border border-transparent
+                            ${
+                              filters.budgetRange === range.value
+                                ? "bg-blue-100 border-blue-400 ring-2 ring-blue-200"
+                                : "hover:bg-gray-100"
+                            }
+                          `}
+                          tabIndex={0}
+                        >
+                          <input
+                            type="radio"
+                            name="budgetRange"
+                            value={range.value}
+                            checked={filters.budgetRange === range.value}
+                            onChange={() =>
+                              handleFilterChange("budgetRange", range.value)
+                            }
+                            className="form-radio h-5 w-5 text-blue-600 focus:ring-blue-500"
+                          />
+                          <span
+                            className={`text-sm font-medium ${
+                              filters.budgetRange === range.value
+                                ? "text-blue-700"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            {range.label}
+                          </span>
+                        </label>
+                      ))}
                     </div>
                   </div>
 
@@ -441,7 +535,7 @@ const JobListing = () => {
                   </div>
 
                   {/* Sort Options */}
-                  <div>
+                  {/* <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Sort By
                     </label>
@@ -472,10 +566,10 @@ const JobListing = () => {
                         <option value="asc">Ascending</option>
                       </select>
                     </div>
-                  </div>
+                  </div> */}
 
                   {/* Tags Filter */}
-                  <div className="">
+                  {/* <div className="">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <Tag className="inline w-4 h-4 mr-1" />
                       Filter by Tags
@@ -495,35 +589,52 @@ const JobListing = () => {
                         </button>
                       ))}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>
 
             {/* PROJECT PART */}
 
-            <div>
+            <div className="relative">
+              <div className="w-[200px] absolute mr-0 right-10">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Sort By
+                </label>
+                <div className="flex  gap-2">
+                  <select
+                    value={filters.sortBy}
+                    onChange={(e) =>
+                      handleFilterChange("sortBy", e.target.value)
+                    }
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="createdAt">Created Date</option>
+                    <option value="deadline">Deadline</option>
+                    <option value="budget">Budget</option>
+                    <option value="title">Title</option>
+                  </select>
+                  <select
+                    value={filters.sortOrder}
+                    onChange={(e) =>
+                      handleFilterChange(
+                        "sortOrder",
+                        e.target.value as "asc" | "desc"
+                      )
+                    }
+                    className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="desc">Descending</option>
+                    <option value="asc">Ascending</option>
+                  </select>
+                </div>
+              </div>
               {/* Results Summary */}
               <div className="flex justify-between items-center mb-6">
                 <div className="text-gray-600">
                   Showing {(filters.page - 1) * filters.limit + 1} -{" "}
                   {Math.min(filters.page * filters.limit, totalProjects)} of{" "}
                   {totalProjects} projects
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">Items per page:</span>
-                  <select
-                    value={filters.limit}
-                    onChange={(e) =>
-                      handleFilterChange("limit", parseInt(e.target.value))
-                    }
-                    className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value={3}>3</option>
-                    <option value={6}>6</option>
-                    <option value={9}>9</option>
-                    <option value={12}>12</option>
-                  </select>
                 </div>
               </div>
 
@@ -577,7 +688,7 @@ const JobListing = () => {
                         : "w-full lg:w-2/3 flex flex-col bg-white  gap-6"
                     }
                   >
-                    {projects.map((project) => (
+                    {filteredProjects.map((project) => (
                       <ProjectCard
                         key={project.id}
                         project={project}
@@ -589,55 +700,94 @@ const JobListing = () => {
                   {/* Details Panel */}
                   <div className="w-full lg:w-1/3">
                     {selectedProject ? (
-                      <div className="bg-white rounded-lg shadow-lg p-6 sticky top-4">
+                      <div className="bg-white rounded-2xl shadow-2xl p-8 sticky top-4 border border-gray-100 transition-all duration-300">
                         <button
-                          className="mb-2 text-gray-500 hover:text-gray-700"
+                          className="mb-4 ml-auto block text-gray-400 hover:text-red-500 transition-colors"
                           onClick={() => setSelectedProject(null)}
+                          title="Close"
                         >
                           <X className="w-6 h-6" />
                         </button>
-                        <h2 className="text-2xl font-bold mb-2">
+                        <h2 className="text-2xl font-extrabold text-[#5A399D] mb-2">
                           {selectedProject.title}
                         </h2>
-                        <p className="mb-2 text-gray-700">
+                        <p className="mb-4 text-gray-700 text-base">
                           {selectedProject.description}
                         </p>
-                        <div className="mb-2">
-                          <span className="font-semibold">Budget:</span>{" "}
-                          {formatBudget(selectedProject.budget)}
+                        <div className="mb-4 flex flex-wrap gap-4">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-gray-600">
+                              Budget:
+                            </span>
+                            <span className="text-green-600 font-bold">
+                              {formatBudget(selectedProject.budget)}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-gray-600">
+                              Deadline:
+                            </span>
+                            <span className="text-blue-600">
+                              {formatDate(selectedProject.deadline)}
+                            </span>
+                          </div>
                         </div>
-                        <div className="mb-2">
-                          <span className="font-semibold">Deadline:</span>{" "}
-                          {formatDate(selectedProject.deadline)}
+                        <div className="mb-4 flex items-center gap-2">
+                          <span className="font-semibold text-gray-600">
+                            Location:
+                          </span>
+                          <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">
+                            {selectedProject.location}
+                          </span>
                         </div>
-                        <div className="mb-2">
-                          <span className="font-semibold">Location:</span>{" "}
-                          {selectedProject.location}
+                        <div className="mb-4">
+                          <span className="font-semibold text-gray-600">
+                            Tags:
+                          </span>
+                          <div className="flex flex-wrap gap-2 mt-1">
+                            {selectedProject.tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
                         </div>
-                        <div className="mb-2">
-                          <span className="font-semibold">Tags:</span>{" "}
-                          {selectedProject.tags.join(", ")}
-                        </div>
-                        <div className="mb-2">
-                          <span className="font-semibold">
+                        <div className="mb-4">
+                          <span className="font-semibold text-gray-600">
                             Responsibilities:
-                          </span>{" "}
-                          {selectedProject.responsibilities.join(", ")}
+                          </span>
+                          <div className="flex flex-wrap gap-2 mt-1">
+                            {selectedProject.responsibilities.map((resp) => (
+                              <span
+                                key={resp}
+                                className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium"
+                              >
+                                {resp}
+                              </span>
+                            ))}
+                          </div>
                         </div>
-                        <div className="mb-2">
-                          <span className="font-semibold">Client:</span>{" "}
-                          {selectedProject.Client.fullname} (
-                          {selectedProject.Client.clientProfile.companyName})
+                        <div className="mb-4">
+                          <span className="font-semibold text-gray-600">
+                            Client:
+                          </span>
+                          <span className="ml-2 text-gray-800 font-medium">
+                            {selectedProject.Client.fullname} (
+                            {selectedProject.Client.clientProfile.companyName})
+                          </span>
                         </div>
                         <button
-                          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                          className="mt-6 w-full py-3 bg-gradient-to-r from-[#5A399D] to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:from-[#4a2e8e] hover:to-purple-700 transition-all duration-300"
                           onClick={() => setShowApplyModal(true)}
                         >
                           Apply
                         </button>
                       </div>
                     ) : (
-                      <div className="bg-white rounded-lg shadow-lg p-6 text-gray-400 text-center">
+                      <div className="bg-white rounded-2xl shadow-2xl p-8 text-gray-400 text-center border border-gray-100">
                         <p>Select a project to see details</p>
                       </div>
                     )}
@@ -645,7 +795,7 @@ const JobListing = () => {
                 </div>
 
                 {/* No Results */}
-                {!loading && !error && projects.length === 0 && (
+                {!loading && !error && filteredProjects.length === 0 && (
                   <div className="text-center py-12">
                     <p className="text-gray-500 text-lg">
                       No projects found matching your criteria.
@@ -663,44 +813,70 @@ const JobListing = () => {
           </div>
         </div>
 
-        {/* Pagination */}
-        {!loading && !error && totalPages > 1 && (
-          <div className="flex justify-center items-center gap-2">
-            <button
-              onClick={() => handleFilterChange("page", filters.page - 1)}
-              disabled={filters.page === 1}
-              className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-            >
-              Previous
-            </button>
+        {/* Pagination Bar - Modern Design */}
+        {true && (
+          <div className="flex flex-col bg-white md:flex-row justify-between items-center border-t border-gray-200 pt-4 mt-8 gap-4">
+            {/* Results Summary */}
+            <div className="text-gray-600 text-sm">
+              Showing {(filters.page - 1) * filters.limit + 1} -{" "}
+              {Math.min(filters.page * filters.limit, totalProjects)} of{" "}
+              {totalProjects} projects
+            </div>
 
-            {[...Array(totalPages)].map((_, i) => (
-              <button
-                key={i + 1}
-                onClick={() => handleFilterChange("page", i + 1)}
-                className={`px-4 py-2 rounded-lg ${
-                  filters.page === i + 1
-                    ? "bg-blue-600 text-white"
-                    : "border border-gray-300 hover:bg-gray-50"
-                }`}
+            {/* Display Dropdown */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">Display</span>
+              <select
+                value={filters.limit}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                  handleFilterChange("limit", parseInt(e.target.value))
+                }
+                className="border border-gray-300 rounded-md px-2 py-1 focus:ring-2 focus:ring-purple-500"
               >
-                {i + 1}
-              </button>
-            ))}
+                {[5, 10, 20, 50].map((num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            <button
-              onClick={() => handleFilterChange("page", filters.page + 1)}
-              disabled={filters.page === totalPages}
-              className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
-            >
-              Next
-            </button>
+            {/* Pagination Controls */}
+            <div className="flex items-center gap-2 bg-white px-5 py-3 rounded-lg">
+              <button
+                onClick={() => handlePageChange(filters.page - 1)}
+                disabled={filters.page === 1}
+                className="px-3 py-1 rounded border border-gray-300 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Prev
+              </button>
+              {[...Array(totalPages)].map((_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => handlePageChange(i + 1)}
+                  className={`px-3 py-1 rounded ${
+                    filters.page === i + 1
+                      ? "bg-[#5A399D] text-white font-bold"
+                      : "border border-gray-300 text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => handlePageChange(filters.page + 1)}
+                disabled={filters.page >= totalPages}
+                className="px-3 py-1 rounded border border-gray-300 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
           </div>
         )}
 
         {showApplyModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#A8A9B3B2] bg-opacity-50">
+            <div className="bg-[#CEC4E2] rounded-lg shadow-lg max-w-md w-full p-6 relative">
               <button
                 className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
                 onClick={() => setShowApplyModal(false)}
@@ -708,25 +884,23 @@ const JobListing = () => {
                 <X className="w-6 h-6" />
               </button>
               <h3 className="text-xl font-bold mb-4">
-                Apply for {selectedProject?.title}
+                Upload your Profile Link
               </h3>
-              <textarea
-                className="w-full border border-gray-300 rounded-lg p-2 mb-4"
-                rows={5}
-                placeholder="Write your application..."
+              <label htmlFor="" className="mb-2">
+                Enter your profile link
+              </label>
+              <input
+                className="w-full border bg-white rounded-lg p-2 mb-4"
+                placeholder="Enter your profile link"
                 value={applicationText}
                 onChange={(e) => setApplicationText(e.target.value)}
               />
               <button
-                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-                onClick={() => {
-                  // TODO: Submit application logic here
-                  setShowApplyModal(false);
-                  setApplicationText("");
-                  alert("Application submitted!");
-                }}
+                className=" bg-[#5A399D] py-2 px-3 rounded-lg w-fit text-white  hover:bg-[#5A399D]/70"
+                // onClick={handleApplicationSubmit}
+                onClick={() => alert("submitted")}
               >
-                Submit Application
+                Submit
               </button>
             </div>
           </div>
