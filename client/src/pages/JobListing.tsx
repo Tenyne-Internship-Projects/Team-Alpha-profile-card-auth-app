@@ -172,14 +172,21 @@ const JobListing = () => {
     fetchProjects(filters);
   }, [filters]);
 
+  // const handleFilterChange = (key: keyof FilterState, value: any) => {
+  //   setFilters((prev) => ({
+  //     ...prev,
+  //     [key]: value,
+  //     page: key !== "page" ? 1 : value, // Reset to page 1 when other filters change
+  //   }));
+  // };
   const handleFilterChange = (
     key: keyof FilterState,
-    value: string | number | string[] | "asc" | "desc"
+    value: string | number | boolean | string[]
   ) => {
     setFilters((prev) => ({
       ...prev,
       [key]: value,
-      page: key !== "page" ? 1 : value, // Reset to page 1 when other filters change
+      page: key === "page" ? Number(value) : 1, // Ensure it's a number
     }));
   };
 
