@@ -1,50 +1,790 @@
-// import { useEffect, useState } from "react";
-import JobBoard from "../components/freelancerComponent/FreelancePage";
-// import axios from "../services/axiosInstance";
+import { useState, useEffect } from "react";
+import {
+  Search,
+  Filter,
+  Calendar,
+  DollarSign,
+  Tag,
+  ChevronDown,
+  ChevronUp,
+  X,
+  Bell,
+  Sun,
+} from "lucide-react";
+import axios from "../services/axiosInstance";
 
-// interface Project {
-//   // Define the shape of your project object here
-//   id: number;
-//   title: string;
-//   // ...other fields
-// }
+// Types based on your data structure
+interface ClientProfile {
+  id: string;
+  userId: string;
+  companyName: string;
+  companyWebsite: string;
+  companyIndustry: string;
+}
+
+interface Client {
+  id: string;
+  email: string;
+  fullname: string;
+  role: string;
+  clientProfile: ClientProfile;
+  createdAt: string;
+  updatedAt: string;
+  verified: boolean;
+}
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  budget: number;
+  deadline: string;
+  location: string;
+  requirement: string;
+  responsibilities: string[];
+  status: string;
+  tags: string[];
+  clientId: string;
+  createdAt: string;
+  updatedAt: string;
+  deleted: boolean;
+  Client: Client;
+}
+
+interface FilterState {
+  search: string;
+  minBudget: string;
+  maxBudget: string;
+  startDate: string;
+  endDate: string;
+  tags: string[];
+  sortBy: string;
+  sortOrder: "asc" | "desc";
+  page: number;
+  limit: number;
+}
 
 const JobListing = () => {
-  // const [projects, setProjects] = useState<Project[]>([]);
-  // const [loading, setLoading] = useState<boolean>(false);
-  // const [error, setError] = useState<string | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [totalProjects, setTotalProjects] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [showFilters, setShowFilters] = useState(false);
+  const [viewMode, setViewMode] = useState<"list" | "grid">("grid");
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [applicationText, setApplicationText] = useState("");
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const fetchProjects = async () => {
-  //     try {
-  //       const response = await axios.get("/project");
-  //       // setProjects(response.data);
-  //       console.log(response.data); // Adjust if your API response shape is different
-  //       // setError(null);
-  //     } catch (err: any) {
-  //       setError(err.message || "Failed to fetch projects.");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+  // Available tags (you can make this dynamic by fetching from API)
+  const availableTags = [
+    "Food",
+    "Reservation",
+    "Delivery",
+    "API",
+    "Backend",
+    "Database",
+    "CRM",
+    "Salesforce",
+    "Chat",
+    "Mobile",
+  ];
 
-  //   fetchProjects();
-  // }, []);
+  const [filters, setFilters] = useState<FilterState>({
+    search: "",
+    minBudget: "",
+    maxBudget: "",
+    startDate: "",
+    endDate: "",
+    tags: [],
+    sortBy: "createdAt",
+    sortOrder: "desc",
+    page: 1,
+    limit: 6,
+  });
+
+  // Fetch projects from API
+  const fetchProjects = async (queryParams: FilterState) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Build query string
+      const params = new URLSearchParams();
+
+      if (queryParams.search) params.append("search", queryParams.search);
+      if (queryParams.minBudget)
+        params.append("minBudget", queryParams.minBudget);
+      if (queryParams.maxBudget)
+        params.append("maxBudget", queryParams.maxBudget);
+      if (queryParams.startDate)
+        params.append("startDate", queryParams.startDate);
+      if (queryParams.endDate) params.append("endDate", queryParams.endDate);
+      if (queryParams.tags.length > 0)
+        params.append("tags", queryParams.tags.join(","));
+      if (queryParams.sortBy) params.append("sortBy", queryParams.sortBy);
+      if (queryParams.sortOrder)
+        params.append("sortOrder", queryParams.sortOrder);
+      params.append("page", queryParams.page.toString());
+      params.append("limit", queryParams.limit.toString());
+
+      const url = `/project?${params.toString()}`;
+      const response = await axios.get(url);
+
+      // Adjust this if your API response shape is different
+      setProjects(response.data.data || response.data.projects || []);
+      setTotalProjects(
+        response.data.pagination?.totalProjects ||
+          response.data.totalProjects ||
+          (response.data.data ? response.data.data.length : 0)
+      );
+      setTotalPages(
+        response.data.pagination?.totalPages || response.data.totalPages || 1
+      );
+    } catch (err: any) {
+      setError(err.message || "Failed to fetch projects. Please try again.");
+      setProjects([]);
+      setTotalProjects(0);
+      setTotalPages(1);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch projects when filters change
+  useEffect(() => {
+    fetchProjects(filters);
+    // eslint-disable-next-line
+  }, [filters]);
+
+  const handleFilterChange = (key: keyof FilterState, value: any) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+      page: key !== "page" ? 1 : value, // Reset to page 1 when other filters change
+    }));
+  };
+
+  const handleTagToggle = (tag: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      tags: prev.tags.includes(tag)
+        ? prev.tags.filter((t) => t !== tag)
+        : [...prev.tags, tag],
+      page: 1,
+    }));
+  };
+
+  const clearFilters = () => {
+    setFilters({
+      search: "",
+      minBudget: "",
+      maxBudget: "",
+      startDate: "",
+      endDate: "",
+      tags: [],
+      sortBy: "createdAt",
+      sortOrder: "desc",
+      page: 1,
+      limit: 6,
+    });
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  const formatBudget = (budget: number) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 0,
+    }).format(budget);
+  };
+
+  const ProjectCard = ({
+    project,
+    onClick,
+  }: {
+    project: Project;
+    onClick: (project: Project) => void;
+  }) => (
+    <div
+      className="bg-white    border-b border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer"
+      onClick={() => onClick(project)}
+    >
+      <div className="flex justify-between items-start mb-4">
+        <div>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            {project.title}
+          </h3>
+          <p className="text-gray-600 text-sm mb-2">{project.description}</p>
+        </div>
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${
+            project.status === "open"
+              ? "bg-green-100 text-green-800"
+              : "bg-gray-100 text-gray-800"
+          }`}
+        >
+          {project.status}
+        </span>
+      </div>
+
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <span className="text-2xl font-bold text-green-600">
+            {formatBudget(project.budget)}
+          </span>
+          <span className="text-sm text-gray-500">📍 {project.location}</span>
+        </div>
+
+        <div className="flex items-center text-sm text-gray-600">
+          <Calendar className="w-4 h-4 mr-1" />
+          Deadline: {formatDate(project.deadline)}
+        </div>
+
+        <div className="flex flex-wrap gap-1">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap gap-1">
+          {project.responsibilities.map((resp) => (
+            <span
+              key={resp}
+              className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs"
+            >
+              {resp}
+            </span>
+          ))}
+        </div>
+
+        <div className="border-t pt-3 mt-3">
+          <div className="flex items-center text-sm text-gray-600">
+            <span className="font-medium">Client:</span>
+            <span className="ml-1">{project.Client.fullname}</span>
+            <span className="mx-2">•</span>
+            <span>{project.Client.clientProfile.companyName}</span>
+          </div>
+          <p className="text-xs text-gray-500 mt-1">{project.requirement}</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  // MAIN PAGE SECTION
 
   return (
-    <div>
-      {/* {loading && <p>Loading projects...</p>}
-      {error && <p className="text-red-500">{error}</p>} */}
-      <p>Projects</p>
-      {/* <p>
-        {projects}
-      </p> */}
-      <JobBoard
-      // projects={projects}
-      />
+    <div className="min-h-screen bg-[#E1DEE8] p-4 px-16">
+      <div className="">
+        {/* Header */}
+        <header className="bg-transparent mb-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16 ">
+              <div className="flex items-center">
+                <img src="/freebioLogo.png" alt="logo" className=" h-[50px]" />
+              </div>
+              <div className="flex items-center space-x-4">
+                <button className="p-2 text-gray-400 hover:text-gray-600">
+                  <Bell className="h-5 w-5" />
+                </button>
+                <button className="p-2 text-gray-400 hover:text-gray-600">
+                  <Sun className="h-5 w-5" />
+                </button>
+                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                  <img
+                    src="/api/placeholder/32/32"
+                    alt="Profile"
+                    className="w-8 h-8 rounded-full"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Search and Filter Controls */}
+        <div className="">
+          <div className="flex flex-col space-y-4">
+            {/* Search Bar */}
+            {/* <div className="relative">
+              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search projects by title, description, or tags..."
+                value={filters.search}
+                onChange={(e) => handleFilterChange("search", e.target.value)}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div> */}
+
+            {/* Search Bar */}
+            <div className="flex w-full mx-auto mb-8">
+              <div className="flex-1 relative">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-7 w-7" />
+                <input
+                  type="text"
+                  placeholder="What position are you looking for ?"
+                  className="w-full pl-12 pr-4 py-4 outline-none text-gray-700 bg-white border border-gray-300 rounded-none rounded-l-2xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  value={filters.search}
+                  onChange={(e) => handleFilterChange("search", e.target.value)}
+                />
+              </div>
+              <button className="bg-[#5A399D] text-[14px] text-white px-8 py-4 rounded-r-lg hover:bg-[#5A399D]/60 transition-colors font-medium">
+                Search Jobs
+              </button>
+            </div>
+          </div>
+
+          {/* FILTER AND PROJECT PAGE */}
+
+          <div className="flex gap-10">
+            {/* FILTER PAGE */}
+            <div className="bg-white h-fit rounded-lg p-6 w-[250px]">
+              {/* Filter Toggle */}
+              <div className="flex flex-col justify-between items-center">
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+                >
+                  <Filter className="w-4 h-4" />
+                  Advanced Filters
+                  {showFilters ? (
+                    <ChevronUp className="w-4 h-4" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4" />
+                  )}
+                </button>
+
+                {(filters.search ||
+                  filters.minBudget ||
+                  filters.maxBudget ||
+                  filters.startDate ||
+                  filters.endDate ||
+                  filters.tags.length > 0) && (
+                  <button
+                    onClick={clearFilters}
+                    className="flex items-center gap-2 text-red-600 hover:text-red-800"
+                  >
+                    <X className="w-4 h-4" />
+                    Clear Filters
+                  </button>
+                )}
+              </div>
+
+              {/* Advanced Filters */}
+              {showFilters && (
+                <div className="grid  gap-4 pt-4 ">
+                  {/* Budget Range */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <DollarSign className="inline w-4 h-4 mr-1" />
+                      Budget Range
+                    </label>
+                    <div className="flex flex-col gap-2">
+                      <input
+                        type="number"
+                        placeholder="Min"
+                        value={filters.minBudget}
+                        onChange={(e) =>
+                          handleFilterChange("minBudget", e.target.value)
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      />
+                      <input
+                        type="number"
+                        placeholder="Max"
+                        value={filters.maxBudget}
+                        onChange={(e) =>
+                          handleFilterChange("maxBudget", e.target.value)
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Date Range */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <Calendar className="inline w-4 h-4 mr-1" />
+                      Deadline Range
+                    </label>
+                    <div className="flex flex-col gap-2">
+                      <input
+                        type="date"
+                        value={filters.startDate}
+                        onChange={(e) =>
+                          handleFilterChange("startDate", e.target.value)
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      />
+                      <input
+                        type="date"
+                        value={filters.endDate}
+                        onChange={(e) =>
+                          handleFilterChange("endDate", e.target.value)
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Sort Options */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Sort By
+                    </label>
+                    <div className="flex flex-col gap-2">
+                      <select
+                        value={filters.sortBy}
+                        onChange={(e) =>
+                          handleFilterChange("sortBy", e.target.value)
+                        }
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="createdAt">Created Date</option>
+                        <option value="deadline">Deadline</option>
+                        <option value="budget">Budget</option>
+                        <option value="title">Title</option>
+                      </select>
+                      <select
+                        value={filters.sortOrder}
+                        onChange={(e) =>
+                          handleFilterChange(
+                            "sortOrder",
+                            e.target.value as "asc" | "desc"
+                          )
+                        }
+                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                      >
+                        <option value="desc">Descending</option>
+                        <option value="asc">Ascending</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Tags Filter */}
+                  <div className="">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <Tag className="inline w-4 h-4 mr-1" />
+                      Filter by Tags
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {availableTags.map((tag) => (
+                        <button
+                          key={tag}
+                          onClick={() => handleTagToggle(tag)}
+                          className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+                            filters.tags.includes(tag)
+                              ? "bg-blue-600 text-white"
+                              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                          }`}
+                        >
+                          {tag}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* PROJECT PART */}
+
+            <div>
+              {/* Results Summary */}
+              <div className="flex justify-between items-center mb-6">
+                <div className="text-gray-600">
+                  Showing {(filters.page - 1) * filters.limit + 1} -{" "}
+                  {Math.min(filters.page * filters.limit, totalProjects)} of{" "}
+                  {totalProjects} projects
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">Items per page:</span>
+                  <select
+                    value={filters.limit}
+                    onChange={(e) =>
+                      handleFilterChange("limit", parseInt(e.target.value))
+                    }
+                    className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value={3}>3</option>
+                    <option value={6}>6</option>
+                    <option value={9}>9</option>
+                    <option value={12}>12</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                {/* Loading State */}
+                {loading && (
+                  <div className="text-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+                    <p className="mt-2 text-gray-600">Loading projects...</p>
+                  </div>
+                )}
+
+                {/* Error State */}
+                {error && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+                    <p className="text-red-800">{error}</p>
+                  </div>
+                )}
+
+                {/* Toggle View Mode */}
+                <div className="flex items-center gap-2 mb-4">
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={`px-3 py-1 rounded ${
+                      viewMode === "list"
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
+                  >
+                    List
+                  </button>
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    className={`px-3 py-1 rounded ${
+                      viewMode === "grid"
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-200 text-gray-700"
+                    }`}
+                  >
+                    Grid
+                  </button>
+                </div>
+
+                {/* Projects Grid */}
+                <div className="flex flex-col lg:flex-row gap-6 ">
+                  {/* Cards List/Grid */}
+                  <div
+                    className={
+                      viewMode === "grid"
+                        ? "w-full lg:w-2/3  grid grid-cols-1 md:grid-cols-2 gap-6"
+                        : "w-full lg:w-2/3 flex flex-col bg-white  gap-6"
+                    }
+                  >
+                    {projects.map((project) => (
+                      <ProjectCard
+                        key={project.id}
+                        project={project}
+                        onClick={setSelectedProject}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Details Panel */}
+                  <div className="w-full lg:w-1/3">
+                    {selectedProject ? (
+                      <div className="bg-white rounded-lg shadow-lg p-6 sticky top-4">
+                        <button
+                          className="mb-2 text-gray-500 hover:text-gray-700"
+                          onClick={() => setSelectedProject(null)}
+                        >
+                          <X className="w-6 h-6" />
+                        </button>
+                        <h2 className="text-2xl font-bold mb-2">
+                          {selectedProject.title}
+                        </h2>
+                        <p className="mb-2 text-gray-700">
+                          {selectedProject.description}
+                        </p>
+                        <div className="mb-2">
+                          <span className="font-semibold">Budget:</span>{" "}
+                          {formatBudget(selectedProject.budget)}
+                        </div>
+                        <div className="mb-2">
+                          <span className="font-semibold">Deadline:</span>{" "}
+                          {formatDate(selectedProject.deadline)}
+                        </div>
+                        <div className="mb-2">
+                          <span className="font-semibold">Location:</span>{" "}
+                          {selectedProject.location}
+                        </div>
+                        <div className="mb-2">
+                          <span className="font-semibold">Tags:</span>{" "}
+                          {selectedProject.tags.join(", ")}
+                        </div>
+                        <div className="mb-2">
+                          <span className="font-semibold">
+                            Responsibilities:
+                          </span>{" "}
+                          {selectedProject.responsibilities.join(", ")}
+                        </div>
+                        <div className="mb-2">
+                          <span className="font-semibold">Client:</span>{" "}
+                          {selectedProject.Client.fullname} (
+                          {selectedProject.Client.clientProfile.companyName})
+                        </div>
+                        <button
+                          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                          onClick={() => setShowApplyModal(true)}
+                        >
+                          Apply
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="bg-white rounded-lg shadow-lg p-6 text-gray-400 text-center">
+                        <p>Select a project to see details</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* No Results */}
+                {!loading && !error && projects.length === 0 && (
+                  <div className="text-center py-12">
+                    <p className="text-gray-500 text-lg">
+                      No projects found matching your criteria.
+                    </p>
+                    <button
+                      onClick={clearFilters}
+                      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Pagination */}
+        {!loading && !error && totalPages > 1 && (
+          <div className="flex justify-center items-center gap-2">
+            <button
+              onClick={() => handleFilterChange("page", filters.page - 1)}
+              disabled={filters.page === 1}
+              className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+            >
+              Previous
+            </button>
+
+            {[...Array(totalPages)].map((_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => handleFilterChange("page", i + 1)}
+                className={`px-4 py-2 rounded-lg ${
+                  filters.page === i + 1
+                    ? "bg-blue-600 text-white"
+                    : "border border-gray-300 hover:bg-gray-50"
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+
+            <button
+              onClick={() => handleFilterChange("page", filters.page + 1)}
+              disabled={filters.page === totalPages}
+              className="px-4 py-2 border border-gray-300 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
+
+        {showApplyModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+              <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                onClick={() => setShowApplyModal(false)}
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <h3 className="text-xl font-bold mb-4">
+                Apply for {selectedProject?.title}
+              </h3>
+              <textarea
+                className="w-full border border-gray-300 rounded-lg p-2 mb-4"
+                rows={5}
+                placeholder="Write your application..."
+                value={applicationText}
+                onChange={(e) => setApplicationText(e.target.value)}
+              />
+              <button
+                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                onClick={() => {
+                  // TODO: Submit application logic here
+                  setShowApplyModal(false);
+                  setApplicationText("");
+                  alert("Application submitted!");
+                }}
+              >
+                Submit Application
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
 export default JobListing;
+
+// import { useEffect, useState } from "react";
+// import JobBoard from "../components/freelancerComponent/FreelancePage";
+// import axios from "../services/axiosInstance";
+
+// // interface Project {
+// //   // Define the shape of your project object here
+// //   id: number;
+// //   title: string;
+// //   // ...other fields
+// // }
+
+// const JobListing = () => {
+//   // const [projects, setProjects] = useState<Project[]>([]);
+//   const [loading, setLoading] = useState<boolean>(false);
+//   const [error, setError] = useState<string | null>(null);
+
+//   useEffect(() => {
+//     setLoading(true);
+//     const fetchProjects = async () => {
+//       try {
+//         const response = await axios.get("/project");
+//         // setProjects(response.data);
+//         console.log(response.data); // Adjust if your API response shape is different
+//         // setError(null);
+//       } catch (err: any) {
+//         setError(err.message || "Failed to fetch projects.");
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchProjects();
+//   }, []);
+
+//   return (
+//     <div>
+//       {/* {loading && <p>Loading projects...</p>}
+//       {error && <p className="text-red-500">{error}</p>} */}
+//       <p>Projects</p>
+//       {/* <p>
+//         {projects}
+//       </p> */}
+//       <JobBoard
+//       // projects={projects}
+//       />
+//     </div>
+//   );
+// };
+
+// export default JobListing;

@@ -11,7 +11,7 @@ export default function VerifyEmail() {
   useEffect(() => {
     if (code) {
       axios
-        .post("/auth/verify-email", { code })
+        .post(`/auth/verify-email/${code}`)
         .then(() => setStatus("success"))
         .catch(() => setStatus("error"));
     }

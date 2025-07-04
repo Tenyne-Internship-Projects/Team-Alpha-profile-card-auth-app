@@ -98,7 +98,7 @@ const DashboardClient = () => {
   };
 
   return (
-    <div className="bg-[#E1DEE8] overflow-hidden min-h-screen w-full">
+    <div className="bg-[#E1DEE8] overflow-y-scroll min-h-screen w-full">
       {/* Top Navigation Bar */}
       <div className="fixed top-2 left-0 w-full   h-16 z-50 px-20 bg-[#E1DEE8]">
         <header className="mb-4">
@@ -265,7 +265,7 @@ const DashboardClient = () => {
         {/* Main Content */}
         <div className=" mt-36 pr-20">
           <div
-            className={`flex-1 flex flex-col overflow-y-scroll  transition-all duration-300 ease-in-out
+            className={`flex-1 flex flex-col   transition-all duration-300 ease-in-out
             ${!isMobile ? "ml-0 md:ml-64" : ""}
             h-screen min-h-0"
           }`}
