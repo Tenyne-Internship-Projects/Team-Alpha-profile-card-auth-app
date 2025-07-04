@@ -5,7 +5,7 @@ import Employees from "./Employees";
 
 const ClientHome = () => {
   return (
-    <div>
+    <div className="w-full">
       <div>
         <DashboardCards />
       </div>

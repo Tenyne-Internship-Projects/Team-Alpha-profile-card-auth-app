@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MessageSquare } from "lucide-react";
+import axios, { AxiosError } from "axios";
 
 interface Applicant {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: string;
@@ -12,77 +13,16 @@ interface Applicant {
 }
 
 const Employees: React.FC = () => {
-  const [applicants, setApplicants] = useState<Applicant[]>([
-    {
-      id: 1,
-      name: "Floyd Miles",
-      email: "floyd.miles@example.com",
-      role: "Backend Developer",
-      skills: "JavaScript, MongoDB",
-      experience: "5+",
-      status: "pending",
-    },
-    {
-      id: 2,
-      name: "Jane Cooper",
-      email: "jane.cooper@example.com",
-      role: "Frontend Developer",
-      skills: "React, TypeScript",
-      experience: "3+",
-      status: "pending",
-    },
-    {
-      id: 3,
-      name: "Floyd Miles",
-      email: "floyd.miles2@example.com",
-      role: "Business Analyst",
-      skills: "Python, PostgreSQL",
-      experience: "4+",
-      status: "pending",
-    },
-    {
-      id: 4,
-      name: "Floyd Miles",
-      email: "floyd.miles3@example.com",
-      role: "Financial Analyst",
-      skills: "Python, PostgreSQL",
-      experience: "3+",
-      status: "pending",
-    },
-    {
-      id: 5,
-      name: "Floyd Miles",
-      email: "floyd.miles4@example.com",
-      role: "Engineering Lead (Backend)",
-      skills: "Not given",
-      experience: "5+",
-      status: "pending",
-    },
-    {
-      id: 6,
-      name: "Floyd Miles",
-      email: "floyd.miles5@example.com",
-      role: "Engineering Lead (Backend)",
-      skills: "Not given",
-      experience: "5+",
-      status: "pending",
-    },
-    {
-      id: 7,
-      name: "Floyd Miles",
-      email: "floyd.miles6@example.com",
-      role: "Product Executive",
-      skills: "Python, PostgreSQL",
-      experience: "4+",
-      status: "pending",
-    },
-  ]);
+  const [applicants, setApplicants] = useState<Applicant[]>([]);
+  const [applicantsLoading, setApplicantsLoading] = useState(false);
+  const [applicantsError, setApplicantsError] = useState<string | null>(null);
+  // const [selectedProjectId, setSelectedProjectId] = useState<string>("");
 
-  const handleViewProfile = (applicantId: number) => {
+  const handleViewProfile = (applicantId: string) => {
     console.log("View profile for:", applicantId);
   };
 
-  const handleDecline = (applicantId: number) => {
+  const handleDecline = (applicantId: string) => {
     setApplicants(applicants.filter((app) => app.id !== applicantId));
   };
 
@@ -112,6 +52,26 @@ const Employees: React.FC = () => {
       </div>
     );
   };
+
+  const fetchApplicants = async () => {
+    setApplicantsLoading(true);
+    setApplicantsError(null);
+    try {
+      const response = await axios.get("/applications");
+      setApplicants(response.data.data || response.data.applicants || []);
+      console.log(response.data);
+    } catch (err) {
+      const error = err as AxiosError;
+      setApplicantsError(error.message || "Failed to fetch applicants.");
+      setApplicants([]);
+    } finally {
+      setApplicantsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchApplicants();
+  }, []);
 
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
@@ -215,6 +175,9 @@ const Employees: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {applicantsLoading && <p>Loading applicants...</p>}
+      {applicantsError && <p className="text-red-500">{applicantsError}</p>}
     </div>
   );
 };

@@ -52,7 +52,7 @@ export default function ProfileForm() {
 
       console.log("Submitting data:", formattedData);
       const response = await axios.put(
-        `${apiUrl}/profile/${user?.id}`,
+        `${apiUrl}/freelancer/${user?.id}`,
         formattedData
       );
       console.log("Response:", response.data);
