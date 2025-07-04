@@ -27,6 +27,7 @@ import ClientHome from "./ClientHome";
 import ClientProject from "./ClientProject";
 import Employees from "./Employees";
 import AddProjects from "./AddProjects";
+import { useNavigate } from "react-router-dom";
 
 // import ProfileUpdate from "./ProfileUpload";
 
@@ -38,6 +39,7 @@ const DashboardClient = () => {
   const [darkMode, setDarkMode] = useState(false);
   const { logout } = useAuth() as AuthContextType;
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   // Check if screen is mobile size
   useEffect(() => {
@@ -118,6 +120,13 @@ const DashboardClient = () => {
 
             {/* Right side - Search and notifications */}
             <div className="flex items-center space-x-4">
+              <button
+                type="button"
+                onClick={() => navigate("/jobs-listed")}
+                className="text-lg md:text-xl font-bold px-6 py-2 cursor-pointer bg-[#723EDA] border-b-2 rounded-xl border-[#FFE01ACC] hover:bg-[#5a2fc0] transition"
+              >
+                Job Listing
+              </button>
               {/* Notifications */}
               <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors relative">
                 <Bell className="w-5 h-5 text-gray-600" />
