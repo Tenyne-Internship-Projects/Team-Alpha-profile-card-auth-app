@@ -6,21 +6,21 @@ import axios, { AxiosError } from "axios";
 import { apiUrl } from "../../services/axiosInstance";
 
 interface FormData {
-  fullname: string;
+  companyName: string;
   gender: string;
-  dateOfBirth: string;
-  primaryEmail: string;
-  profession: string;
-  specialization: string;
-  location: string;
-  bio: string;
-  skills: string[];
-  linkedIn: string;
-  github: string;
-  phoneNumber: string;
+  companyAddress: string;
+  isHiringFrequently: string;
+  //   hiringCategories: string;
+  //   specialization: string;
+  //   location: string;
+  //   bio: string;
+  hiringCategories: string[];
+  //   linkedIn: string;
+  //   github: string;
+  //   phoneNumber: string;
 }
 
-export default function ProfileForm() {
+export default function ClientProfile() {
   const { user } = useAuth() as AuthContextType;
   const [step, setStep] = useState("step1");
   const {
@@ -32,7 +32,7 @@ export default function ProfileForm() {
     setValue,
   } = useForm<FormData>({
     defaultValues: {
-      skills: [],
+      hiringCategories: [],
     },
   });
 
@@ -47,14 +47,19 @@ export default function ProfileForm() {
       // Convert skills array to JSON array string
       const formattedData = {
         ...data,
-        skills: JSON.stringify(data.skills),
+        hiringCategories: data.hiringCategories,
       };
 
       console.log("Submitting data:", formattedData);
-      // console.log(`${user}`);
+      console.log(`${user}`);
       const response = await axios.put(
-        `${apiUrl}/profile/freelancer/${user?.id}`,
-        formattedData
+        `${apiUrl}/profile/client/${user?.id}`,
+        formattedData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       console.log("Response:", response.data);
       setMessage("Profile updated successfully");
@@ -68,20 +73,20 @@ export default function ProfileForm() {
   };
 
   const [input, setInput] = useState("");
-  const skills = watch("skills");
+  const skills = watch("hiringCategories");
 
   const addSkill = () => {
     const trimmed = input.trim();
     if (!trimmed || skills.includes(trimmed)) return;
 
     const updated = [...skills, trimmed];
-    setValue("skills", updated);
+    setValue("hiringCategories", updated);
     setInput("");
   };
 
   const removeSkill = (skill: string) => {
     const updated = skills.filter((s) => s !== skill);
-    setValue("skills", updated);
+    setValue("hiringCategories", updated);
   };
 
   return (
@@ -100,11 +105,11 @@ export default function ProfileForm() {
                 {/* <label className="block mb-1">Full Name</label> */}
                 <input
                   type="text"
-                  placeholder="Enter Fullname"
-                  {...register("fullname", { required: true })}
+                  placeholder="Enter Company Name"
+                  {...register("companyName", { required: true })}
                   className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 />
-                {errors.fullname && (
+                {errors.companyName && (
                   <p className="text-red-500 text-sm">Required</p>
                 )}
               </div>
@@ -113,8 +118,8 @@ export default function ProfileForm() {
                 {/* <label className="block mb-1">Profession</label> */}
                 <input
                   type="text"
-                  placeholder="Profession"
-                  {...register("profession", { required: true })}
+                  placeholder="Company Address"
+                  {...register("companyAddress", { required: true })}
                   className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 />
               </div>
@@ -124,21 +129,21 @@ export default function ProfileForm() {
               <div>
                 {/* <label className="block mb-1">Gender</label> */}
                 <select
-                  {...register("gender", { required: true })}
+                  {...register("isHiringFrequently", { required: true })}
                   className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 >
-                  <option value="">Select Gender</option>
-                  <option value="female">Female</option>
-                  <option value="male">Male</option>
-                  <option value="other">Other</option>
+                  <option value="">Frequently Hiring</option>
+                  <option value="true">true</option>
+                  <option value="false">false</option>
+                  {/* <option value="other">Other</option> */}
                 </select>
-                {errors.gender && (
+                {errors.isHiringFrequently && (
                   <p className="text-red-500 text-sm">Required</p>
                 )}
               </div>
 
-              <div>
-                {/* <label className="block mb-1">Date of Birth</label> */}
+              {/* <div>
+                <label className="block mb-1">Date of Birth</label>
                 <input
                   type="date"
                   {...register("dateOfBirth")}
@@ -147,49 +152,49 @@ export default function ProfileForm() {
                 {errors.dateOfBirth && (
                   <p className="text-red-500 text-sm">Required</p>
                 )}
-              </div>
+              </div> */}
             </div>
 
-            <div>
-              {/* <label className="block mb-1">Email</label> */}
+            {/* <div>
+              <label className="block mb-1">Email</label>
               <input
                 type="email"
                 placeholder="Enter Email"
                 {...register("primaryEmail", { required: true })}
                 className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
               />
-            </div>
+            </div> */}
 
-            <div>
-              {/* <label className="block mb-1">Phone Number</label> */}
+            {/* <div>
+              <label className="block mb-1">Phone Number</label>
               <input
                 type="tel"
-                placeholder="Enter Phone No"
+                placeholder=""
                 {...register("phoneNumber", { required: true })}
                 className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
               />
-            </div>
+            </div> */}
 
             <div className="grid grid-cols-2 gap-4">
-              <div>
-                {/* <label className="block mb-1">Specialization</label> */}
+              {/* <div>
+                <label className="block mb-1">Specialization</label>
                 <input
                   type="text"
                   placeholder="Specialization"
                   {...register("specialization", { required: true })}
                   className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 />
-              </div>
+              </div> */}
 
-              <div>
-                {/* <label className="block mb-1">Location</label> */}
+              {/* <div>
+                <label className="block mb-1">Location</label>
                 <input
                   type="text"
                   placeholder="Location"
                   {...register("location", { required: true })}
                   className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 />
-              </div>
+              </div> */}
             </div>
 
             <div className="flex justify-between">
@@ -213,8 +218,8 @@ export default function ProfileForm() {
 
         {step === "step2" && (
           <div className="space-y-5">
-            <div>
-              {/* <label className="block mb-1">Bio</label> */}
+            {/* <div>
+              <label className="block mb-1">Bio</label>
               <textarea
                 placeholder="Bio"
                 {...register("bio", {
@@ -233,10 +238,10 @@ export default function ProfileForm() {
               {errors.bio && (
                 <p className="text-sm text-red-600">{errors.bio.message}</p>
               )}
-            </div>
+            </div> */}
             <div className=" mx-auto p-3 md:p-6 bg-white shadow rounded">
               {/* <h2 className="text-xl font-bold mb-4">Enter Your Skills</h2> */}
-              <input type="hidden" {...register("skills")} />
+              <input type="hidden" {...register("hiringCategories")} />
 
               <div className="flex gap-2">
                 <input
@@ -280,25 +285,25 @@ export default function ProfileForm() {
               </div>
             </div>
 
-            <div>
-              {/* <label className="block mb-1">LinkedIn (optional)</label> */}
+            {/* <div>
+              <label className="block mb-1">LinkedIn (optional)</label>
               <input
                 type="url"
                 placeholder="LinkedIn (optional)"
                 {...register("linkedIn")}
                 className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
               />
-            </div>
+            </div> */}
 
-            <div>
-              {/* <label className="block mb-1">GitHub (optional)</label> */}
+            {/* <div>
+              <label className="block mb-1">GitHub (optional)</label>
               <input
                 type="url"
                 placeholder="GitHub (optional)"
                 {...register("github")}
                 className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
               />
-            </div>
+            </div> */}
 
             <div className="flex justify-between text-base font-bold mt-5">
               <button

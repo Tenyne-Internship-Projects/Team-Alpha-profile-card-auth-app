@@ -15,6 +15,7 @@ import {
 import axios from "../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
+import { useAuth } from "../hooks/useAuth";
 
 // Types based on your data structure
 interface ClientProfile {
@@ -89,6 +90,7 @@ const JobListing = () => {
   const [applicationText, setApplicationText] = useState("");
   const [jobs, setJobs] = useState(false);
   const navigate = useNavigate();
+  const user = useAuth();
 
   // Available tags (you can make this dynamic by fetching from API)
   // const availableTags = [
@@ -265,14 +267,16 @@ const JobListing = () => {
           </h3>
           <p className="text-gray-600 text-sm mb-2">{project.description}</p>
         </div>
-        <button
-          onClick={() => setJobs((prev) => !prev)}
-          className={`p-2 rounded-full ${
-            jobs ? "text-red-500" : "text-[#5A399D] hover:text-red-500"
-          }`}
-        >
-          <Heart className={`h-5 w-5 ${jobs ? "fill-current" : ""}`} />
-        </button>
+        {user?.user?.role === "freelancer" && (
+          <button
+            onClick={() => setJobs((prev) => !prev)}
+            className={`p-2 rounded-full ${
+              jobs ? "text-red-500" : "text-[#5A399D] hover:text-red-500"
+            }`}
+          >
+            <Heart className={`h-5 w-5 ${jobs ? "fill-current" : ""}`} />
+          </button>
+        )}
         {/* <span
           className={`px-2 py-1 rounded-full text-xs font-medium ${
             project.status === "open"
@@ -787,12 +791,14 @@ const JobListing = () => {
                             {selectedProject.Client.clientProfile.companyName})
                           </span>
                         </div>
-                        <button
-                          className="mt-6 w-full py-3 bg-gradient-to-r from-[#5A399D] to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:from-[#4a2e8e] hover:to-purple-700 transition-all duration-300"
-                          onClick={() => setShowApplyModal(true)}
-                        >
-                          Apply
-                        </button>
+                        {user?.user?.role === "freelancer" && (
+                          <button
+                            className="mt-6 w-full py-3 bg-gradient-to-r from-[#5A399D] to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:from-[#4a2e8e] hover:to-purple-700 transition-all duration-300"
+                            onClick={() => setShowApplyModal(true)}
+                          >
+                            Apply
+                          </button>
+                        )}
                       </div>
                     ) : (
                       <div className="bg-white rounded-2xl shadow-2xl p-8 text-gray-400 text-center border border-gray-100">

@@ -6,6 +6,35 @@ import {
   Calendar,
   CheckCircle,
 } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import axios from "../../services/axiosInstance";
+import { AxiosError } from "axios";
+
+export interface InvoiceRecord {
+  id: string;
+  createdAt: string;
+  freelancerId: string;
+  projectId: string;
+  message: string | null;
+  status: string;
+  freelancer: {
+    id: string;
+    fullname: string;
+    email: string;
+    freelancerProfile: {
+      // Define this if you have freelancer profile fields
+      [key: string]: string[];
+    };
+  };
+  project: {
+    id: string;
+    title: string;
+    description: string;
+    budget: number;
+    tags: string[]; // Adjust type if tags are not strings
+    // Add other project fields here if necessary
+  };
+}
 
 interface Stats {
   approvedProjects: number;
@@ -41,6 +70,49 @@ interface PurpleCardProps {
 }
 
 const DashboardCards = () => {
+  const [applicants, setApplicants] = useState<InvoiceRecord[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchApplicants = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await axios.get("/applications");
+      setApplicants(response.data.data);
+      // console.log(response.data.data);
+    } catch (err) {
+      const error = err as AxiosError;
+      setError(error.message || "Failed to fetch applicants.");
+      setApplicants([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchApplicants();
+    // pendingApplicants()
+  }, [fetchApplicants]);
+
+  const pendingApplicants = applicants.filter(
+    (applicant) => applicant.status === "pending"
+  );
+
+  const numberOfPendingApplicants = pendingApplicants.length;
+
+  const approvedApplicants = applicants.filter(
+    (applicant) => applicant.status === "approved"
+  );
+
+  const numberOfApprovedApplicants = approvedApplicants.length;
+
+  const rejectedApplicants = applicants.filter(
+    (applicant) => applicant.status === "rejected"
+  );
+
+  const numberOfRejectedApplicants = rejectedApplicants.length;
+
   const stats: Stats = {
     approvedProjects: 1563,
     maxHugValue: 1563,
@@ -62,6 +134,9 @@ const DashboardCards = () => {
     <div
       className={`${className} rounded-lg p-6 shadow-sm border border-gray-200 relative overflow-hidden`}
     >
+      <p>
+        {loading} {error}
+      </p>
       <div className="flex items-center justify-between">
         <div>
           <p className={`text-sm font-medium ${textColor} mb-1`}>{title}</p>
@@ -130,15 +205,15 @@ const DashboardCards = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <StatCard
             title="Approved Project"
-            value={stats.approvedProjects}
+            value={numberOfApprovedApplicants}
             icon={CheckCircle}
             iconBg="bg-green-100"
             iconColor="text-green-600"
           />
 
           <StatCard
-            title="Active Project"
-            value={stats.maxHugValue}
+            title="Pending Project"
+            value={numberOfPendingApplicants}
             icon={Briefcase}
             iconBg="bg-green-100"
             iconColor="text-green-600"
@@ -152,8 +227,8 @@ const DashboardCards = () => {
           /> */}
 
           <StatCard
-            title="Draft Project"
-            value={stats.openProjects}
+            title="Rejected Project"
+            value={numberOfRejectedApplicants}
             icon={FileText}
             iconBg="bg-blue-100"
             iconColor="text-blue-600"

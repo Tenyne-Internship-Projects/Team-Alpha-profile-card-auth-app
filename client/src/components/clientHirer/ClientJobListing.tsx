@@ -13,7 +13,7 @@ import {
   //   Heart,
 } from "lucide-react";
 import axios from "../../services/axiosInstance";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 
 // Types based on your data structure
@@ -77,6 +77,7 @@ const budgetRanges = [
 ];
 
 const ClientJobListing = () => {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -279,6 +280,13 @@ const ClientJobListing = () => {
             className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
           >
             Delete
+          </button>
+
+          <button
+            onClick={() => navigate(`/edit-project/${project.id}`)}
+            className="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-400"
+          >
+            Edit
           </button>
         </div>
         {/* <span
@@ -942,54 +950,3 @@ const ClientJobListing = () => {
 };
 
 export default ClientJobListing;
-
-// import { useEffect, useState } from "react";
-// import JobBoard from "../components/freelancerComponent/FreelancePage";
-// import axios from "../services/axiosInstance";
-
-// // interface Project {
-// //   // Define the shape of your project object here
-// //   id: number;
-// //   title: string;
-// //   // ...other fields
-// // }
-
-// const JobListing = () => {
-//   // const [projects, setProjects] = useState<Project[]>([]);
-//   const [loading, setLoading] = useState<boolean>(false);
-//   const [error, setError] = useState<string | null>(null);
-
-//   useEffect(() => {
-//     setLoading(true);
-//     const fetchProjects = async () => {
-//       try {
-//         const response = await axios.get("/project");
-//         // setProjects(response.data);
-//         console.log(response.data); // Adjust if your API response shape is different
-//         // setError(null);
-//       } catch (err: any) {
-//         setError(err.message || "Failed to fetch projects.");
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchProjects();
-//   }, []);
-
-//   return (
-//     <div>
-//       {/* {loading && <p>Loading projects...</p>}
-//       {error && <p className="text-red-500">{error}</p>} */}
-//       <p>Projects</p>
-//       {/* <p>
-//         {projects}
-//       </p> */}
-//       <JobBoard
-//       // projects={projects}
-//       />
-//     </div>
-//   );
-// };
-
-// export default JobListing;
