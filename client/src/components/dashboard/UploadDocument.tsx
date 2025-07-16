@@ -54,8 +54,8 @@ const UploadDocument: React.FC = () => {
         profile: data.avatar[0]?.name,
       });
 
-      const response = await axios.patch(
-        `${apiUrl}/profile/${user?.id}/upload-files`,
+      const response = await axios.post(
+        `${apiUrl}/profile/freelancer-uploads/${user?.id}`,
         formData,
         {
           headers: {

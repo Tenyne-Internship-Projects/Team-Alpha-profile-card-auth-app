@@ -40,7 +40,7 @@ export default function Registration() {
     console.log(data);
     try {
       const res = await axios.post("/auth/register", data);
-      console.log(data);
+      // console.log(data);
 
       if (res.status === 201) {
         toast.success("Verify email");

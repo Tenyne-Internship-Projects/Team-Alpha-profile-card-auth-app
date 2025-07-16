@@ -29,7 +29,8 @@ export default function ProfileDetail() {
         const axiosError = error as AxiosError<{ message: string }>;
         const errorMessage =
           axiosError.response?.data?.message || "Failed to fetch user";
-        toast.error("❌ " + errorMessage);
+        // toast.error("❌ " + errorMessage);
+        console.error("❌ " + errorMessage);
         console.error("Error fetching user:", error);
       }
     };

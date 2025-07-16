@@ -15,6 +15,7 @@ import RegisterWelcome from "./pages/RegisterWelcome";
 import NotFound from "./pages/NotFound";
 // import FreelancePage from "./pages/FreelancePage";
 import DashboardClient from "./components/clientHirer/DashboardClient";
+import EditProject from "./components/clientHirer/EditProject";
 
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -73,6 +74,16 @@ export default function App() {
               element={
                 <ProtectedRoute allowedRoles={["client"]}>
                   <DashboardClient />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* Protected: Edit Project */}
+            <Route
+              path="/edit-project/:id"
+              element={
+                <ProtectedRoute allowedRoles={["client"]}>
+                  <EditProject />
                 </ProtectedRoute>
               }
             />

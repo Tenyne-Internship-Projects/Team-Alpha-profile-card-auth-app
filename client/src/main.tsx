@@ -7,7 +7,10 @@ import "./index.css";
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     {/* <BrowserRouter> */}
-    <App />
+
+    <main className="max-w-[1440px] mx-auto">
+      <App />
+    </main>
     {/* </BrowserRouter> */}
   </React.StrictMode>
 );

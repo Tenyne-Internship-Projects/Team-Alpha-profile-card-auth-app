@@ -28,6 +28,7 @@ import ClientProject from "./ClientProject";
 import Employees from "./Employees";
 import AddProjects from "./AddProjects";
 import { useNavigate } from "react-router-dom";
+import ClientProfile from "./ClientProfile";
 
 // import ProfileUpdate from "./ProfileUpload";
 
@@ -58,6 +59,7 @@ const DashboardClient = () => {
   const menuItems = [
     { icon: Home, label: "Dashboard", key: "dashboard" },
     { icon: LayoutGrid, label: "Projects", key: "projects" },
+    { icon: LayoutGrid, label: "Profile", key: "profile" },
     { icon: Users, label: "Employees", key: "employees" },
     { icon: Upload, label: "Add Project", key: "addprojects" },
   ];
@@ -90,6 +92,8 @@ const DashboardClient = () => {
         return <ClientHome />;
       case "projects":
         return <ClientProject />;
+      case "profile":
+        return <ClientProfile />;
       case "employees":
         return <Employees />;
       case "addprojects":
@@ -102,8 +106,8 @@ const DashboardClient = () => {
   return (
     <div className="bg-[#E1DEE8] overflow-y-scroll min-h-screen w-full">
       {/* Top Navigation Bar */}
-      <div className="fixed top-2 left-0 w-full   h-16 z-50 px-20 bg-[#E1DEE8]">
-        <header className="mb-4">
+      <div className="fixed pt-2  left-0 w-full   h-16 z-50 px-20 bg-[#E1DEE8]">
+        <header className=" bg-[#E1DEE8]">
           <div className="flex items-center justify-between h-full px-4">
             {/* Left side - Hamburger menu and title */}
             <div className="flex items-center space-x-4">
@@ -154,7 +158,7 @@ const DashboardClient = () => {
         </header>
 
         {/* Search bar section */}
-        <div className="">
+        <div className="  bg-[#E1DEE8] ">
           <div className="flex mx-auto mb-8">
             <div className="flex-1 relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-7 w-7" />
@@ -274,13 +278,13 @@ const DashboardClient = () => {
         {/* Main Content */}
         <div className=" mt-36 pr-20">
           <div
-            className={`flex-1 flex flex-col   transition-all duration-300 ease-in-out
+            className={` w-full   transition-all duration-300 ease-in-out
             ${!isMobile ? "ml-0 md:ml-64" : ""}
             h-screen min-h-0"
           }`}
           >
             {/* Main Content Area */}
-            <main className="flex-1  rounded-2xl bg-transparent ml-5  ">
+            <main className="bg-tranparent w-full  rounded-2xl ml-5  ">
               {renderContent()}
             </main>
           </div>
