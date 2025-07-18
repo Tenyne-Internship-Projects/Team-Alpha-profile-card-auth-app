@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext";
 import { ErrorBoundary } from "react-error-boundary";
@@ -14,12 +19,21 @@ import UserDetails from "./pages/UserDetail";
 import RegisterWelcome from "./pages/RegisterWelcome";
 import NotFound from "./pages/NotFound";
 // import FreelancePage from "./pages/FreelancePage";
-import DashboardClient from "./components/clientHirer/DashboardClient";
-import EditProject from "./components/clientHirer/EditProject";
+import DashboardLayout from "./components/clientHirer/DashboardLayout";
+// import EditProject from "./components/clientHirer/EditProject";
+
+// Client Pages
+import DashboardPage from "./pages/clientPages/DashboardPage";
+import ProjectsPage from "./pages/clientPages/ProjectsPage";
+import ProfilePage from "./pages/clientPages/ProfilePage";
+import EmployeesPage from "./pages/clientPages/EmployeesPage";
+import AddProjectPage from "./pages/clientPages/AddProjectPage";
+// import DashboardRedirect from "./pages/clientPages/DashboardRedirect";
 
 // Components
 import ProtectedRoute from "./components/ProtectedRoute";
 import JobListing from "./pages/JobListing";
+import EditProjectPage from "./pages/clientPages/EditProjectPage";
 
 // Error fallback
 function ErrorFallback({ error }: { error: Error }) {
@@ -68,24 +82,37 @@ export default function App() {
               }
             />
 
-            {/* Protected: Client Dashboard */}
+            {/* Protected: Client Dashboard with nested routes */}
             <Route
               path="/job-list-dashboard"
               element={
                 <ProtectedRoute allowedRoles={["client"]}>
-                  <DashboardClient />
+                  <DashboardLayout />
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route index element={<DashboardPage />} />
+              <Route path="projects" element={<ProjectsPage />} />
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="employees" element={<EmployeesPage />} />
+              <Route path="edit-project" element={<EditProjectPage />} />
+              <Route path="add-project" element={<AddProjectPage />} />
+            </Route>
 
             {/* Protected: Edit Project */}
-            <Route
+            {/* <Route
               path="/edit-project/:id"
               element={
                 <ProtectedRoute allowedRoles={["client"]}>
                   <EditProject />
                 </ProtectedRoute>
               }
+            /> */}
+
+            {/* Redirect old dashboard route */}
+            <Route
+              path="/dashboard-client"
+              element={<Navigate to="/job-list-dashboard" replace />}
             />
 
             {/* 404 */}

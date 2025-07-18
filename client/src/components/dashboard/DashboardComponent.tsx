@@ -2,16 +2,17 @@ import { useState, useEffect } from "react";
 import {
   Menu,
   X,
-  Home,
+  // Home,
   Settings,
   Bell,
   User,
-  ChevronLeft,
-  ChevronRight,
+  // ChevronLeft,
+  // ChevronRight,
   Power,
   Sun,
   Moon,
   Upload,
+  LayoutDashboard,
 } from "lucide-react";
 import SettingsContent from "./SettingsContent";
 import HomeContent from "./HomeContent";
@@ -20,6 +21,8 @@ import { AuthContextType } from "../../types/user";
 import { useAuth } from "../../hooks/useAuth";
 import UploadDocument from "./UploadDocument";
 import { useNavigate } from "react-router-dom";
+// import Earnings from "./NotificationInterface";
+import NotificationInterface from "./NotificationInterface";
 
 // import ProfileUpdate from "./ProfileUpload";
 
@@ -47,10 +50,16 @@ const DashboardComponent = () => {
   }, []);
 
   const menuItems = [
-    { icon: Home, label: "Home", key: "Home" },
-    { icon: User, label: "Profile Details", key: "Profile" },
+    { icon: LayoutDashboard, label: "Dashboard", key: "dashboard" },
+    { icon: User, label: "Projects", key: "project" },
+    { icon: User, label: "Applications", key: "application" },
+    { icon: User, label: "Message", key: "message" },
+    { icon: User, label: "Earnings", key: "earnings" },
+
+    { icon: Settings, label: "Settings", key: "setting" },
+
+    { icon: Upload, label: " Profile", key: "profile" },
     { icon: Upload, label: " Uploads", key: "upload" },
-    { icon: Settings, label: "Settings", key: "Settings" },
   ];
 
   const toggleSidebar = () => {
@@ -77,16 +86,18 @@ const DashboardComponent = () => {
 
   const renderContent = () => {
     switch (activeSection) {
-      case "Home":
+      case "dashboard":
         return <HomeContent />;
       case "upload":
         return <UploadDocument />;
-      case "Profile":
+      case "earnings":
+        return <NotificationInterface />;
+      case "profile":
         return <ProfileUpload />;
-      case "Settings":
+      case "setting":
         return <SettingsContent />;
       default:
-      // return <HomeContent />;
+        return <HomeContent />;
     }
   };
 
@@ -114,7 +125,7 @@ const DashboardComponent = () => {
         <div className="flex flex-col h-full bg-gradient-to-b from-[#552EA4] to-[#201437]">
           {/* Sidebar Header */}
           <div className="flex items-center justify-between h-16 px-4">
-            <div
+            {/* <div
               className={`flex items-center w-full justify-center space-x-3 ${
                 sidebarCollapsed && !isMobile ? "justify-center" : ""
               }`}
@@ -124,10 +135,10 @@ const DashboardComponent = () => {
                   <User className="w-10 h-10 text-[#552EA4]" />
                 </div>
               )}
-            </div>
+            </div> */}
 
             {/* Desktop collapse button */}
-            {!isMobile && (
+            {/* {!isMobile && (
               <button
                 onClick={toggleSidebar}
                 className="p-1 rounded-lg  hover:bg-opacity-20 transition-colors"
@@ -138,7 +149,7 @@ const DashboardComponent = () => {
                   <ChevronLeft className="w-5 h-5 text-white" />
                 )}
               </button>
-            )}
+            )} */}
 
             {/* Mobile close button */}
             {isMobile && (
@@ -152,7 +163,7 @@ const DashboardComponent = () => {
           </div>
 
           {/* Navigation Menu */}
-          <nav className="flex-1 px-2 lg:px-4 mt-16 py-6 space-y-2 text-white">
+          <nav className="flex-1 px-2 lg:px-4  py-6 space-y-2 text-white">
             {menuItems.map((item, index) => {
               const Icon = item.icon;
               const isActive = activeSection === item.key;
@@ -250,7 +261,7 @@ const DashboardComponent = () => {
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-auto bg-gray-50 p-6">
+        <main className="flex-1 overflow-y-auto bg-gray-50 p-6">
           {renderContent()}
         </main>
       </div>

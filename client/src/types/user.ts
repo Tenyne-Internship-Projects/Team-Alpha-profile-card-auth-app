@@ -60,7 +60,7 @@ export interface ApiError {
 
 export interface IUserProfile {
   id: string;
-  fullname: string;
+  fullName: string;
   email: string;
   password: string;
   createdAt: string;
@@ -68,7 +68,7 @@ export interface IUserProfile {
   bio: string;
   dateOfBirth: string;
   documents: string[];
-  fullName: string;
+  // fullName: string;
   gender: string;
   github: string | null;
   // id: string;
