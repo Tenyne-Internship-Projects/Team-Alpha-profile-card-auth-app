@@ -116,7 +116,9 @@ const EarningsChart: React.FC<EarningsChartProps> = ({
       return (
         <div className="bg-purple-600 text-white px-3 py-2 rounded-lg shadow-lg relative">
           <div className="text-sm font-medium">{data.fullMonth}</div>
-          <div className="text-lg font-bold">${data.earnings}</div>
+          <div className="text-lg font-bold">
+            ₦{Number(data.earnings).toLocaleString("en-NG")}
+          </div>
           {/* Tooltip arrow */}
           <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-purple-600"></div>
         </div>
@@ -178,6 +180,15 @@ const EarningsChart: React.FC<EarningsChartProps> = ({
     setSelectedPeriod(period);
   };
 
+  const filteredEarningsData = (() => {
+    if (selectedPeriod === "All time") {
+      return earningsData;
+    } else if (selectedPeriod === "Last 6 Months") {
+      return earningsData.slice(-6);
+    }
+    return earningsData;
+  })();
+
   return (
     <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 max-w-md mx-auto">
       {/* Header */}
@@ -201,7 +212,7 @@ const EarningsChart: React.FC<EarningsChartProps> = ({
       <div className="h-64 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={earningsData}
+            data={filteredEarningsData}
             margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
           >
             <CartesianGrid

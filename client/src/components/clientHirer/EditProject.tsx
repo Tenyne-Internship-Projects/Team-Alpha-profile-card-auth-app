@@ -138,7 +138,7 @@ const EditProjects = () => {
     };
     console.log(formattedData);
     try {
-      const response = await axios.put(`/project/update/${id}`, formattedData);
+      const response = await axios.put(`/project/${id}`, formattedData);
       console.log(response);
       if (response.status === 200) {
         alert("Project updated successfully!");
