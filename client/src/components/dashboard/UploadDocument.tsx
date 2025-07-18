@@ -53,13 +53,16 @@ const UploadDocument: React.FC = () => {
         resume: data.documents[0]?.name,
         profile: data.avatar[0]?.name,
       });
+      const token = localStorage.getItem("token");
 
       const response = await axios.post(
         `${apiUrl}/profile/freelancer-uploads/${user?.id}`,
         formData,
+
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -109,9 +112,9 @@ const UploadDocument: React.FC = () => {
                   validate: (files) =>
                     ["application/pdf", "application/msword"].includes(
                       files?.[0]?.type
-                    ) || "Only PDF/DOC allowed",
+                    ) || "Only PDF allowed",
                 })}
-                accept=".pdf,.doc,.docx"
+                accept=".pdf"
                 className="hidden"
               />
               <div className="cursor-pointer bg-[#5A399D] shadow-xl text-white p-3 rounded-lg text-center">

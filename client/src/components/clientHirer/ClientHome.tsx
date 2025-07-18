@@ -5,11 +5,11 @@ import Employees from "./Employees";
 
 const ClientHome = () => {
   return (
-    <div className="w-full">
-      <div>
+    <div className="flex flex-col gap-10">
+      <div className="">
         <DashboardCards />
       </div>
-      <div className="mt-10">
+      <div className="hidden">
         <Employees />
       </div>
     </div>

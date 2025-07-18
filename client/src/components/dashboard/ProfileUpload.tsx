@@ -6,7 +6,7 @@ import axios, { AxiosError } from "axios";
 import { apiUrl } from "../../services/axiosInstance";
 
 interface FormData {
-  fullname: string;
+  fullName: string;
   gender: string;
   dateOfBirth: string;
   primaryEmail: string;
@@ -51,10 +51,17 @@ export default function ProfileForm() {
       };
 
       console.log("Submitting data:", formattedData);
+      const token = localStorage.getItem("token");
       // console.log(`${user}`);
       const response = await axios.put(
         `${apiUrl}/profile/freelancer/${user?.id}`,
-        formattedData
+        formattedData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("Response:", response.data);
       setMessage("Profile updated successfully");
@@ -101,10 +108,10 @@ export default function ProfileForm() {
                 <input
                   type="text"
                   placeholder="Enter Fullname"
-                  {...register("fullname", { required: true })}
+                  {...register("fullName", { required: true })}
                   className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
                 />
-                {errors.fullname && (
+                {errors.fullName && (
                   <p className="text-red-500 text-sm">Required</p>
                 )}
               </div>
@@ -282,22 +289,56 @@ export default function ProfileForm() {
 
             <div>
               {/* <label className="block mb-1">LinkedIn (optional)</label> */}
-              <input
-                type="url"
-                placeholder="LinkedIn (optional)"
-                {...register("linkedIn")}
-                className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
-              />
+              <div>
+                <label htmlFor="linkedIn" className="block mb-1 text-white">
+                  LinkedIn (optional)
+                </label>
+                <input
+                  id="linkedIn"
+                  type="url"
+                  placeholder="https://linkedin.com/in/yourprofile"
+                  {...register("linkedIn", {
+                    pattern: {
+                      value:
+                        /^(https?:\/\/)?([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/,
+                      message: "Please enter a valid URL",
+                    },
+                  })}
+                  className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
+                  autoComplete="off"
+                />
+                {errors.linkedIn && (
+                  <span className="text-red-500">
+                    {errors.linkedIn.message}
+                  </span>
+                )}
+              </div>
             </div>
 
             <div>
               {/* <label className="block mb-1">GitHub (optional)</label> */}
-              <input
-                type="url"
-                placeholder="GitHub (optional)"
-                {...register("github")}
-                className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
-              />
+              <div>
+                <label htmlFor="github" className="block mb-1 text-black">
+                  GitHub (optional)
+                </label>
+                <input
+                  id="github"
+                  type="url"
+                  placeholder="https://github.com/yourusername"
+                  {...register("github", {
+                    pattern: {
+                      value:
+                        /^(https?:\/\/)?(www\.)?github\.com\/[A-Za-z0-9_-]+\/?$/,
+                      message: "Please enter a valid GitHub URL",
+                    },
+                  })}
+                  className="w-full px-3 py-2 bg-[#5A399D] text-white shadow-2xl rounded"
+                  autoComplete="off"
+                />
+                {errors.github && (
+                  <span className="text-red-500">{errors.github.message}</span>
+                )}
+              </div>
             </div>
 
             <div className="flex justify-between text-base font-bold mt-5">

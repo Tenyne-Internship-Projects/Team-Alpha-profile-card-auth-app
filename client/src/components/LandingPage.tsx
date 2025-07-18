@@ -81,13 +81,13 @@ const LandingPage = () => {
             Get Started
           </button>
 
-          <button
+          {/* <button
             type="button"
             onClick={() => navigate("/jobs-listed")}
             className="text-lg md:text-xl font-bold px-6 py-2 cursor-pointer bg-[#723EDA] border-b-2 rounded-xl border-[#FFE01ACC] hover:bg-[#5a2fc0] transition"
           >
             Job Listing
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

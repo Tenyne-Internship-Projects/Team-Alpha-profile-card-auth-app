@@ -51,13 +51,15 @@ export default function ClientProfile() {
       };
 
       console.log("Submitting data:", formattedData);
-      console.log(`${user}`);
+      // console.log(user.);
+      const token = localStorage.getItem("token");
       const response = await axios.put(
         `${apiUrl}/profile/client/${user?.id}`,
         formattedData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );

@@ -22,7 +22,6 @@ export interface InvoiceRecord {
     fullname: string;
     email: string;
     freelancerProfile: {
-      // Define this if you have freelancer profile fields
       [key: string]: string[];
     };
   };
@@ -31,19 +30,13 @@ export interface InvoiceRecord {
     title: string;
     description: string;
     budget: number;
+    progressStatus: string;
     tags: string[]; // Adjust type if tags are not strings
     // Add other project fields here if necessary
   };
 }
 
-interface Stats {
-  approvedProjects: number;
-  maxHugValue: number;
-  openProjects: number;
-  archiveProjects: number;
-  totalFreelancers: number;
-  pendingApplications: number;
-}
+//
 
 interface StatCardProps {
   title: string;
@@ -54,13 +47,6 @@ interface StatCardProps {
   iconBg?: string;
   iconColor?: string;
 }
-
-// interface MaxHugCardProps {
-//   title: string;
-//   subtitle: string;
-//   value: number;
-//   icon: React.ComponentType<{ className?: string }>;
-// }
 
 interface PurpleCardProps {
   title: string;
@@ -80,7 +66,7 @@ const DashboardCards = () => {
     try {
       const response = await axios.get("/applications");
       setApplicants(response.data.data);
-      // console.log(response.data.data);
+      console.log(response.data);
     } catch (err) {
       const error = err as AxiosError;
       setError(error.message || "Failed to fetch applicants.");
@@ -95,11 +81,19 @@ const DashboardCards = () => {
     // pendingApplicants()
   }, [fetchApplicants]);
 
+  const totalApplicant = applicants.length;
+
   const pendingApplicants = applicants.filter(
     (applicant) => applicant.status === "pending"
   );
 
   const numberOfPendingApplicants = pendingApplicants.length;
+
+  const ongoingProject = applicants.filter(
+    (applicant) => applicant.project.progressStatus === "ongoing"
+  );
+
+  const numberOfOngoingProject = ongoingProject.length;
 
   const approvedApplicants = applicants.filter(
     (applicant) => applicant.status === "approved"
@@ -113,14 +107,14 @@ const DashboardCards = () => {
 
   const numberOfRejectedApplicants = rejectedApplicants.length;
 
-  const stats: Stats = {
-    approvedProjects: 1563,
-    maxHugValue: 1563,
-    openProjects: 1563,
-    archiveProjects: 1563,
-    totalFreelancers: 486,
-    pendingApplications: 486,
-  };
+  // const stats: Stats = {
+  //   approvedProjects: 1563,
+  //   maxHugValue: 1563,
+  //   openProjects: 1563,
+  //   archiveProjects: 1563,
+  //   totalFreelancers: 486,
+  //   pendingApplications: 486,
+  // };
 
   const StatCard: React.FC<StatCardProps> = ({
     title,
@@ -151,30 +145,6 @@ const DashboardCards = () => {
     </div>
   );
 
-  //   const MaxHugCard: React.FC<MaxHugCardProps> = ({
-  //     title,
-  //     subtitle,
-  //     value,
-  //     icon: Icon,
-  //   }) => (
-  //     <div className="bg-gradient-to-r from-blue-400 to-blue-500 rounded-lg p-6 shadow-sm text-white relative overflow-hidden">
-  //       <div className="flex items-center justify-between">
-  //         <div>
-  //           <p className="text-sm font-medium text-blue-100 mb-1">{subtitle}</p>
-  //           <p className="text-2xl font-bold text-white">
-  //             {value.toLocaleString()}
-  //           </p>
-  //         </div>
-  //         <div className="bg-white bg-opacity-20 p-3 rounded-full">
-  //           <Icon className="w-6 h-6 text-white" />
-  //         </div>
-  //       </div>
-  //       <div className="absolute top-2 left-2 bg-blue-600 text-white text-xs px-2 py-1 rounded">
-  //         {title}
-  //       </div>
-  //     </div>
-  //   );
-
   const PurpleCard: React.FC<PurpleCardProps> = ({
     title,
     value,
@@ -200,7 +170,7 @@ const DashboardCards = () => {
 
   return (
     <div className=" bg-transparent ">
-      <div className="max-w-7xl mx-auto">
+      <div className="">
         {/* Top Row - 3 Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           <StatCard
@@ -212,8 +182,8 @@ const DashboardCards = () => {
           />
 
           <StatCard
-            title="Pending Project"
-            value={numberOfPendingApplicants}
+            title="Ongoing Project"
+            value={numberOfOngoingProject}
             icon={Briefcase}
             iconBg="bg-green-100"
             iconColor="text-green-600"
@@ -239,7 +209,7 @@ const DashboardCards = () => {
         <div className="grid grid-cols-1 mb-6">
           <StatCard
             title="Archive Project"
-            value={stats.archiveProjects}
+            value={totalApplicant}
             icon={Calendar}
             iconBg="bg-gray-100"
             iconColor="text-gray-600"
@@ -250,14 +220,14 @@ const DashboardCards = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <PurpleCard
             title="Total Freelancers"
-            value={stats.totalFreelancers}
+            value={totalApplicant}
             icon={Users}
             gradient="#5A399D"
           />
 
           <PurpleCard
             title="Pending Application"
-            value={stats.pendingApplications}
+            value={numberOfPendingApplicants}
             icon={Clock}
             gradient="#46aec5"
           />

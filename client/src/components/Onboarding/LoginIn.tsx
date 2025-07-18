@@ -40,6 +40,7 @@ export const LoginIn = () => {
       const res = await axios.post("/auth/login", data);
       const token = res.data.accessToken;
       const role = res.data.user.role;
+      // console.log(res);
 
       login(token, res.data.user); // Pass both token and user data
       if (role === "freelancer") {
@@ -49,8 +50,7 @@ export const LoginIn = () => {
       } else {
         navigate("/");
       }
-      console.log(res.data);
-      // navigate("/dashboard");
+
       toast.success("Successfully logged in");
     } catch (err) {
       const error = err as AxiosError<{ message: string }>;
@@ -58,7 +58,7 @@ export const LoginIn = () => {
       const errorMessage =
         error.response?.data?.message || "Invalid credentials.";
 
-      toast.error("❌ " + errorMessage);
+      toast.error(errorMessage);
     }
   };
 

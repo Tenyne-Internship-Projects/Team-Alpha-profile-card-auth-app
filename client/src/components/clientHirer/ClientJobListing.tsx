@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import {
   Search,
-  Filter,
+  // Filter,
   Calendar,
   // DollarSign,
   // Tag,
-  ChevronDown,
-  ChevronUp,
+  // ChevronDown,
+  // ChevronUp,
   X,
   //   Bell,
   //   Sun,
@@ -283,7 +283,7 @@ const ClientJobListing = () => {
           </button>
 
           <button
-            onClick={() => navigate(`/edit-project/${project.id}`)}
+            onClick={() => navigate("/job-list-dashboard/edit-project")}
             className="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-400"
           >
             Edit
@@ -394,57 +394,11 @@ const ClientJobListing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#E1DEE8] p-4 px-16">
+    <div className="min-h-screen w-full bg-[#E1DEE8] p-4 ">
       <div className="">
-        {/* Header */}
-        {/* <header className="bg-transparent mb-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16 ">
-              <div className="flex items-center">
-                <img src="/freebioLogo.png" alt="logo" className=" h-[50px]" />
-              </div>
-              <div className="flex items-center space-x-4">
-                <button
-                  type="button"
-                  onClick={() => navigate("/")}
-                  className="text-lg md:text-xl font-bold px-6 py-2 cursor-pointer bg-[#723EDA] border-b-2 rounded-xl border-[#FFE01ACC] hover:bg-[#5a2fc0] transition"
-                >
-                  Home
-                </button>
-               
-                <button className="p-2 text-gray-400 hover:text-gray-600">
-                  <Bell className="h-5 w-5" />
-                </button>
-                <button className="p-2 text-gray-400 hover:text-gray-600">
-                  <Sun className="h-5 w-5" />
-                </button>
-                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                  <img
-                    src="/api/placeholder/32/32"
-                    alt="Profile"
-                    className="w-8 h-8 rounded-full"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </header> */}
-
         {/* Search and Filter Controls */}
-        <div className="">
+        <div className="w-full">
           <div className="flex flex-col space-y-4">
-            {/* Search Bar */}
-            {/* <div className="relative">
-              <Search className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search projects by title, description, or tags..."
-                value={filters.search}
-                onChange={(e) => handleFilterChange("search", e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-            </div> */}
-
             {/* Search Bar */}
             <div className="flex w-full mx-auto mb-8">
               <div className="flex-1 relative">
@@ -465,178 +419,49 @@ const ClientJobListing = () => {
 
           {/* FILTER AND PROJECT PAGE */}
 
-          <div className="flex gap-10">
+          <div className="flex flex-col">
             {/* FILTER PAGE */}
-            <div className="bg-white h-fit rounded-lg p-6 w-[250px]">
-              {/* Filter Toggle */}
-              <div className="flex flex-col justify-between items-center">
+            <div className=" flex gap-10 items-center h-fit rounded-lg p-6">
+              {/* Advanced Filters */}
+              <div>
                 <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
+                  onClick={() => setShowFilters((prev) => !prev)}
+                  className="bg-gray-200 px-4 py-2 rounded mb-4"
                 >
-                  <Filter className="w-4 h-4" />
-                  Advanced Filters
-                  {showFilters ? (
-                    <ChevronUp className="w-4 h-4" />
-                  ) : (
-                    <ChevronDown className="w-4 h-4" />
-                  )}
+                  {showFilters ? "Hide Filters" : "Show Filters"}
                 </button>
-
-                {(filters.search ||
-                  filters.minBudget ||
-                  filters.maxBudget ||
-                  filters.startDate ||
-                  filters.endDate ||
-                  filters.tags.length > 0) && (
-                  <button
-                    onClick={clearFilters}
-                    className="flex items-center gap-2 text-red-600 hover:text-red-800"
-                  >
-                    <X className="w-4 h-4" />
-                    Clear Filters
-                  </button>
+                {showFilters && (
+                  <div>
+                    {/* Date Range */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        <Calendar className="inline w-4 h-4 mr-1" />
+                        Start Date - End Date
+                      </label>
+                      <div className="flex  gap-2">
+                        <input
+                          type="date"
+                          value={filters.startDate}
+                          onChange={(e) =>
+                            handleFilterChange("startDate", e.target.value)
+                          }
+                          className="w-full px-3 py-2 border border-gray-300 bg-white rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                        <input
+                          type="date"
+                          value={filters.endDate}
+                          onChange={(e) =>
+                            handleFilterChange("endDate", e.target.value)
+                          }
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 )}
               </div>
 
-              {/* Advanced Filters */}
-              {showFilters && (
-                <div className="grid  gap-4 pt-4 ">
-                  {/* Budget Range */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
-                      {/* <DollarSign className="inline w-4 h-4 mr-1" /> */}
-                      Budget
-                    </label>
-                    <div className="grid gap-2">
-                      {budgetRanges.map((range) => (
-                        <label
-                          key={range.value}
-                          className={`
-                            flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition
-                            border border-transparent
-                            ${
-                              filters.budgetRange === range.value
-                                ? "bg-blue-100 border-blue-400 ring-2 ring-blue-200"
-                                : "hover:bg-gray-100"
-                            }
-                          `}
-                          tabIndex={0}
-                        >
-                          <input
-                            type="radio"
-                            name="budgetRange"
-                            value={range.value}
-                            checked={filters.budgetRange === range.value}
-                            onChange={() =>
-                              handleFilterChange("budgetRange", range.value)
-                            }
-                            className="form-radio h-5 w-5 text-blue-600 focus:ring-blue-500"
-                          />
-                          <span
-                            className={`text-sm font-medium ${
-                              filters.budgetRange === range.value
-                                ? "text-blue-700"
-                                : "text-gray-700"
-                            }`}
-                          >
-                            {range.label}
-                          </span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Date Range */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Calendar className="inline w-4 h-4 mr-1" />
-                      Deadline Range
-                    </label>
-                    <div className="flex flex-col gap-2">
-                      <input
-                        type="date"
-                        value={filters.startDate}
-                        onChange={(e) =>
-                          handleFilterChange("startDate", e.target.value)
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      />
-                      <input
-                        type="date"
-                        value={filters.endDate}
-                        onChange={(e) =>
-                          handleFilterChange("endDate", e.target.value)
-                        }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Sort Options */}
-                  {/* <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Sort By
-                    </label>
-                    <div className="flex flex-col gap-2">
-                      <select
-                        value={filters.sortBy}
-                        onChange={(e) =>
-                          handleFilterChange("sortBy", e.target.value)
-                        }
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="createdAt">Created Date</option>
-                        <option value="deadline">Deadline</option>
-                        <option value="budget">Budget</option>
-                        <option value="title">Title</option>
-                      </select>
-                      <select
-                        value={filters.sortOrder}
-                        onChange={(e) =>
-                          handleFilterChange(
-                            "sortOrder",
-                            e.target.value as "asc" | "desc"
-                          )
-                        }
-                        className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option value="desc">Descending</option>
-                        <option value="asc">Ascending</option>
-                      </select>
-                    </div>
-                  </div> */}
-
-                  {/* Tags Filter */}
-                  {/* <div className="">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <Tag className="inline w-4 h-4 mr-1" />
-                      Filter by Tags
-                    </label>
-                    <div className="flex flex-wrap gap-2">
-                      {availableTags.map((tag) => (
-                        <button
-                          key={tag}
-                          onClick={() => handleTagToggle(tag)}
-                          className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
-                            filters.tags.includes(tag)
-                              ? "bg-blue-600 text-white"
-                              : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                          }`}
-                        >
-                          {tag}
-                        </button>
-                      ))}
-                    </div>
-                  </div> */}
-                </div>
-              )}
-            </div>
-
-            {/* PROJECT PART */}
-
-            <div className="relative">
-              <div className="w-[200px] absolute mr-0 right-10">
+              <div className="">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Sort By
                 </label>
@@ -668,17 +493,28 @@ const ClientJobListing = () => {
                   </select>
                 </div>
               </div>
-              {/* Results Summary */}
-              <div className="flex justify-between items-center mb-6">
-                <div className="text-gray-600">
-                  Showing {(filters.page - 1) * filters.limit + 1} -{" "}
-                  {Math.min(filters.page * filters.limit, totalProjects)} of{" "}
-                  {totalProjects} projects
-                </div>
-              </div>
+              <button
+                type="button"
+                onClick={() => navigate("/job-list-dashboard/add-project")}
+                className="bg-[#5A399D] py-2 px-3 rounded-lg text-white text-base cursor-pointer"
+              >
+                Add Project
+              </button>
+            </div>
 
+            {/* PROJECT PART */}
+
+            <div className="relative bg-white rounded-3xl px-4 py-8">
               <div>
                 {/* Loading State */}
+                {/* Results Summary */}
+                {/* <div className="flex justify-between items-center mb-6">
+                  <div className="text-gray-600">
+                    Showing {(filters.page - 1) * filters.limit + 1} -{" "}
+                    {Math.min(filters.page * filters.limit, totalProjects)} of{" "}
+                    {totalProjects} projects
+                  </div>
+                </div> */}
                 {loading && (
                   <div className="text-center py-8">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
@@ -718,7 +554,7 @@ const ClientJobListing = () => {
                 </div>
 
                 {/* Projects Grid */}
-                <div className="flex flex-col lg:flex-row gap-6 ">
+                <div className="flex w-full flex-col lg:flex-row gap-6 ">
                   {/* Cards List/Grid */}
                   <div
                     className={
@@ -820,7 +656,17 @@ const ClientJobListing = () => {
                         </div>
                         <button
                           className="mt-6 w-full py-3 bg-gradient-to-r from-[#5A399D] to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:from-[#4a2e8e] hover:to-purple-700 transition-all duration-300"
-                          onClick={() => setShowApplyModal(true)}
+                          onClick={() => {
+                            // Store project data in sessionStorage for the edit page
+                            sessionStorage.setItem(
+                              "editProjectData",
+                              JSON.stringify(selectedProject)
+                            );
+                            // Navigate to edit page with project ID
+                            navigate(
+                              `/job-list-dashboard/edit-project?=${selectedProject.id}`
+                            );
+                          }}
                         >
                           Edit
                         </button>

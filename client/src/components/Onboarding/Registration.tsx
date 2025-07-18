@@ -147,9 +147,7 @@ export default function Registration() {
               </label>
             </div>
             {errors.role && (
-              <p className="text-red-500 text-sm mt-1">
-                Please select a gender.
-              </p>
+              <p className="text-red-500 text-sm mt-1">Please select a role.</p>
             )}
           </div>
 

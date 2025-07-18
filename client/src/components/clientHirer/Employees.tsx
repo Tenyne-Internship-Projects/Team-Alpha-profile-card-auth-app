@@ -116,7 +116,7 @@ const Employees: React.FC = () => {
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
       {/* Header */}
       <div className="px-6 py-4 border-b border-gray-200">
         <h2 className="text-lg font-semibold text-gray-900">
@@ -139,8 +139,8 @@ const Employees: React.FC = () => {
 
       {/* Table */}
       {!loading && !error && pendingApplicants.length > 0 && (
-        <div className="overflow-x-auto">
-          <table className="w-full">
+        <div className="">
+          <table className="">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -193,7 +193,7 @@ const Employees: React.FC = () => {
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => handleViewProfile(applicant.id)}
-                        className="bg-purple-600 text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors flex items-center space-x-1"
+                        className="bg-[#5A399D] text-white px-3 py-1.5 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors flex items-center space-x-1"
                       >
                         <MessageSquare className="w-4 h-4" />
                         <a href="http://localhost:5173/users/ef637f0b-cff1-4b5a-a6ad-3b71c80f28b8">
