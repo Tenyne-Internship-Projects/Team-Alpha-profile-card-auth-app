@@ -59,7 +59,7 @@ const NotificationFilter = () => {
 
   return (
     <div>
-      <div className="w-full md:w-4/12 bg-white rounded-2xl mb-4 py-6 px-5">
+      <div className="w-full  bg-white rounded-2xl mb-4 py-6 px-5">
         <h4 className="text-black font-medium mb-3 text-sm">Notifications</h4>
 
         <div className="grid gap-2">
@@ -70,11 +70,11 @@ const NotificationFilter = () => {
                 className="flex justify-between border border-[#CEC4E2] rounded-xl p-2"
               >
                 <div className="flex gap-3">
-                  {/* <img
-                    src={notify.img}
+                  <img
+                    src="/clientDashboard/notifyPayIcon.png"
                     alt={notify.title}
                     className="w-[24px] h-[24px]"
-                  /> */}
+                  />
                   <div>
                     <h4 className="text-sm text-black">{notify.title}</h4>
                     {/* <p className="text-xs text-black/40">{notify.time}</p> */}

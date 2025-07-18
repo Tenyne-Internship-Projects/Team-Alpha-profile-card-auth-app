@@ -88,9 +88,12 @@ const JobListing = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [applicationText, setApplicationText] = useState("");
-  const [jobs, setJobs] = useState(false);
+  // const [jobs, setJobs] = useState(false);
   const navigate = useNavigate();
   const user = useAuth();
+  const [likedProjects, setLikedProjects] = useState<{ [id: string]: boolean }>(
+    {}
+  );
 
   // Available tags (you can make this dynamic by fetching from API)
   // const availableTags = [
@@ -249,6 +252,20 @@ const JobListing = () => {
     return true;
   });
 
+  const toggleFavorite = async (projectId: string, isFavorite: boolean) => {
+    try {
+      if (!isFavorite) {
+        // Add to favorites
+        await axios.post(`/favorites/${projectId}`);
+      } else {
+        // Remove from favorites
+        await axios.delete(`/api/favorites/${projectId}`);
+      }
+    } catch (error) {
+      console.error("Failed to toggle favorite:", error);
+    }
+  };
+
   const ProjectCard = ({
     project,
     onClick,
@@ -269,12 +286,24 @@ const JobListing = () => {
         </div>
         {user?.user?.role === "freelancer" && (
           <button
-            onClick={() => setJobs((prev) => !prev)}
+            onClick={async () => {
+              await toggleFavorite(project.id, likedProjects[project.id]);
+              setLikedProjects((prev) => ({
+                ...prev,
+                [project.id]: !prev[project.id],
+              }));
+            }}
             className={`p-2 rounded-full ${
-              jobs ? "text-red-500" : "text-[#5A399D] hover:text-red-500"
+              likedProjects[project.id]
+                ? "text-red-500"
+                : "text-[#5A399D] hover:text-red-500"
             }`}
           >
-            <Heart className={`h-5 w-5 ${jobs ? "fill-current" : ""}`} />
+            <Heart
+              className={`h-5 w-5 ${
+                likedProjects[project.id] ? "fill-current" : ""
+              }`}
+            />
           </button>
         )}
         {/* <span
@@ -925,54 +954,3 @@ const JobListing = () => {
 };
 
 export default JobListing;
-
-// import { useEffect, useState } from "react";
-// import JobBoard from "../components/freelancerComponent/FreelancePage";
-// import axios from "../services/axiosInstance";
-
-// // interface Project {
-// //   // Define the shape of your project object here
-// //   id: number;
-// //   title: string;
-// //   // ...other fields
-// // }
-
-// const JobListing = () => {
-//   // const [projects, setProjects] = useState<Project[]>([]);
-//   const [loading, setLoading] = useState<boolean>(false);
-//   const [error, setError] = useState<string | null>(null);
-
-//   useEffect(() => {
-//     setLoading(true);
-//     const fetchProjects = async () => {
-//       try {
-//         const response = await axios.get("/project");
-//         // setProjects(response.data);
-//         console.log(response.data); // Adjust if your API response shape is different
-//         // setError(null);
-//       } catch (err: any) {
-//         setError(err.message || "Failed to fetch projects.");
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchProjects();
-//   }, []);
-
-//   return (
-//     <div>
-//       {/* {loading && <p>Loading projects...</p>}
-//       {error && <p className="text-red-500">{error}</p>} */}
-//       <p>Projects</p>
-//       {/* <p>
-//         {projects}
-//       </p> */}
-//       <JobBoard
-//       // projects={projects}
-//       />
-//     </div>
-//   );
-// };
-
-// export default JobListing;

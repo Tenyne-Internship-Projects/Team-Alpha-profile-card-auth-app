@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "../services/axiosInstance";
+import { AxiosError } from "axios";
 
 export default function VerifyEmail() {
+  const navigate = useNavigate();
   const { code } = useParams(); // grabs token from URL path
   const [status, setStatus] = useState<"loading" | "success" | "error">(
     "loading"
@@ -11,14 +13,25 @@ export default function VerifyEmail() {
     "idle" | "sending" | "sent" | "error"
   >("idle");
 
-  useEffect(() => {
-    if (code) {
-      axios
-        .post(`/auth/verify-email/${code}`)
-        .then(() => setStatus("success"))
-        .catch(() => setStatus("error"));
+  const verify = async () => {
+    try {
+      const res = await axios.post(`/auth/verify-email/${code}`);
+      if (res.status === 200) {
+        navigate("/login");
+        setStatus("success");
+      }
+      // .then(() => setStatus("success"))
+      // .catch(() => setStatus("error"));
+    } catch (err) {
+      const error = err as AxiosError;
+      console.error(error);
+      // setStatus(error)
     }
-  }, [code]);
+  };
+
+  useEffect(() => {
+    verify();
+  }, []);
 
   const handleResend = async () => {
     setResendStatus("sending");

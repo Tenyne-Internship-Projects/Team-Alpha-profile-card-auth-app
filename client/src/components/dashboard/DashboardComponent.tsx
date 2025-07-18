@@ -9,8 +9,8 @@ import {
   // ChevronLeft,
   // ChevronRight,
   Power,
-  Sun,
-  Moon,
+  // Sun,
+  // Moon,
   Upload,
   LayoutDashboard,
 } from "lucide-react";
@@ -23,6 +23,7 @@ import UploadDocument from "./UploadDocument";
 import { useNavigate } from "react-router-dom";
 // import Earnings from "./NotificationInterface";
 import NotificationInterface from "./NotificationInterface";
+import NotificationFilter from "./NotificationFilter";
 
 // import ProfileUpdate from "./ProfileUpload";
 
@@ -31,9 +32,10 @@ const DashboardComponent = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [activeSection, setActiveSection] = useState("Home");
-  const [darkMode, setDarkMode] = useState(false);
+  // const [darkMode, setDarkMode] = useState(false);
   const { logout } = useAuth() as AuthContextType;
   const navigate = useNavigate();
+  const [showNotifications, setShowNotifications] = useState(false);
 
   // Check if screen is mobile size
   useEffect(() => {
@@ -51,10 +53,10 @@ const DashboardComponent = () => {
 
   const menuItems = [
     { icon: LayoutDashboard, label: "Dashboard", key: "dashboard" },
-    { icon: User, label: "Projects", key: "project" },
-    { icon: User, label: "Applications", key: "application" },
-    { icon: User, label: "Message", key: "message" },
-    { icon: User, label: "Earnings", key: "earnings" },
+    // { icon: User, label: "Projects", key: "project" },
+    // { icon: User, label: "Applications", key: "application" },
+    // { icon: User, label: "Message", key: "message" },
+    { icon: User, label: "Notification", key: "notification" },
 
     { icon: Settings, label: "Settings", key: "setting" },
 
@@ -90,7 +92,7 @@ const DashboardComponent = () => {
         return <HomeContent />;
       case "upload":
         return <UploadDocument />;
-      case "earnings":
+      case "notification":
         return <NotificationInterface />;
       case "profile":
         return <ProfileUpload />;
@@ -102,7 +104,7 @@ const DashboardComponent = () => {
   };
 
   return (
-    <div className={`flex h-screen ${darkMode ? "dark" : ""} bg-gray-50`}>
+    <div className={`flex h-screen  bg-gray-50`}>
       {/* Mobile Overlay */}
       {isMobile && sidebarOpen && (
         <div
@@ -235,13 +237,23 @@ const DashboardComponent = () => {
                 Job Listing
               </button>
               {/* Notifications */}
-              <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors relative">
-                <Bell className="w-5 h-5 text-gray-600" />
-                <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-              </button>
+              <div className="relative">
+                <button
+                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors relative"
+                  onClick={() => setShowNotifications((prev) => !prev)}
+                >
+                  <Bell className="w-5 h-5 text-gray-600" />
+                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
+                {showNotifications && (
+                  <div className="absolute right-0 mt-2 z-50 w-96">
+                    <NotificationFilter />
+                  </div>
+                )}
+              </div>
 
               {/* Dark mode toggle */}
-              <button
+              {/* <button
                 onClick={() => setDarkMode(!darkMode)}
                 className="p-2 rounded-lg hover:bg-gray-100 transition-colors relative"
               >
@@ -250,7 +262,7 @@ const DashboardComponent = () => {
                 ) : (
                   <Moon className="w-5 h-5 text-gray-600" />
                 )}
-              </button>
+              </button> */}
 
               {/* Profile */}
               <button className="border-2 border-[#552EA4] rounded-full hover:bg-gray-100 w-[40px] h-[40px] flex items-center justify-center transition-colors">

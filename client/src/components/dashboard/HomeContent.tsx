@@ -4,31 +4,32 @@ import { AuthContextType } from "../../types/user";
 import axios from "../../services/axiosInstance";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import EarningsChart from "./Chart";
+import NotificationFilter from "./NotificationFilter";
 
-const Notification = [
-  {
-    img: "/clientDashboard/notifyPayIcon.png",
-    title: "Payment made",
-    time: "Just now",
-  },
-  {
-    title: "Approved project",
-    time: "Just now",
-    img: "/clientDashboard/notifyApprovIcon.png",
-  },
-  {
-    title: "Rejected Application",
-    time: "Just now",
-    img: "/clientDashboard/notifyRejectIcon.png",
-  },
-  {
-    title: "Job alert",
-    time: "Just now",
-    img: "/clientDashboard/jobalertIcon.png",
-  },
-];
+// const Notification = [
+//   {
+//     img: "/clientDashboard/notifyPayIcon.png",
+//     title: "Payment made",
+//     time: "Just now",
+//   },
+//   {
+//     title: "Approved project",
+//     time: "Just now",
+//     img: "/clientDashboard/notifyApprovIcon.png",
+//   },
+//   {
+//     title: "Rejected Application",
+//     time: "Just now",
+//     img: "/clientDashboard/notifyRejectIcon.png",
+//   },
+//   {
+//     title: "Job alert",
+//     time: "Just now",
+//     img: "/clientDashboard/jobalertIcon.png",
+//   },
+// ];
 
 interface IApplicationStat {
   applicationStats: {
@@ -233,7 +234,7 @@ const HomeContent = () => {
           </div>
         </div>
 
-        <div className="w-full md:w-4/12 bg-white rounded-2xl mb-4 py-6 px-5">
+        {/* <div className="w-full md:w-4/12 bg-white rounded-2xl mb-4 py-6 px-5">
           <h4 className="text-black font-medium mb-3 text-sm">Notifications</h4>
 
           <div className="grid gap-2">
@@ -267,6 +268,9 @@ const HomeContent = () => {
           <Link to="" className="border-b text-[#6F757E] text-sm mt-4">
             View all notification
           </Link>
+        </div> */}
+        <div className="md:w-4/12">
+          <NotificationFilter />
         </div>
       </div>
 
@@ -277,7 +281,7 @@ const HomeContent = () => {
       {/* {user && user.profile ? <ProfileDetail /> : <p>Loading profile...</p>} */}
 
       <div className="flex gap-4 max-md:flex-col mt-6">
-        <div className="md:w-3/12">
+        <div className="md:w-4/12">
           <div
             className={`p-6  shadow-2xl rounded-2xl flex gap-4 bg-white  border-b-2  `}
           >
@@ -314,10 +318,10 @@ const HomeContent = () => {
           </div>
         </div>
 
-        <div className="md:w-6/12">
+        <div className="md:w-8/12">
           <EarningsChart monthlyEarnings={monthlyEarnings} />
         </div>
-        <div className="w-3/12"></div>
+        {/* <div className="w-3/12"></div> */}
       </div>
     </div>
   );
