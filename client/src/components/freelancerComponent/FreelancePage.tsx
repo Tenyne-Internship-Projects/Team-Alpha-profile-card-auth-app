@@ -4,14 +4,11 @@ import {
   Bell,
   Sun,
   Heart,
-  // MessageSquare,
   ChevronDown,
   Filter,
   Calendar,
   DollarSign,
   Clock,
-  // MapPin,
-  // Briefcase,
   Upload,
 } from "lucide-react";
 import { FaList } from "react-icons/fa6";

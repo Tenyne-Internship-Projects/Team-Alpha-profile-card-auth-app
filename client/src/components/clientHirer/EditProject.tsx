@@ -130,11 +130,11 @@ const EditProjects = () => {
       title: data.title,
       description: data.description,
       budget: Number(data.budget),
-      tags: data.tags, // or data.skills if that's your field
+      tags: data.tags,
       deadline: new Date(data.deadline).toISOString(),
-      responsibilities: data.responsibilities, // if needed by backend
-      requirement: data.requirement, // if needed by backend
-      location: data.location, // if needed by backend
+      responsibilities: data.responsibilities,
+      requirement: data.requirement,
+      location: data.location,
     };
     console.log(formattedData);
     try {

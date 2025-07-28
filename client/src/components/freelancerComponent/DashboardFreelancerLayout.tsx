@@ -16,7 +16,7 @@ import { AuthContextType } from "../../types/user";
 
 const DashboardFreelancerLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  //   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const { logout } = useAuth() as AuthContextType;
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const DashboardFreelancerLayout = () => {
       {/* Sidebar */}
       <aside
         className={`fixed left-0 top-24 h-full bg-gradient-to-b  from-[#552EA4]  to-[#201437] rounded-2xl p-6 text-white w-64 transition-all duration-300 z-40 ${
-          sidebarCollapsed ? "w-20" : "w-64"
+          sidebarOpen ? "w-20" : "w-64"
         } ${sidebarOpen ? "block" : "hidden md:block"}`}
       >
         <div className="flex items-center justify-between p-4 max-md:border-b max-md:border-gray-800">

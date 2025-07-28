@@ -1,17 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  Search,
-  // Filter,
-  Calendar,
-  // DollarSign,
-  // Tag,
-  // ChevronDown,
-  // ChevronUp,
-  X,
-  //   Bell,
-  //   Sun,
-  //   Heart,
-} from "lucide-react";
+import { Search, Calendar, X } from "lucide-react";
 import axios from "../../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
@@ -88,22 +76,6 @@ const ClientJobListing = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [applicationText, setApplicationText] = useState("");
-  //   const [jobs, setJobs] = useState(false);
-  //   const navigate = useNavigate();
-
-  // Available tags (you can make this dynamic by fetching from API)
-  // const availableTags = [
-  //   "Food",
-  //   "Reservation",
-  //   "Delivery",
-  //   "API",
-  //   "Backend",
-  //   "Database",
-  //   "CRM",
-  //   "Salesforce",
-  //   "Chat",
-  //   "Mobile",
-  // ];
 
   const [filters, setFilters] = useState<FilterState>({
     search: "",
@@ -244,7 +216,7 @@ const ClientJobListing = () => {
     const { min, max } = getBudgetRange(filters.budgetRange);
     if (min !== null && project.budget < min) return false;
     if (max !== null && project.budget > max) return false;
-    // ...other filter conditions
+
     return true;
   });
 
@@ -267,14 +239,6 @@ const ClientJobListing = () => {
           <p className="text-gray-600 text-sm mb-2">{project.description}</p>
         </div>
         <div>
-          {/* <button
-          onClick={() => setJobs((prev) => !prev)}
-          className={`p-2 rounded-full ${
-            jobs ? "text-red-500" : "text-[#5A399D] hover:text-red-500"
-          }`}
-        >
-          <Heart className={`h-5 w-5 ${jobs ? "fill-current" : ""}`} />
-        </button> */}
           <button
             onClick={() => deleteProject(project.id)}
             className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"

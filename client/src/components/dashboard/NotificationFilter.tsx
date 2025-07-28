@@ -17,13 +17,12 @@ const NotificationFilter = () => {
   const [notificationData, setNotificationData] = useState<
     INotification[] | undefined
   >();
-  // const [notifyData, setNotifyData] = useState();
+
   const fetchNotification = async () => {
     try {
       const res = await axios.get("/notifications");
       setNotificationData(res.data.notifications);
       console.log(res);
-      // console.log(notificationData);
     } catch (err) {
       const error = err as AxiosError;
       console.error(error);
@@ -33,29 +32,6 @@ const NotificationFilter = () => {
   useEffect(() => {
     fetchNotification();
   }, []);
-
-  // const Notification = [
-  //   {
-  //     img: "/clientDashboard/notifyPayIcon.png",
-  //     title: <div>{notifyData}</div>,
-  //     time: "Just now",
-  //   },
-  //   {
-  //     title: "Approved project",
-  //     time: "Just now",
-  //     img: "/clientDashboard/notifyApprovIcon.png",
-  //   },
-  //   {
-  //     title: "Rejected Application",
-  //     time: "Just now",
-  //     img: "/clientDashboard/notifyRejectIcon.png",
-  //   },
-  //   {
-  //     title: "Job alert",
-  //     time: "Just now",
-  //     img: "/clientDashboard/jobalertIcon.png",
-  //   },
-  // ];
 
   return (
     <div>

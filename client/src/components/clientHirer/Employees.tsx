@@ -3,19 +3,6 @@ import { MessageSquare } from "lucide-react";
 import axios from "../../services/axiosInstance";
 import { AxiosError } from "axios";
 
-// interface Applicant {
-//   id: string;
-//   name: string;
-//   email: string;
-//   description: string;
-//   tags: string[];
-//   budget: string;
-//   responsibilities: string[];
-//   location: string;
-//   deadline: string;
-//   requirement: string;
-// }
-
 export interface InvoiceRecord {
   id: string;
   createdAt: string;
@@ -37,8 +24,7 @@ export interface InvoiceRecord {
     title: string;
     description: string;
     budget: number;
-    tags: string[]; // Adjust type if tags are not strings
-    // Add other project fields here if necessary
+    tags: string[];
   };
 }
 
