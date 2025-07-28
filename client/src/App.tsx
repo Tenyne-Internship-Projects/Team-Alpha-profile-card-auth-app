@@ -34,6 +34,12 @@ import AddProjectPage from "./pages/clientPages/AddProjectPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import JobListing from "./pages/JobListing";
 import EditProjectPage from "./pages/clientPages/EditProjectPage";
+import DashboardFreelancerLayout from "./components/freelancerComponent/DashboardFreelancerLayout";
+import HomePage from "./pages/freelancerPages/HomePage";
+import UploadsPage from "./pages/freelancerPages/UploadsPage";
+import NotificationsPage from "./pages/freelancerPages/NotificationsPage";
+import ProfilePageFreelancer from "./pages/freelancerPages/ProfilePage";
+import SettingsPage from "./pages/freelancerPages/SettingsPage";
 
 // Error fallback
 function ErrorFallback({ error }: { error: Error }) {
@@ -72,15 +78,21 @@ export default function App() {
             <Route path="/users/:id" element={<UserDetails />} />
             <Route path="/jobs-listed" element={<JobListing />} />
 
-            {/* Protected: Freelancer Dashboard */}
+            {/* Protected: Freelancer Dashboard with nested routes */}
             <Route
               path="/dashboard"
               element={
                 <ProtectedRoute allowedRoles={["freelancer"]}>
-                  <Dashboard />
+                  <DashboardFreelancerLayout />
                 </ProtectedRoute>
               }
-            />
+            >
+              <Route index element={<HomePage />} />
+              <Route path="uploads" element={<UploadsPage />} />
+              <Route path="notifications" element={<NotificationsPage />} />
+              <Route path="profile" element={<ProfilePageFreelancer />} />
+              <Route path="settings" element={<SettingsPage />} />
+            </Route>
 
             {/* Protected: Client Dashboard with nested routes */}
             <Route

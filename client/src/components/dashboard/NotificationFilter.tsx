@@ -63,7 +63,7 @@ const NotificationFilter = () => {
         <h4 className="text-black font-medium mb-3 text-sm">Notifications</h4>
 
         <div className="grid gap-2">
-          {notificationData?.map((notify, idx) => {
+          {notificationData?.slice(0, 4).map((notify, idx) => {
             return (
               <div
                 key={idx}
