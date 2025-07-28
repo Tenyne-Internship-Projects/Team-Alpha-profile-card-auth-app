@@ -13,10 +13,6 @@ interface INotification {
   createdAt: string; // ISO 8601 date string
 }
 
-// interface INotificationData {
-//   Notification: INotification[];
-// }
-
 const NotificationInterface = () => {
   const [notificationData, setNotificationData] = useState<
     INotification[] | undefined

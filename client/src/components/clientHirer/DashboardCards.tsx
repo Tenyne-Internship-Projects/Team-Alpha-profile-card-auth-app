@@ -31,8 +31,7 @@ export interface InvoiceRecord {
     description: string;
     budget: number;
     progressStatus: string;
-    tags: string[]; // Adjust type if tags are not strings
-    // Add other project fields here if necessary
+    tags: string[];
   };
 }
 
@@ -106,15 +105,6 @@ const DashboardCards = () => {
   );
 
   const numberOfRejectedApplicants = rejectedApplicants.length;
-
-  // const stats: Stats = {
-  //   approvedProjects: 1563,
-  //   maxHugValue: 1563,
-  //   openProjects: 1563,
-  //   archiveProjects: 1563,
-  //   totalFreelancers: 486,
-  //   pendingApplications: 486,
-  // };
 
   const StatCard: React.FC<StatCardProps> = ({
     title,

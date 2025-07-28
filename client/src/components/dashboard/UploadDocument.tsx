@@ -37,12 +37,6 @@ const UploadDocument: React.FC = () => {
     }
   }, [watchedProfile, step]);
 
-  // const handleNext = () => {
-  //   if (watchedResume?.[0]) {
-  //     setStep("profile");
-  //   }
-  // };
-
   const onSubmit = async (data: FormData) => {
     const formData = new FormData();
     formData.append("documents", data.documents[0]);

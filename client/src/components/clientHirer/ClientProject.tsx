@@ -1,5 +1,3 @@
-// import React from 'react'
-
 import ClientJobListing from "./ClientJobListing";
 
 const ClientProject = () => {

@@ -1,35 +1,10 @@
 import { useAuth } from "../../hooks/useAuth";
 import { AuthContextType } from "../../types/user";
-// import ProfileDetail from "../home/ProfileDetail";
 import axios from "../../services/axiosInstance";
 import { useEffect, useState } from "react";
 import { AxiosError } from "axios";
-// import { Link } from "react-router-dom";
 import EarningsChart from "./Chart";
 import NotificationFilter from "./NotificationFilter";
-
-// const Notification = [
-//   {
-//     img: "/clientDashboard/notifyPayIcon.png",
-//     title: "Payment made",
-//     time: "Just now",
-//   },
-//   {
-//     title: "Approved project",
-//     time: "Just now",
-//     img: "/clientDashboard/notifyApprovIcon.png",
-//   },
-//   {
-//     title: "Rejected Application",
-//     time: "Just now",
-//     img: "/clientDashboard/notifyRejectIcon.png",
-//   },
-//   {
-//     title: "Job alert",
-//     time: "Just now",
-//     img: "/clientDashboard/jobalertIcon.png",
-//   },
-// ];
 
 interface IApplicationStat {
   applicationStats: {
@@ -74,7 +49,6 @@ const HomeContent = () => {
     try {
       const res = await axios.get("/freelancer-dashboard/metrics-cards");
       setApplicationStat(res.data);
-      // console.log(res);
     } catch (err) {
       const error = err as AxiosError;
       console.error(error);

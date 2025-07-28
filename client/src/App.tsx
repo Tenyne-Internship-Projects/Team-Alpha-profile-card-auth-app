@@ -12,7 +12,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
+
 import VerifyEmail from "./pages/VerifyEmail";
 import VerifyPage from "./pages/EmailVerification";
 import UserDetails from "./pages/UserDetail";

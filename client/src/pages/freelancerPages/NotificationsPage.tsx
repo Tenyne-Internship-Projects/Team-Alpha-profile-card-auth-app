@@ -1,4 +1,3 @@
-import React from "react";
 import NotificationInterface from "../../components/dashboard/NotificationInterface";
 
 const NotificationsPage = () => {

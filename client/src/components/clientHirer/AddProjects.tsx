@@ -25,8 +25,6 @@ const AddProjects = () => {
   const [responsibilities, setResponsibilities] = useState<string[]>([]);
   const { user } = useAuth() as AuthContextType;
 
-  // const [experienceLevel, setExperienceLevel] = useState("Entry");
-
   const {
     register,
     handleSubmit,
@@ -41,9 +39,6 @@ const AddProjects = () => {
       requirement: "",
       responsibilities: [],
       location: "",
-      // deadline: Date,
-      // budget: "",
-      // experienceLevel: "Entry",
       tags: [],
     },
   });
@@ -92,11 +87,11 @@ const AddProjects = () => {
       title: data.title,
       description: data.description,
       budget: Number(data.budget),
-      tags: data.tags, // or data.skills if that's your field
+      tags: data.tags,
       deadline: new Date(data.deadline).toISOString(),
-      responsibilities: data.responsibilities, // if needed by backend
-      requirement: data.requirement, // if needed by backend
-      location: data.location, // if needed by backend
+      responsibilities: data.responsibilities,
+      requirement: data.requirement,
+      location: data.location,
     };
     console.log(formattedData);
     try {
@@ -105,16 +100,8 @@ const AddProjects = () => {
         formattedData
       );
       console.log(response);
-      // if (response.status === 200) {
-      //   // const result = await response.json();
-      //   console.log("Project created successfully:", response.status);
-      //   alert("Project created successfully!");
-      // } else {
-      //   throw new Error("Failed to create project");
-      // }
     } catch (error) {
       console.error("Error creating project:", error);
-      // alert("Error creating project. Please try again.");
     }
   };
 
@@ -155,12 +142,6 @@ const AddProjects = () => {
                   }`}
                 ></div>
                 <div className="h-16 w-[3px]  transition-colors duration-200"></div>
-                {/* Centered short horizontal bar directly under the dot */}
-                {/* <div
-                  className={`w-8 h-[3px] rounded mx-auto transition-colors duration-200 ${
-                    isActive ? "bg-[#5A399D]" : "bg-[#CEC4E2]"
-                  }`}
-                ></div> */}
               </div>
             )}
           </div>
@@ -382,29 +363,6 @@ const AddProjects = () => {
           setCurrentStep(3);
         }}
       >
-        {/* <div>
-          <label className="block text-sm font-medium text-gray-900 mb-3">
-            Experience Level <span className="text-red-500">*</span>
-          </label>
-          <div className="space-y-2">
-            {["Entry", "Intermediate", "Expert"].map((level) => (
-              <label key={level} className="flex items-center">
-                <input
-                  type="radio"
-                  value={level}
-                  checked={experienceLevel === level}
-                  onChange={(e) => {
-                    setExperienceLevel(e.target.value);
-                    setValue("experienceLevel", e.target.value);
-                  }}
-                  className="w-4 h-4 text-purple-600 border-gray-300 focus:ring-purple-500"
-                />
-                <span className="ml-2 text-sm text-gray-700">{level}</span>
-              </label>
-            ))}
-          </div>
-        </div> */}
-
         <div>
           <label className="block text-sm font-medium text-gray-900 mb-2">
             Deadline <span className="text-red-500">*</span>
