@@ -16,6 +16,7 @@ import axios from "../services/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { useAuth } from "../hooks/useAuth";
+import SubmissionForm from "../components/forms/SubmissionForm";
 
 // Types based on your data structure
 interface ClientProfile {
@@ -87,7 +88,7 @@ const JobListing = () => {
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
-  const [applicationText, setApplicationText] = useState("");
+  // const [applicationText, setApplicationText] = useState("");
   // const [jobs, setJobs] = useState(false);
   const navigate = useNavigate();
   const user = useAuth();
@@ -370,33 +371,41 @@ const JobListing = () => {
     handleFilterChange("page", newPage);
   };
 
-  const handleApplicationSubmit = async () => {
-    if (!applicationText.trim() || !selectedProject) {
-      alert("Please enter your profile link and select a project.");
-      return;
-    }
-    try {
-      await axios.post(`/applications/apply/${selectedProject.id}`, {
-        profileLink: applicationText,
-      });
-      alert("Application submitted!");
-      setShowApplyModal(false);
-      setApplicationText("");
-    } catch (error: unknown) {
-      const err = error as AxiosError;
-      alert(
-        (err.response?.data as { message?: string })?.message ||
-          "Failed to submit application. Please try again."
-      );
-    }
-  };
+  // const handleApplicationSubmit = async () => {
+  //   if (!applicationText.trim() || !selectedProject) {
+  //     alert("Please enter your profile link and select a project.");
+  //     return;
+  //   }
+  //   try {
+  //     await axios.post(`/applications/apply/${selectedProject.id}`, {
+  //       profileLink: applicationText,
+  //     });
+  //     alert("Application submitted!");
+  //     setShowApplyModal(false);
+  //     setApplicationText("");
+  //   } catch (error: unknown) {
+  //     const err = error as AxiosError;
+  //     alert(
+  //       (err.response?.data as { message?: string })?.message ||
+  //         "Failed to submit application. Please try again."
+  //     );
+  //   }
+  // };
 
   //
 
   // MAIN PAGE SECTION
+  const bidModalClose = () => {
+    setShowApplyModal(false);
+  };
 
   return (
-    <div className="min-h-screen bg-[#E1DEE8] p-4 px-16">
+    <div className="min-h-screen relative bg-[#E1DEE8] p-4 px-16">
+      <SubmissionForm
+        bidModal={showApplyModal}
+        setBidModalClose={bidModalClose}
+        selectedProjectId={selectedProject?.id}
+      />
       <div className="">
         {/* Header */}
         <header className="bg-transparent mb-10">
@@ -477,7 +486,7 @@ const JobListing = () => {
                   className="flex items-center gap-2 text-blue-600 hover:text-blue-800"
                 >
                   <Filter className="w-4 h-4" />
-                  Advanced Filters
+                  Filters
                   {showFilters ? (
                     <ChevronUp className="w-4 h-4" />
                   ) : (
@@ -917,7 +926,7 @@ const JobListing = () => {
           </div>
         )}
 
-        {showApplyModal && (
+        {/* {showApplyModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#A8A9B3B2] bg-opacity-50">
             <div className="bg-[#CEC4E2] rounded-lg shadow-lg max-w-md w-full p-6 relative">
               <button
@@ -947,7 +956,7 @@ const JobListing = () => {
               </button>
             </div>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
