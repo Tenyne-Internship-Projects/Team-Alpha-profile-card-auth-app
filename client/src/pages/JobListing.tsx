@@ -151,6 +151,7 @@ const JobListing = () => {
 
       const url = `/project?${params.toString()}`;
       const response = await axios.get(url);
+      console.log(response);
 
       // Adjust this if your API response shape is different
       setProjects(response.data.data || response.data.projects || []);
@@ -750,7 +751,7 @@ const JobListing = () => {
                   {/* Details Panel */}
                   <div className="w-full lg:w-1/3">
                     {selectedProject ? (
-                      <div className="bg-white rounded-2xl shadow-2xl p-8 sticky top-4 border border-gray-100 transition-all duration-300">
+                      <div className="bg-white rounded-2xl shadow-2xl p-3 sticky top-4 border border-gray-100 transition-all duration-300">
                         <button
                           className="mb-4 ml-auto block text-gray-400 hover:text-red-500 transition-colors"
                           onClick={() => setSelectedProject(null)}
@@ -758,85 +759,132 @@ const JobListing = () => {
                         >
                           <X className="w-6 h-6" />
                         </button>
-                        <h2 className="text-2xl font-extrabold text-[#5A399D] mb-2">
+                        <h2 className="text-[1.2em] font-[500] text-[#000000] mb-2">
                           {selectedProject.title}
                         </h2>
-                        <p className="mb-4 text-gray-700 text-base">
-                          {selectedProject.description}
-                        </p>
-                        <div className="mb-4 flex flex-wrap gap-4">
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold text-gray-600">
-                              Budget:
-                            </span>
-                            <span className="text-green-600 font-bold">
-                              {formatBudget(selectedProject.budget)}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold text-gray-600">
-                              Deadline:
-                            </span>
-                            <span className="text-blue-600">
-                              {formatDate(selectedProject.deadline)}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="mb-4 flex items-center gap-2">
-                          <span className="font-semibold text-gray-600">
-                            Location:
-                          </span>
-                          <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">
-                            {selectedProject.location}
+
+                        {/* company name */}
+                         <div className="mb-4">
+                          
+                          <span className=" text-[#6F757E] text-[0.95em] font-[400] ">
+                            {/* {selectedProject.Client.fullname}  */}
+                            {selectedProject.Client.clientProfile.companyName}
                           </span>
                         </div>
-                        <div className="mb-4">
-                          <span className="font-semibold text-gray-600">
+
+                        
+
+                       <div className="mb-4 flex gap-2  px-2 py-4 border-b border-gray-400">
+  {/* Budget */}
+  <div className="flex flex-col items-center gap-2 flex-1 border-r pr-2">
+    <span className="font-semibold text-[0.8em] text-[#000]">Budget</span>
+    <span className="text-gray-600 font-bold text-xs">
+      {formatBudget(selectedProject.budget)}
+    </span>
+  </div>
+
+  {/* Deadline */}
+  <div className="flex flex-col items-center gap-2 flex-1 border-r px-2">
+    <span className="font-semibold text-[0.8em] text-[#000]">Deadline</span>
+    <span className="text-gray-600 text-xs">
+      {formatDate(selectedProject.deadline)}
+    </span>
+  </div>
+
+  {/* Location */}
+  <div className="flex flex-col items-center gap-2 flex-1 border-r px-2">
+    <span className="font-semibold text-[0.8em] text-[#000]">Location</span>
+    <span className="text-gray-600 text-xs">{selectedProject.location}</span>
+  </div>
+
+  {/* Bids */}
+  <div className="flex flex-col items-center gap-2 flex-1 border-r px-2">
+    <span className="font-semibold text-[0.8em] text-[#000]">Bids</span>
+    <span className=" text-gray-600 px-2 py-1 rounded-full text-xs">
+      {/* {selectedProject.bidsCount || 0} */} 0
+    </span>
+  </div>
+
+  {/* Average Bid */}
+  <div className="flex flex-col items-center gap-2 flex-1 pl-2">
+    <span className="font-semibold text-[0.8em] text-[#000]">Ave. Bid</span>
+    <span className="text-gray-600 font-bold text-xs">
+      {/* {formatBudget(selectedProject.averageBid) || 0} */} 0
+    </span>
+  </div>
+</div>
+
+                       {/* Bid Button  */}
+                      <div className="flex justify-between border-b  p-2">
+                          <div className="flex-2">
+                           {user?.user?.role === "freelancer" && (
+                          <button
+                            className="mt-6 w-full py-3 bg-gradient-to-r from-[#5A399D] to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:from-[#4a2e8e] hover:to-purple-700 transition-all duration-300"
+                            onClick={() => setShowApplyModal(true)}
+                          >
+                            Bid
+                          </button>
+                        )}
+                          </div>
+
+                          <div className="flex  flex-1">
+                            <p>1</p>
+                            <p>2</p>
+                          </div>
+                      </div>
+
+
+                      {/* Tags */}
+                      <div className="mb-4 mt-3">
+                          {/* <span className="font-semibold text-gray-600">
                             Tags:
-                          </span>
+                          </span> */}
                           <div className="flex flex-wrap gap-2 mt-1">
                             {selectedProject.tags.map((tag) => (
                               <span
                                 key={tag}
-                                className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium"
+                                className="px-3 py-2 bg-purple-100 text-purple-700 rounded-[0.5em] text-xs font-medium"
                               >
                                 {tag}
                               </span>
                             ))}
                           </div>
                         </div>
-                        <div className="mb-4">
-                          <span className="font-semibold text-gray-600">
-                            Responsibilities:
-                          </span>
-                          <div className="flex flex-wrap gap-2 mt-1">
-                            {selectedProject.responsibilities.map((resp) => (
-                              <span
-                                key={resp}
-                                className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium"
-                              >
-                                {resp}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                        <div className="mb-4">
-                          <span className="font-semibold text-gray-600">
-                            Client:
-                          </span>
-                          <span className="ml-2 text-gray-800 font-medium">
-                            {selectedProject.Client.fullname} (
-                            {selectedProject.Client.clientProfile.companyName})
-                          </span>
-                        </div>
-                        {user?.user?.role === "freelancer" && (
-                          <button
-                            className="mt-6 w-full py-3 bg-gradient-to-r from-[#5A399D] to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:from-[#4a2e8e] hover:to-purple-700 transition-all duration-300"
-                            onClick={() => setShowApplyModal(true)}
-                          >
-                            Apply
-                          </button>
-                        )}
+
+                        
+
+                        {/* Job description */}
+                         <div className="flex flex-col  px-2">
+    <span className="font-semibold text-[1.3em] text-[#000]">Full Job Description</span>
+     <p className="mb-4 text-gray-500 text-base">
+                          {selectedProject.description}
+                        </p>
+  </div>
+                       
+                       
+                        
+                       <div className="mb-4">
+  <span className="font-semibold text-gray-600 block mb-1">
+    Responsibilities:
+  </span>
+  {selectedProject.responsibilities?.length > 0 ? (
+    <ul className="flex flex-wrap gap-2">
+      {selectedProject.responsibilities.map((resp, index) => (
+        <li
+          key={index}
+          className="px-2 py-1  text-gray-500 rounded-full text-xs font-medium"
+        >
+          {resp}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p className="text-sm text-gray-500">No responsibilities listed.</p>
+  )}
+</div>
+
+                       
+                        <button className="mt-6 w-3/5 rounded-lg py-3 bg-purple-300 border border-purple-600 text-[#000]">Report</button>
                       </div>
                     ) : (
                       <div className="bg-white rounded-2xl shadow-2xl p-8 text-gray-400 text-center border border-gray-100">
