@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../services/axiosInstance";
 import SubmissionBidModal from "../modal/freelancerModal/SubmissionBidModal";
+import BidSubmitLoader from "../skeletonLoader/freelancerLoader/BidSubmitLoader";
+import toast from "react-hot-toast";
 
 interface ISubmitBidForm {
   profile: string;
@@ -36,23 +38,32 @@ IsubmitForm) => {
     reset,
   } = useForm<ISubmitBidForm>();
   const [successModal, setSuccessModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const proposalValue = watch("proposal") || "";
 
   const SubmitBidForm = async (data: ISubmitBidForm) => {
-    console.log(data);
+    setLoading(true);
+
     try {
       const res = await axios.post(`/bid/${selectedProjectId}`, data);
-      console.log(res);
 
       if (res.status === 201) {
         setSuccessModal(true);
         reset();
-        console.log("succesful");
+        toast.success("Bid submitted successfully!");
+        console.log("successful");
       }
     } catch (err) {
       const error = err as AxiosError;
-      console.error(error);
+
+      if (error.response?.status === 409) {
+        toast.error("You have already submitted a bid for this project.");
+      } else {
+        toast.error("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -224,6 +235,7 @@ IsubmitForm) => {
           </div>
         </div>
       )} */}
+      <div className="relative">{loading && <BidSubmitLoader />}</div>
       <SubmissionBidModal
         setBidModalClose={setBidModalClose}
         handlesuccessModal={successModal}

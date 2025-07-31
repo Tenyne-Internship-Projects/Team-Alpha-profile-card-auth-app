@@ -129,7 +129,7 @@ const HomeContent = () => {
       color: "#25CA13",
     },
     {
-      title: "Pending Application",
+      title: "Pending Bid",
       no: (
         <div className="metric-value text-[#09080D] text-xl font-regular">
           {applicationStat?.applicationStats?.pending || 0}
