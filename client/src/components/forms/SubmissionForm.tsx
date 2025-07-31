@@ -106,6 +106,7 @@ IsubmitForm) => {
                 </label>
                 <Asterisk className="text-[#FF0000] w-3 absolute -right-3 top-0" />
               </div>
+              {/* <p>Adding this just to test</p> */}
               <input
                 {...register("profile", { required: true })}
                 type="text"
