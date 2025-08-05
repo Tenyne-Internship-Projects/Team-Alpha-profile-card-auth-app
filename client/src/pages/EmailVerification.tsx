@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "../services/axiosInstance";
 import { AxiosError } from "axios";
+import toast from "react-hot-toast";
 
 export default function VerifyEmail() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function VerifyEmail() {
       if (res.status === 200) {
         navigate("/login");
         setStatus("success");
+        toast.success("verified successfully");
       }
       // .then(() => setStatus("success"))
       // .catch(() => setStatus("error"));

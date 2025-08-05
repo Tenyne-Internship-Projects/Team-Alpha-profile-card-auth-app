@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { Asterisk } from "lucide-react";
+import { Asterisk, ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../services/axiosInstance";
@@ -20,6 +20,7 @@ interface IsubmitForm {
   selectedProjectId?: string;
   setBidModalClose: () => void;
   onClose?: () => void;
+  selectedTitle?: string;
 }
 
 const MAX_PROPOSAL_LENGTH = 1000;
@@ -28,6 +29,7 @@ const SubmissionForm = ({
   bidModal,
   setBidModalClose,
   selectedProjectId,
+  selectedTitle,
 }: // onClose,
 IsubmitForm) => {
   const {
@@ -39,6 +41,7 @@ IsubmitForm) => {
   } = useForm<ISubmitBidForm>();
   const [successModal, setSuccessModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [breadCrumb, setBreadCrumb] = useState("bidForm");
 
   const proposalValue = watch("proposal") || "";
 
@@ -53,6 +56,7 @@ IsubmitForm) => {
         reset();
         toast.success("Bid submitted successfully!");
         console.log("successful");
+        setBreadCrumb("bidSubmission");
       }
     } catch (err) {
       const error = err as AxiosError;
@@ -76,50 +80,56 @@ IsubmitForm) => {
     <div className="bg-[#E1DEE8]/30 max-md:px-3 left-0 fixed top-0 py-10 z-30  h-screen w-screen overflow-y-scroll">
       <div className="w-full">
         <div className="bg-white md:w-5/12 mx-auto p-6 rounded-2xl ">
+          <div className="flex items-center gap-3 text-sm">
+            <p
+              className={`${
+                breadCrumb === "bidForm" ? "text-[#5500F4]" : "text-[#6F757E]"
+              }`}
+            >
+              Bid Form
+            </p>{" "}
+            <ChevronRight className="w-3 h-3 text-[#6F757E]" />{" "}
+            <p
+              className={`breadcrumbs ${
+                breadCrumb === "bidSubmission"
+                  ? "text-[#5500F4]"
+                  : "text-[#6F757E]"
+              }`}
+            >
+              Bid Submission
+            </p>
+          </div>
+
+          <div className="flex items-center gap-1 text-sm mt-4">
+            <ChevronLeft className="w-3 h-3 text-[#5500F4]" />
+
+            <button
+              type="button"
+              onClick={() => setBidModalClose()}
+              className="text-[#5500F4]"
+            >
+              Back to Projects
+            </button>
+          </div>
+
           <div className="flex justify-between items-center mb-4">
             <div className="my-6">
-              <h3 className="text-[#09080D] text-[28px] ">Submit Your Bid</h3>
-              <p className="text-[#6F757E] text-[18px] mt-6">
-                Website Redesign Project
-              </p>
+              <h3 className="text-[#09080D] text-3xl ">Submit Your Bid</h3>
+              <p className="text-[#6F757E] text-lg mt-2">{selectedTitle}</p>
             </div>
-            <button
+            {/* <button
               className="text-[#5A399D] text-2xl font-bold hover:text-[#3a256b]"
               onClick={() => setBidModalClose()}
               aria-label="Close modal"
               type="button"
             >
               ×
-            </button>
+            </button> */}
           </div>
           <form
             onSubmit={handleSubmit(SubmitBidForm)}
             className=" border border-[#6F757E] grid gap-6 rounded-2xl p-4"
           >
-            <div>
-              <div className="relative w-fit">
-                <label
-                  htmlFor="profile"
-                  className="text-sm w-fit font-medium  text-[#09080D]"
-                >
-                  Profile card Link
-                </label>
-                <Asterisk className="text-[#FF0000] w-3 absolute -right-3 top-0" />
-              </div>
-              {/* <p>Adding this just to test</p> */}
-              <input
-                {...register("profile", { required: true })}
-                type="text"
-                id="profile"
-                className="my-2 border border-[#CEC4E2] py-3 px-5"
-                placeholder="Enter your profile card link"
-              />
-              {errors.profile && (
-                <p className="text-[#FF0000] text-xs">
-                  Profile link is compulsory
-                </p>
-              )}
-            </div>
             <div>
               <div className="relative w-fit">
                 <label
@@ -135,7 +145,7 @@ IsubmitForm) => {
                 type="number"
                 id="price"
                 className="my-2 border border-[#CEC4E2] py-3 px-5"
-                placeholder="Enter your bid amount"
+                placeholder="$"
               />
               <p className="text-[#6F757E] text-xs ">Project budget: $3000</p>
               {errors.price && (
@@ -181,7 +191,7 @@ IsubmitForm) => {
                   maxLength: MAX_PROPOSAL_LENGTH,
                 })}
                 id="proposal"
-                className="w-full border rounded-2xl h-[170px] py-3 px-5"
+                className="w-full outline-none rounded-2xl h-[170px] py-3 px-5 my-2 border border-[#CEC4E2] "
                 placeholder="Describe your approach and relevant experience..."
                 maxLength={MAX_PROPOSAL_LENGTH}
               />
@@ -196,25 +206,52 @@ IsubmitForm) => {
                 )}
               </div>
             </div>
-            {/* <div className="flex items-center gap-5">
+
+            <div>
+              <div className="relative w-fit">
+                <label
+                  htmlFor="profile"
+                  className="text-sm w-fit font-medium  text-[#09080D]"
+                >
+                  Profile card Link
+                </label>
+                <Asterisk className="text-[#FF0000] w-3 absolute -right-3 top-0" />
+              </div>
+              {/* <p>Adding this just to test</p> */}
+              <input
+                {...register("profile", { required: true })}
+                type="text"
+                id="profile"
+                className="my-2 border border-[#CEC4E2] py-3 px-5"
+                placeholder="Enter your profile card link"
+              />
+              {errors.profile && (
+                <p className="text-[#FF0000] text-xs">
+                  Profile link is compulsory
+                </p>
+              )}
+            </div>
+
+            <div className="flex items-center gap-5">
               <input
                 type="checkbox"
                 id="terms"
                 className="w-4 h-4"
                 // {...register("terms", { required: true })}
               />
-              <label htmlFor="terms" className="text-sm">
-                I agree to the bidding <span>terms and conditions</span>
+              <label htmlFor="terms" className="text-sm font-medium">
+                I agree to the bidding{" "}
+                <span className="text-[#5500F4]">terms and conditions</span>
               </label>
             </div>
-            {errors.terms && (
+            {/* {errors.terms && (
               <p className="text-[#FF0000] text-xs">
                 You must agree to the terms and conditions
               </p>
             )} */}
             <button
               type="submit"
-              className="bg-[#5A399D] py-3 w-2/5  text-white font-medium rounded-lg"
+              className="bg-[#5A399D] py-3 w-2/5 cursor-pointer text-white font-medium rounded-lg"
             >
               Submit Bid
             </button>

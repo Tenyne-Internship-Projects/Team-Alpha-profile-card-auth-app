@@ -4,6 +4,7 @@ import { ChevronDown } from "lucide-react";
 import { useAuth } from "../../hooks/useAuth";
 import { AuthContextType } from "../../types/user";
 import axios from "../../services/axiosInstance";
+import toast from "react-hot-toast";
 
 interface FormData {
   title: string;
@@ -30,6 +31,7 @@ const AddProjects = () => {
     handleSubmit,
     setValue,
     getValues,
+    reset,
     // watch,
     formState: { errors },
   } = useForm<FormData>({
@@ -88,7 +90,7 @@ const AddProjects = () => {
       description: data.description,
       budget: Number(data.budget),
       tags: data.tags,
-      deadline: new Date(data.deadline).toISOString(),
+      deadline: data.deadline,
       responsibilities: data.responsibilities,
       requirement: data.requirement,
       location: data.location,
@@ -100,7 +102,12 @@ const AddProjects = () => {
         formattedData
       );
       console.log(response);
+      if (response.status === 201) {
+        reset();
+        toast.success("Project created successfully");
+      }
     } catch (error) {
+      // toast.error(error as string);
       console.error("Error creating project:", error);
     }
   };
@@ -181,14 +188,21 @@ const AddProjects = () => {
             Description <span className="text-red-500">*</span>
           </label>
           <textarea
-            {...register("description", { required: true })}
+            {...register("description", {
+              required: true,
+              validate: (value) => {
+                const wordCount = value.trim().split(/\s+/).length;
+                if (wordCount < 50) return "Minimum 50 words required";
+                if (wordCount > 80) return "Maximum 80 words allowed";
+              },
+            })}
             rows={4}
             placeholder="Brief + key details; support markdown or rich text"
             className="w-full px-4 py-3 placeholder-[#6F757E] border border-[#6F757E] rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none resize-none"
           />
           {errors.description && (
             <span className="text-red-500 text-xs">
-              Description is required
+              {errors.description.message}
             </span>
           )}
         </div>
@@ -198,14 +212,21 @@ const AddProjects = () => {
             Requirements <span className="text-red-500">*</span>
           </label>
           <textarea
-            {...register("requirement", { required: true })}
+            {...register("requirement", {
+              required: true,
+              validate: (value) => {
+                const wordCount = value.trim().split(/\s+/).length;
+                if (wordCount < 50) return "Minimum 50 words required";
+                if (wordCount > 80) return "Maximum 80 words allowed";
+              },
+            })}
             rows={4}
             placeholder="Brief + key details; support markdown or rich text"
             className="w-full px-4 placeholder-[#6F757E] py-3 border border-[#6F757E] rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none resize-none"
           />
           {errors.requirement && (
             <span className="text-red-500 text-xs">
-              Description is required
+              {errors.requirement.message}
             </span>
           )}
         </div>
@@ -369,8 +390,8 @@ const AddProjects = () => {
           </label>
           <input
             {...register("deadline", { required: true })}
-            type="date"
-            placeholder="Input Date"
+            type="text"
+            placeholder=""
             className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
           />
           {errors.deadline && (

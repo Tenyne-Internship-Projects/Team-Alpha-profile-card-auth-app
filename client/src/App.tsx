@@ -98,7 +98,7 @@ export default function App() {
             <Route
               path="/job-list-dashboard"
               element={
-                <ProtectedRoute allowedRoles={["client"]}>
+                <ProtectedRoute allowedRoles={["client", "admin"]}>
                   <DashboardLayout />
                 </ProtectedRoute>
               }

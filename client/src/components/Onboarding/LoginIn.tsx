@@ -40,7 +40,7 @@ export const LoginIn = () => {
       const res = await axios.post("/auth/login", data);
       const token = res.data.accessToken;
       const role = res.data.user.role;
-      // console.log(res);
+      console.log(res);
 
       login(token, res.data.user); // Pass both token and user data
       if (role === "freelancer") {
