@@ -3,7 +3,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import type { AuthContextType } from "../types/user";
 
-type UserRole = "client" | "freelancer"; // Add more roles as needed
+type UserRole = "client" | "freelancer" | "admin"; // Add more roles as needed
 
 interface ProtectedRouteProps {
   children: ReactNode;

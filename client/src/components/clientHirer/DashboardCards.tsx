@@ -116,10 +116,11 @@ const DashboardCards = () => {
     iconColor = "text-gray-600",
   }) => (
     <div
-      className={`${className} rounded-lg p-6 shadow-sm border border-gray-200 relative overflow-hidden`}
+      className={`${className} rounded-lg p-6 w-full shadow-sm border border-gray-200 relative overflow-hidden`}
     >
       <p>
-        {loading} {error}
+        {loading}
+        <span className="hidden">{error}</span>
       </p>
       <div className="flex items-center justify-between">
         <div>
@@ -159,10 +160,10 @@ const DashboardCards = () => {
   );
 
   return (
-    <div className=" bg-transparent ">
-      <div className="">
+    <div className=" bg-transparent w-full">
+      <div className="w-full">
         {/* Top Row - 3 Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-6">
           <StatCard
             title="Approved Project"
             value={numberOfApprovedApplicants}
