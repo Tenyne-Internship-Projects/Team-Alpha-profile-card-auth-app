@@ -6,7 +6,7 @@ interface ISuccessModal {
   setBidModalClose: () => void;
 }
 
-const SubmissionBidModal = ({
+const AcceptanceSuccessModal = ({
   handleClose,
   setBidModalClose,
   handlesuccessModal,
@@ -20,7 +20,7 @@ const SubmissionBidModal = ({
   };
   return (
     handlesuccessModal === true && (
-      <div className="bg-[#E1DEE8]/30 max-md:px-3 left-0 fixed top-20 py-10 z-50  h-screen w-screen ">
+      <div className="bg-[#E1DEE8]/30 max-md:px-3 left-0 fixed top-0 py-10 z-50  h-screen w-screen ">
         <div className="bg-white p-4 border border-[#E5E7EB] md:w-2/5 mx-auto  rounded-lg grid gap-6 text-center">
           <img
             src="/successfullIcon.png"
@@ -48,4 +48,4 @@ const SubmissionBidModal = ({
   );
 };
 
-export default SubmissionBidModal;
+export default AcceptanceSuccessModal;

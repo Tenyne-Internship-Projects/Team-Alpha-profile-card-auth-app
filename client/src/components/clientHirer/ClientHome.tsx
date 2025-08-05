@@ -1,17 +1,15 @@
-// import React from 'react'
-
 import DashboardCards from "./DashboardCards";
-import Employees from "./Employees";
+// import Employees from "./Employees";
 
 const ClientHome = () => {
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col gap-10 ">
       <div className="">
         <DashboardCards />
       </div>
-      <div className="hidden">
+      {/* <div className="">
         <Employees />
-      </div>
+      </div> */}
     </div>
   );
 };

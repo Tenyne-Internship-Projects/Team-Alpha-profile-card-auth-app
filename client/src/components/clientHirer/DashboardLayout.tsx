@@ -105,7 +105,7 @@ const DashboardLayout = () => {
   return (
     <div className="bg-[#E1DEE8] overflow-y-scroll min-h-screen w-full">
       {/* Top Navigation Bar */}
-      <div className="fixed pt-2 top-3 left-0 w-full h-16 z-50 px-20 bg-[#E1DEE8]">
+      <div className="fixed pt-2 top-0 left-0 w-full h-16 z-50 lg:px-20 bg-[#E1DEE8]">
         <header className="bg-[#E1DEE8]">
           <div className="flex items-center justify-between h-full px-4">
             {/* Left side - Hamburger menu and title */}
@@ -194,7 +194,7 @@ const DashboardLayout = () => {
                 ? `fixed left-0 h-screen w-56 z-50 bg-white rounded-t-[24px] shadow-lg transition-transform duration-300 ease-in-out ${
                     sidebarOpen ? "translate-x-0" : "-translate-x-full"
                   } overflow-y-auto`
-                : `fixed top-36 left-0 h-screen w-52 z-30 bg-white rounded-t-2xl shadow-lg transition-all duration-300 ease-in-out overflow-hidden`
+                : `fixed top-28 left-0 h-screen w-52 z-30 bg-white rounded-t-2xl shadow-lg transition-all duration-300 ease-in-out overflow-hidden`
             }
           `}
         >
@@ -272,14 +272,14 @@ const DashboardLayout = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 pr-10 mt-16">
+        <div className="flex-1 pr-10 mt-8">
           <div
             className={`w-10/12 transition-all duration-300 ease-in-out
             ${!isMobile ? "ml-0 md:ml-56" : ""}
             h-screen min-h-0"`}
           >
             {/* Main Content Area */}
-            <main className="bg-transparent rounded-2xl ml-5">
+            <main className="bg-transparent mt-20 rounded-2xl ml-5">
               <Outlet />
             </main>
           </div>

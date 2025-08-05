@@ -279,12 +279,11 @@ const JobListing = () => {
       className="bg-white    border-b border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer"
       onClick={() => onClick(project)}
     >
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex justify-between items-start mb-2">
         <div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
             {project.title}
           </h3>
-          <p className="text-gray-600 text-sm mb-2">{project.description}</p>
         </div>
         {user?.user?.role === "freelancer" && (
           <button
@@ -308,26 +307,17 @@ const JobListing = () => {
             />
           </button>
         )}
-        {/* <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
-            project.status === "open"
-              ? "bg-green-100 text-green-800"
-              : "bg-gray-100 text-gray-800"
-          }`}
-        >
-          {project.status}
-        </span> */}
       </div>
 
-      <div className="space-y-3">
+      <div className="grid gap-2">
         <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold text-green-600">
+          <span className="text-xs text-[#6F757E]  ">
             {formatBudget(project.budget)}
           </span>
-          <span className="text-sm text-gray-500">📍 {project.location}</span>
+          <span className="text-xs text-[#6F757E]">📍 {project.location}</span>
         </div>
 
-        <div className="flex items-center text-sm text-gray-600">
+        <div className="flex items-center text-xs text-[#050F24]">
           <Calendar className="w-4 h-4 mr-1" />
           Deadline: {formatDate(project.deadline)}
         </div>
@@ -336,23 +326,12 @@ const JobListing = () => {
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs"
+              className="px-2 py-1 bg-[#CEC4E2] rounded-md text-xs"
             >
               {tag}
             </span>
           ))}
         </div>
-
-        {/* <div className="flex flex-wrap gap-1">
-          {project.responsibilities.map((resp) => (
-            <span
-              key={resp}
-              className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs"
-            >
-              {resp}
-            </span>
-          ))}
-        </div> */}
 
         {/* <div className="border-t pt-3 mt-3">
           <div className="flex items-center text-sm text-gray-600">
@@ -364,6 +343,10 @@ const JobListing = () => {
           <p className="text-xs text-gray-500 mt-1">{project.requirement}</p>
         </div> */}
       </div>
+      <p className="text-[#6F757E] text-xs my-3">
+        {project.description.split(" ").slice(0, 20).join(" ")}
+        {project.description.split(" ").length > 20 && "..."}
+      </p>
     </div>
   );
 
@@ -401,16 +384,17 @@ const JobListing = () => {
   };
 
   return (
-    <div className="min-h-screen relative bg-[#E1DEE8] p-4 px-10">
+    <div className="min-h-screen relative bg-[#E1DEE8] p-5 md:px-10">
       <SubmissionForm
         bidModal={showApplyModal}
         setBidModalClose={bidModalClose}
+        selectedTitle={selectedProject?.title}
         selectedProjectId={selectedProject?.id}
       />
       <div className="">
         {/* Header */}
         <header className="bg-transparent mb-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="md:max-w-7xl mx-auto  sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16 ">
               <div className="flex items-center">
                 <img src="/freebioLogo.png" alt="logo" className=" h-[50px]" />
@@ -477,7 +461,7 @@ const JobListing = () => {
 
           {/* FILTER AND PROJECT PAGE */}
 
-          <div className="flex gap-10">
+          <div className="flex max-md:flex-col gap-10">
             {/* FILTER PAGE */}
             <div className="bg-white h-fit rounded-lg py-6 px-4 w-[200px]">
               {/* Filter Toggle */}
@@ -647,7 +631,7 @@ const JobListing = () => {
 
             {/* PROJECT PART */}
 
-            <div className="relative">
+            <div className="relative ">
               <div className="w-[200px] absolute mr-0 right-10">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Sort By
@@ -749,9 +733,9 @@ const JobListing = () => {
                   </div>
 
                   {/* Details Panel */}
-                  <div className="w-full lg:w-3/5">
+                  <div className="w-full  lg:w-3/5">
                     {selectedProject ? (
-                      <div className="bg-white rounded-2xl shadow-2xl p-3 sticky top-4 border border-gray-100 transition-all duration-300">
+                      <div className="bg-white max-md:absolute rounded-2xl shadow-2xl p-3 sticky top-4 border border-gray-100 transition-all duration-300">
                         <button
                           className="mb-4 ml-auto block text-gray-400 hover:text-red-500 transition-colors"
                           onClick={() => setSelectedProject(null)}
@@ -759,63 +743,79 @@ const JobListing = () => {
                         >
                           <X className="w-6 h-6" />
                         </button>
-                        <h2 className="text-[1.2em] font-[500] text-[#000000] mb-2">
+                        <h2 className="text-xl font-[500] text-[#000000] mb-1">
                           {selectedProject.title}
                         </h2>
 
                         {/* company name */}
                         <div className="mb-4">
-                          <span className=" text-[#6F757E] text-[0.95em] font-[400] ">
+                          <span className=" text-[#6F757E] text-xs font-[400] ">
                             {/* {selectedProject.Client.fullname}  */}
                             {selectedProject.Client.clientProfile.companyName}
                           </span>
                         </div>
 
-                        <div className="mb-4 flex gap-2  px-2 py-4 border-b border-gray-400">
+                        <div className=" flex items-center">
                           {/* Budget */}
-                          <div className="flex flex-col items-center gap-2 flex-1 border-r pr-2">
-                            <span className="font-semibold text-[0.8em] text-[#000]">
-                              Budget
-                            </span>
-                            <span className="text-gray-600 font-bold text-xs">
-                              {formatBudget(selectedProject.budget)}
-                            </span>
+                          <div className="flex items-center">
+                            <div className="flex flex-col gap-2 ">
+                              <span className="font-medium text-[0.8em] text-[#050F24]">
+                                Budget
+                              </span>
+                              <span className="text-gray-600 font-bold text-xs">
+                                {formatBudget(selectedProject.budget)}
+                              </span>
+                            </div>
+
+                            <p className="h-8 w-[2px] bg-[#CEC4E2] mx-3"></p>
                           </div>
 
                           {/* Deadline */}
-                          <div className="flex flex-col items-center gap-2 flex-1 border-r px-2">
-                            <span className="font-semibold text-[0.8em] text-[#000]">
-                              Deadline
-                            </span>
-                            <span className="text-gray-600 text-xs">
-                              {formatDate(selectedProject.deadline)}
-                            </span>
+                          <div className="flex items-center">
+                            <div className="flex flex-col  gap-2 ">
+                              <span className="font-medium text-[0.8em] text-[#050F24]">
+                                Deadline
+                              </span>
+                              <span className="text-gray-600 text-xs">
+                                {formatDate(selectedProject.deadline)}
+                              </span>
+                            </div>
+
+                            <p className="h-8 w-[2px] bg-[#CEC4E2] mx-3"></p>
                           </div>
 
                           {/* Location */}
-                          <div className="flex flex-col items-center gap-2 flex-1 border-r px-2">
-                            <span className="font-semibold text-[0.8em] text-[#000]">
-                              Location
-                            </span>
-                            <span className="text-gray-600 text-xs">
-                              {selectedProject.location}
-                            </span>
+                          <div className="flex items-center">
+                            <div className="flex flex-col  gap-2 ">
+                              <span className="font-medium text-[0.8em] text-[#000]">
+                                Location
+                              </span>
+                              <span className="text-gray-600 text-xs">
+                                {selectedProject.location}
+                              </span>
+                            </div>
+
+                            <p className="h-8 w-[2px] bg-[#CEC4E2] mx-3"></p>
                           </div>
 
                           {/* Bids */}
-                          <div className="flex flex-col items-center gap-2 flex-1 border-r px-2">
-                            <span className="font-semibold text-[0.8em] text-[#000]">
-                              Bids
-                            </span>
-                            <span className=" text-gray-600 px-2 py-1 rounded-full text-xs">
-                              {/* {selectedProject.bidsCount || 0} */} 0
-                            </span>
+                          <div className="flex items-center">
+                            <div className="flex flex-col  gap-2 ">
+                              <span className="font-medium text-[0.8em] text-[#050F24]">
+                                Bids
+                              </span>
+                              <span className=" text-gray-600 px-2 py-1 rounded-full text-xs">
+                                {/* {selectedProject.bidsCount || 0} */} 0
+                              </span>
+                            </div>
+
+                            <p className="h-8 w-[2px] bg-[#CEC4E2] mx-3"></p>
                           </div>
 
                           {/* Average Bid */}
-                          <div className="flex flex-col items-center gap-2 flex-1 pl-2">
-                            <span className="font-semibold text-[0.8em] text-[#000]">
-                              Ave. Bid
+                          <div className="flex flex-col  gap-2">
+                            <span className="font-medium text-[0.8em] text-[#050F24]">
+                              Budget
                             </span>
                             <span className="text-gray-600 font-bold text-xs">
                               {/* {formatBudget(selectedProject.averageBid) || 0} */}{" "}
@@ -825,21 +825,49 @@ const JobListing = () => {
                         </div>
 
                         {/* Bid Button  */}
-                        <div className="flex justify-between border-b  p-2">
-                          <div className="flex-2">
+                        <div
+                          className="flex justify-between mt-3
+                         items-center py-4 border-y border-[#E1E1E1] "
+                        >
+                          <div className="w-3/5">
                             {user?.user?.role === "freelancer" && (
                               <button
-                                className="mt-6 w-full py-3 bg-gradient-to-r from-[#5A399D] to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:from-[#4a2e8e] hover:to-purple-700 transition-all duration-300"
+                                className=" w-fit px-4 py-3  bg-[#5A399D]  text-white rounded-lg font-semibold shadow-lg hover:from-[#4a2e8e] hover:to-purple-700 transition-all duration-300"
                                 onClick={() => setShowApplyModal(true)}
                               >
-                                Bid
+                                Submit Bid
                               </button>
                             )}
                           </div>
-
-                          <div className="flex  flex-1">
-                            <p>1</p>
-                            <p>2</p>
+                          <div>
+                            {user?.user?.role === "freelancer" && (
+                              <button
+                                onClick={async () => {
+                                  await toggleFavorite(
+                                    selectedProject.id,
+                                    likedProjects[selectedProject.id]
+                                  );
+                                  setLikedProjects((prev) => ({
+                                    ...prev,
+                                    [selectedProject.id]:
+                                      !prev[selectedProject.id],
+                                  }));
+                                }}
+                                className={`p-2 rounded-full ${
+                                  likedProjects[selectedProject.id]
+                                    ? "text-red-500"
+                                    : "text-[#5A399D] hover:text-red-500"
+                                }`}
+                              >
+                                <Heart
+                                  className={`h-5 w-5 ${
+                                    likedProjects[selectedProject.id]
+                                      ? "fill-current"
+                                      : ""
+                                  }`}
+                                />
+                              </button>
+                            )}
                           </div>
                         </div>
 
@@ -852,7 +880,7 @@ const JobListing = () => {
                             {selectedProject.tags.map((tag) => (
                               <span
                                 key={tag}
-                                className="px-3 py-2 bg-purple-100 text-purple-700 rounded-[0.5em] text-xs font-medium"
+                                className="px-3 py-2 bg-[#CEC4E2] rounded-[0.5em] text-xs font-medium"
                               >
                                 {tag}
                               </span>
@@ -862,27 +890,33 @@ const JobListing = () => {
 
                         {/* Job description */}
                         <div className="flex flex-col  px-2">
-                          <span className="font-semibold text-[1.3em] text-[#000]">
+                          <h4 className="font-medium text-sm  text-[#050F24]">
                             Full Job Description
-                          </span>
-                          <p className="mb-4 text-gray-500 text-base">
+                          </h4>
+                          <p className="mb-4 text-[#6F757E] text-sm">
                             {selectedProject.description}
                           </p>
                         </div>
 
-                        <div className="mb-4">
-                          <span className="font-semibold text-gray-600 block mb-1">
-                            Responsibilities:
-                          </span>
+                        <div className="mb-4 px-2">
+                          <h4 className="font-medium text-sm  text-[#050F24]">
+                            Responsibilities
+                          </h4>
                           {selectedProject.responsibilities?.length > 0 ? (
-                            <ul className="flex flex-wrap gap-2">
+                            <ul
+                              className="grid gap-2 w-full
+                            "
+                            >
                               {selectedProject.responsibilities.map(
                                 (resp, index) => (
                                   <li
                                     key={index}
-                                    className="px-2 py-1  text-gray-500 rounded-full text-xs font-medium"
+                                    className="  flex gap-2 items-start text-[#6F757E] rounded-full text-xs font-medium"
                                   >
-                                    {resp}
+                                    {/* <p className="w-fit"> */}
+                                    <span className="w-2 h-[6px] mt-1 rounded-full bg-gray-500"></span>
+                                    {/* </p> */}
+                                    <p className="text-[#6F757E]">{resp}</p>
                                   </li>
                                 )
                               )}
@@ -894,9 +928,18 @@ const JobListing = () => {
                           )}
                         </div>
 
-                        <button className="mt-6 w-3/5 rounded-lg py-3 bg-purple-300 border border-purple-600 text-[#000]">
+                        <div className="mb-4 px-2">
+                          <h4 className="font-medium text-sm  text-[#050F24]">
+                            Requirements
+                          </h4>
+                          <p className="mb-4 text-[#6F757E] text-sm">
+                            {selectedProject.requirement}
+                          </p>
+                        </div>
+
+                        {/* <button className="mt-6 w-3/5 rounded-lg py-3 bg-purple-300 border border-purple-600 text-[#000]">
                           Report
-                        </button>
+                        </button> */}
                       </div>
                     ) : (
                       <div className="bg-white rounded-2xl shadow-2xl p-8 text-gray-400 text-center border border-gray-100">
