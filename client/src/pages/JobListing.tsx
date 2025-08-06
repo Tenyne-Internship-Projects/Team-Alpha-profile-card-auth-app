@@ -174,9 +174,36 @@ const JobListing = () => {
     }
   };
 
+  // HANDLE NUMBER OF BIDS
+  // const bidsProject = async (projectId: string) => {
+  //   try {
+  //     const res = await axios.get(`/bid/${projectId}`);
+  //     console.log(res);
+  //   } catch {
+  //     console.error(error);
+  //   }
+  // };
+
+  // FAVOURITE
+
+  const toggleFavorite = async (projectId: string, isFavorite: boolean) => {
+    try {
+      if (!isFavorite) {
+        // Add to favorites
+        await axios.post(`/favorites/${projectId}`);
+      } else {
+        // Remove from favorites
+        await axios.delete(`/api/favorites/${projectId}`);
+      }
+    } catch (error) {
+      console.error("Failed to toggle favorite:", error);
+    }
+  };
+
   // Fetch projects when filters change
   useEffect(() => {
     fetchProjects(filters);
+    // bidsProject;
   }, [filters]);
 
   // const handleFilterChange = (key: keyof FilterState, value: any) => {
@@ -254,20 +281,6 @@ const JobListing = () => {
     return true;
   });
 
-  const toggleFavorite = async (projectId: string, isFavorite: boolean) => {
-    try {
-      if (!isFavorite) {
-        // Add to favorites
-        await axios.post(`/favorites/${projectId}`);
-      } else {
-        // Remove from favorites
-        await axios.delete(`/api/favorites/${projectId}`);
-      }
-    } catch (error) {
-      console.error("Failed to toggle favorite:", error);
-    }
-  };
-
   const ProjectCard = ({
     project,
     onClick,
@@ -319,7 +332,7 @@ const JobListing = () => {
 
         <div className="flex items-center text-xs text-[#050F24]">
           <Calendar className="w-4 h-4 mr-1" />
-          Deadline: {formatDate(project.deadline)}
+          Deadline: {project.deadline || formatDate(project.deadline)}
         </div>
 
         <div className="flex flex-wrap gap-1">
@@ -402,10 +415,18 @@ const JobListing = () => {
               <div className="flex items-center space-x-4">
                 <button
                   type="button"
-                  onClick={() => navigate("/")}
+                  onClick={() =>
+                    navigate(
+                      `${
+                        user?.user?.role === "freelancer"
+                          ? "/dashboard"
+                          : "/job-list-dashboard"
+                      }`
+                    )
+                  }
                   className="text-lg md:text-xl font-bold px-6 py-2 cursor-pointer bg-[#723EDA] border-b-2 rounded-xl border-[#FFE01ACC] hover:bg-[#5a2fc0] transition"
                 >
-                  Home
+                  Dashboard
                 </button>
                 {/* <button type="button">Dashboard</button> */}
                 <button className="p-2 text-gray-400 hover:text-gray-600">
@@ -751,7 +772,8 @@ const JobListing = () => {
                         <div className="mb-4">
                           <span className=" text-[#6F757E] text-xs font-[400] ">
                             {/* {selectedProject.Client.fullname}  */}
-                            {selectedProject.Client.clientProfile.companyName}
+                            {selectedProject.Client.clientProfile.companyName ||
+                              "Fill profile details"}{" "}
                           </span>
                         </div>
 
@@ -777,7 +799,7 @@ const JobListing = () => {
                                 Deadline
                               </span>
                               <span className="text-gray-600 text-xs">
-                                {formatDate(selectedProject.deadline)}
+                                {selectedProject.deadline}
                               </span>
                             </div>
 
@@ -813,15 +835,14 @@ const JobListing = () => {
                           </div>
 
                           {/* Average Bid */}
-                          <div className="flex flex-col  gap-2">
+                          {/* <div className="flex flex-col  gap-2">
                             <span className="font-medium text-[0.8em] text-[#050F24]">
                               Budget
                             </span>
                             <span className="text-gray-600 font-bold text-xs">
-                              {/* {formatBudget(selectedProject.averageBid) || 0} */}{" "}
-                              0
+                              {selectedProject.budget}
                             </span>
-                          </div>
+                          </div> */}
                         </div>
 
                         {/* Bid Button  */}

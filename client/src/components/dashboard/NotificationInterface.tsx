@@ -2,6 +2,7 @@ import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import axios from "../../services/axiosInstance";
 import { formatDistanceToNow } from "date-fns";
+import NotificationDetailModal from "../modal/freelancerModal/NotificationDetailModal";
 
 interface INotification {
   id: string;
@@ -133,7 +134,7 @@ const NotificationInterface = () => {
                 >
                   Details
                 </button>
-                {openDropdownId === notification.id && (
+                {/* {openDropdownId === notification.id && (
                   <div className="absolute right-0 top-12 z-50 mt-2 w-64 bg-white rounded-lg border border-gray-200  shadow-lg p-4 text-gray-800">
                     <p className="font-semibold mb-2">Message</p>
                     <p>{notification.message}</p>
@@ -145,7 +146,14 @@ const NotificationInterface = () => {
                       Close
                     </button>
                   </div>
-                )}
+                )} */}
+                <div>
+                  {openDropdownId === notification.id && (
+                    <NotificationDetailModal
+                      setOpenDropdownId={() => setOpenDropdownId(null)}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           ))}
