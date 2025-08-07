@@ -173,21 +173,21 @@ const ClientJobListing = () => {
   //   }));
   // };
 
-  const clearFilters = () => {
-    setFilters({
-      search: "",
-      minBudget: "",
-      maxBudget: "",
-      startDate: "",
-      endDate: "",
-      tags: [],
-      sortBy: "createdAt",
-      sortOrder: "desc",
-      page: 1,
-      limit: 5,
-      budgetRange: "any",
-    });
-  };
+  // const clearFilters = () => {
+  //   setFilters({
+  //     search: "",
+  //     minBudget: "",
+  //     maxBudget: "",
+  //     startDate: "",
+  //     endDate: "",
+  //     tags: [],
+  //     sortBy: "createdAt",
+  //     sortOrder: "desc",
+  //     page: 1,
+  //     limit: 5,
+  //     budgetRange: "any",
+  //   });
+  // };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -228,51 +228,26 @@ const ClientJobListing = () => {
     onClick: (project: Project) => void;
   }) => (
     <div
-      className="bg-white    border-b border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer"
+      className="bg-white w-full   border-b border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer"
       onClick={() => onClick(project)}
     >
-      <div className="flex justify-between items-start mb-4">
+      <div className="flex justify-between items-start mb-2">
         <div>
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
             {project.title}
           </h3>
-          <p className="text-gray-600 text-sm mb-2">{project.description}</p>
         </div>
-        <div>
-          <button
-            onClick={() => deleteProject(project.id)}
-            className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
-          >
-            Delete
-          </button>
-
-          <button
-            onClick={() => navigate("/job-list-dashboard/edit-project")}
-            className="bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-400"
-          >
-            Edit
-          </button>
-        </div>
-        {/* <span
-          className={`px-2 py-1 rounded-full text-xs font-medium ${
-            project.status === "open"
-              ? "bg-green-100 text-green-800"
-              : "bg-gray-100 text-gray-800"
-          }`}
-        >
-          {project.status}
-        </span> */}
       </div>
 
-      <div className="space-y-3">
+      <div className="grid gap-2">
         <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold text-green-600">
+          <span className="text-xs text-[#6F757E]  ">
             {formatBudget(project.budget)}
           </span>
-          <span className="text-sm text-gray-500">📍 {project.location}</span>
+          <span className="text-xs text-[#6F757E]">📍 {project.location}</span>
         </div>
 
-        <div className="flex items-center text-sm text-gray-600">
+        <div className="flex items-center text-xs text-[#050F24]">
           <Calendar className="w-4 h-4 mr-1" />
           Deadline: {formatDate(project.deadline)}
         </div>
@@ -281,25 +256,14 @@ const ClientJobListing = () => {
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs"
+              className="px-2 py-1 bg-[#CEC4E2] rounded-md text-xs"
             >
               {tag}
             </span>
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-1">
-          {project.responsibilities.map((resp) => (
-            <span
-              key={resp}
-              className="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs"
-            >
-              {resp}
-            </span>
-          ))}
-        </div>
-
-        <div className="border-t pt-3 mt-3">
+        {/* <div className="border-t pt-3 mt-3">
           <div className="flex items-center text-sm text-gray-600">
             <span className="font-medium">Client:</span>
             <span className="ml-1">{project.Client.fullname}</span>
@@ -307,8 +271,12 @@ const ClientJobListing = () => {
             <span>{project.Client.clientProfile.companyName}</span>
           </div>
           <p className="text-xs text-gray-500 mt-1">{project.requirement}</p>
-        </div>
+        </div> */}
       </div>
+      <p className="text-[#6F757E] text-xs my-3">
+        {project.description.split(" ").slice(0, 20).join(" ")}
+        {project.description.split(" ").length > 20 && "..."}
+      </p>
     </div>
   );
 
@@ -341,21 +309,25 @@ const ClientJobListing = () => {
 
   // MAIN PAGE SECTION
 
-  const deleteProject = async (projectId: string) => {
-    if (!window.confirm("Are you sure you want to delete this project?"))
-      return;
-    try {
-      await axios.delete(`/project/${projectId}`);
-      alert("Project deleted successfully!");
-      setProjects((prev) => prev.filter((p) => p.id !== projectId));
-    } catch (err) {
-      const error = err as AxiosError;
-      const errorMessage =
-        (error.response?.data as { message?: string })?.message ||
-        "Failed to delete project.";
-      alert(errorMessage);
-    }
-  };
+  // const deleteProject = async (projectId: string) => {
+  //   if (!window.confirm("Are you sure you want to delete this project?"))
+  //     return;
+  //   try {
+  //     await axios.delete(`/project/${projectId}`);
+  //     alert("Project deleted successfully!");
+  //     setProjects((prev) => prev.filter((p) => p.id !== projectId));
+  //   } catch (err) {
+  //     const error = err as AxiosError;
+  //     const errorMessage =
+  //       (error.response?.data as { message?: string })?.message ||
+  //       "Failed to delete project.";
+  //     alert(errorMessage);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   deleteProject;
+  // }, []);
 
   return (
     <div className="min-h-screen w-full bg-[#E1DEE8] p-4 ">
@@ -385,7 +357,7 @@ const ClientJobListing = () => {
 
           <div className="flex flex-col">
             {/* FILTER PAGE */}
-            <div className=" flex gap-10 items-center h-fit rounded-lg p-6">
+            <div className=" flex max-md:flex-col gap-5 md:gap-10 items-center h-fit rounded-lg p-6">
               {/* Advanced Filters */}
               <div>
                 <button
@@ -518,7 +490,7 @@ const ClientJobListing = () => {
                 </div>
 
                 {/* Projects Grid */}
-                <div className="flex w-full flex-col lg:flex-row gap-6 ">
+                <div className="flex flex-col lg:flex-row gap-6 ">
                   {/* Cards List/Grid */}
                   <div
                     className={
@@ -537,9 +509,9 @@ const ClientJobListing = () => {
                   </div>
 
                   {/* Details Panel */}
-                  <div className="w-full lg:w-1/3">
+                  <div className="w-full  lg:w-3/5">
                     {selectedProject ? (
-                      <div className="bg-white rounded-2xl shadow-2xl p-8 sticky top-4 border border-gray-100 transition-all duration-300">
+                      <div className="bg-white max-md:absolute rounded-2xl shadow-2xl p-3 sticky top-4 border border-gray-100 transition-all duration-300">
                         <button
                           className="mb-4 ml-auto block text-gray-400 hover:text-red-500 transition-colors"
                           onClick={() => setSelectedProject(null)}
@@ -547,93 +519,202 @@ const ClientJobListing = () => {
                         >
                           <X className="w-6 h-6" />
                         </button>
-                        <h2 className="text-2xl font-extrabold text-[#5A399D] mb-2">
+                        <h2 className="text-xl font-[500] text-[#000000] mb-1">
                           {selectedProject.title}
                         </h2>
-                        <p className="mb-4 text-gray-700 text-base">
-                          {selectedProject.description}
-                        </p>
-                        <div className="mb-4 flex flex-wrap gap-4">
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold text-gray-600">
-                              Budget:
-                            </span>
-                            <span className="text-green-600 font-bold">
-                              {formatBudget(selectedProject.budget)}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-semibold text-gray-600">
-                              Deadline:
-                            </span>
-                            <span className="text-blue-600">
-                              {formatDate(selectedProject.deadline)}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="mb-4 flex items-center gap-2">
-                          <span className="font-semibold text-gray-600">
-                            Location:
-                          </span>
-                          <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">
-                            {selectedProject.location}
-                          </span>
-                        </div>
+
+                        {/* company name */}
                         <div className="mb-4">
-                          <span className="font-semibold text-gray-600">
-                            Tags:
+                          <span className=" text-[#6F757E] text-xs font-[400] ">
+                            {/* {selectedProject.Client.fullname}  */}
+                            {selectedProject.Client.clientProfile.companyName}
                           </span>
+                        </div>
+
+                        <div className=" flex items-center">
+                          {/* Budget */}
+                          <div className="flex items-center">
+                            <div className="flex flex-col gap-2 ">
+                              <span className="font-medium text-[0.8em] text-[#050F24]">
+                                Budget
+                              </span>
+                              <span className="text-gray-600 font-bold text-xs">
+                                {formatBudget(selectedProject.budget)}
+                              </span>
+                            </div>
+
+                            <p className="h-8 w-[2px] bg-[#CEC4E2] mx-3"></p>
+                          </div>
+
+                          {/* Deadline */}
+                          <div className="flex items-center">
+                            <div className="flex flex-col  gap-2 ">
+                              <span className="font-medium text-[0.8em] text-[#050F24]">
+                                Deadline
+                              </span>
+                              <span className="text-gray-600 text-xs">
+                                {selectedProject.deadline}
+                              </span>
+                            </div>
+
+                            <p className="h-8 w-[2px] bg-[#CEC4E2] mx-3"></p>
+                          </div>
+
+                          {/* Location */}
+                          <div className="flex items-center">
+                            <div className="flex flex-col  gap-2 ">
+                              <span className="font-medium text-[0.8em] text-[#000]">
+                                Location
+                              </span>
+                              <span className="text-gray-600 text-xs">
+                                {selectedProject.location}
+                              </span>
+                            </div>
+
+                            <p className="h-8 w-[2px] bg-[#CEC4E2] mx-3"></p>
+                          </div>
+
+                          {/* Bids */}
+                          <div className="flex items-center">
+                            <div className="flex flex-col  gap-2 ">
+                              <span className="font-medium text-[0.8em] text-[#050F24]">
+                                Bids
+                              </span>
+                              <span className=" text-gray-600 px-2 py-1 rounded-full text-xs">
+                                {/* {selectedProject.bidsCount || 0} */} 0
+                              </span>
+                            </div>
+
+                            <p className="h-8 w-[2px] bg-[#CEC4E2] mx-3"></p>
+                          </div>
+
+                          {/* Average Bid */}
+                          <div className="flex flex-col  gap-2">
+                            <span className="font-medium text-[0.8em] text-[#050F24]">
+                              Budget
+                            </span>
+                            <span className="text-gray-600 font-bold text-xs">
+                              {selectedProject.budget}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Bid Button 
+                        <div
+                          className="flex justify-between mt-3
+                         items-center py-4 border-y border-[#E1E1E1] "
+                        >
+                          <div className="w-3/5">
+                            {user?.user?.role === "freelancer" && (
+                              <button
+                                className=" w-fit px-4 py-3  bg-[#5A399D]  text-white rounded-lg font-semibold shadow-lg hover:from-[#4a2e8e] hover:to-purple-700 transition-all duration-300"
+                                onClick={() => setShowApplyModal(true)}
+                              >
+                                Submit Bid
+                              </button>
+                            )}
+                          </div>
+                          <div>
+                            {user?.user?.role === "freelancer" && (
+                              <button
+                                onClick={async () => {
+                                  await toggleFavorite(
+                                    selectedProject.id,
+                                    likedProjects[selectedProject.id]
+                                  );
+                                  setLikedProjects((prev) => ({
+                                    ...prev,
+                                    [selectedProject.id]:
+                                      !prev[selectedProject.id],
+                                  }));
+                                }}
+                                className={`p-2 rounded-full ${
+                                  likedProjects[selectedProject.id]
+                                    ? "text-red-500"
+                                    : "text-[#5A399D] hover:text-red-500"
+                                }`}
+                              >
+                                <Heart
+                                  className={`h-5 w-5 ${
+                                    likedProjects[selectedProject.id]
+                                      ? "fill-current"
+                                      : ""
+                                  }`}
+                                />
+                              </button>
+                            )}
+                          </div>
+                        </div> */}
+
+                        {/* Tags */}
+                        <div className="mb-4 mt-3">
+                          {/* <span className="font-semibold text-gray-600">
+                            Tags:
+                          </span> */}
                           <div className="flex flex-wrap gap-2 mt-1">
                             {selectedProject.tags.map((tag) => (
                               <span
                                 key={tag}
-                                className="px-2 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium"
+                                className="px-3 py-2 bg-[#CEC4E2] rounded-[0.5em] text-xs font-medium"
                               >
                                 {tag}
                               </span>
                             ))}
                           </div>
                         </div>
-                        <div className="mb-4">
-                          <span className="font-semibold text-gray-600">
-                            Responsibilities:
-                          </span>
-                          <div className="flex flex-wrap gap-2 mt-1">
-                            {selectedProject.responsibilities.map((resp) => (
-                              <span
-                                key={resp}
-                                className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium"
-                              >
-                                {resp}
-                              </span>
-                            ))}
-                          </div>
+
+                        {/* Job description */}
+                        <div className="flex flex-col  px-2">
+                          <h4 className="font-medium text-sm  text-[#050F24]">
+                            Full Job Description
+                          </h4>
+                          <p className="mb-4 text-[#6F757E] text-sm">
+                            {selectedProject.description}
+                          </p>
                         </div>
-                        <div className="mb-4">
-                          <span className="font-semibold text-gray-600">
-                            Client:
-                          </span>
-                          <span className="ml-2 text-gray-800 font-medium">
-                            {selectedProject.Client.fullname} (
-                            {selectedProject.Client.clientProfile.companyName})
-                          </span>
+
+                        <div className="mb-4 px-2">
+                          <h4 className="font-medium text-sm  text-[#050F24]">
+                            Responsibilities
+                          </h4>
+                          {selectedProject.responsibilities?.length > 0 ? (
+                            <ul
+                              className="grid gap-2 w-full
+                            "
+                            >
+                              {selectedProject.responsibilities.map(
+                                (resp, index) => (
+                                  <li
+                                    key={index}
+                                    className="  flex gap-2 items-start text-[#6F757E] rounded-full text-xs font-medium"
+                                  >
+                                    {/* <p className="w-fit"> */}
+                                    <span className="w-2 h-[6px] mt-1 rounded-full bg-gray-500"></span>
+                                    {/* </p> */}
+                                    <p className="text-[#6F757E]">{resp}</p>
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          ) : (
+                            <p className="text-sm text-gray-500">
+                              No responsibilities listed.
+                            </p>
+                          )}
                         </div>
-                        <button
-                          className="mt-6 w-full py-3 bg-gradient-to-r from-[#5A399D] to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:from-[#4a2e8e] hover:to-purple-700 transition-all duration-300"
-                          onClick={() => {
-                            // Store project data in sessionStorage for the edit page
-                            sessionStorage.setItem(
-                              "editProjectData",
-                              JSON.stringify(selectedProject)
-                            );
-                            // Navigate to edit page with project ID
-                            navigate(
-                              `/job-list-dashboard/edit-project?=${selectedProject.id}`
-                            );
-                          }}
-                        >
-                          Edit
-                        </button>
+
+                        <div className="mb-4 px-2">
+                          <h4 className="font-medium text-sm  text-[#050F24]">
+                            Requirements
+                          </h4>
+                          <p className="mb-4 text-[#6F757E] text-sm">
+                            {selectedProject.requirement}
+                          </p>
+                        </div>
+
+                        {/* <button className="mt-6 w-3/5 rounded-lg py-3 bg-purple-300 border border-purple-600 text-[#000]">
+                          Report
+                        </button> */}
                       </div>
                     ) : (
                       <div className="bg-white rounded-2xl shadow-2xl p-8 text-gray-400 text-center border border-gray-100">
@@ -642,21 +723,6 @@ const ClientJobListing = () => {
                     )}
                   </div>
                 </div>
-
-                {/* No Results */}
-                {!loading && !error && filteredProjects.length === 0 && (
-                  <div className="text-center py-12">
-                    <p className="text-gray-500 text-lg">
-                      No projects found matching your criteria.
-                    </p>
-                    <button
-                      onClick={clearFilters}
-                      className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                    >
-                      Clear Filters
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
           </div>

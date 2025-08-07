@@ -1,50 +1,33 @@
 // import { useNavigate } from "react-router-dom";
 
+import { X } from "lucide-react";
+
 interface ISuccessModal {
-  handlesuccessModal: boolean;
-  handleClose: () => void;
-  setBidModalClose: () => void;
+  setAcceptSuccess: () => void;
 }
 
-const AcceptanceSuccessModal = ({
-  handleClose,
-  setBidModalClose,
-  handlesuccessModal,
-}: ISuccessModal) => {
-  // const navigate = useNavigate();
-
-  const handleButton = () => {
-    // navigate("/jobs-listed");
-    handleClose();
-    setBidModalClose();
-  };
+const AcceptanceSuccessModal = ({ setAcceptSuccess }: ISuccessModal) => {
   return (
-    handlesuccessModal === true && (
-      <div className="bg-[#E1DEE8]/30 max-md:px-3 left-0 fixed top-0 py-10 z-50  h-screen w-screen ">
-        <div className="bg-white p-4 border border-[#E5E7EB] md:w-2/5 mx-auto  rounded-lg grid gap-6 text-center">
-          <img
-            src="/successfullIcon.png"
-            alt="successfull"
-            className="w-fit mx-auto"
-          />
-          <h3 className="text-[#111827] text-[28px] font-normal">
-            Bid Submitted Successfully
-          </h3>
-          <p className="text-sm text-[#4B5563] ">
-            Thank you for submitting your bid for the Website Redesign Project.
-            The client will review your proposal and get back to you soon.
-          </p>
-
-          <button
-            type="button"
-            onClick={handleButton}
-            className="bg-[#5A399D] w-3/5 mx-auto cursor-pointer rounded-lg text-white text-sm font-medium py-2"
-          >
-            View All Projects
-          </button>
-        </div>
+    // handlesuccessModal === true && (
+    <div className="bg-[#E1DEE8]/30 max-md:px-3 left-0 fixed top-20 py-10 z-50  h-screen w-screen ">
+      <div className="bg-white pb-10 relative p-4 border border-[#E5E7EB] md:w-2/5 mx-auto  rounded-lg grid gap-6 text-center">
+        <button type="button" onClick={setAcceptSuccess}>
+          <X className="w-6 h-6 cursor-pointer absolute right-5 text-[#5A399D]" />
+        </button>
+        <img
+          src="/successfullIcon.png"
+          alt="successfull"
+          className="w-fit mx-auto mt-5"
+        />
+        <h3 className="text-[#111827] text-[28px] font-normal">
+          Bid Accepted Successfully!
+        </h3>
+        <p className="text-sm text-[#4B5563] ">
+          The freelancer will be notified immediately
+        </p>
       </div>
-    )
+    </div>
+    // )
   );
 };
 

@@ -131,7 +131,7 @@ const DashboardLayout = () => {
                 Job Listing
               </button>
               {/* Notifications */}
-              <button className="p-2 rounded-lg hover:bg-gray-100 transition-colors relative">
+              <button className="p-2 max-md:hidden rounded-lg hover:bg-gray-100 transition-colors relative">
                 <Bell className="w-5 h-5 text-gray-600" />
                 <span className="absolute top-0 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
               </button>
@@ -139,7 +139,7 @@ const DashboardLayout = () => {
               {/* Dark mode toggle */}
               <button
                 onClick={() => setDarkMode(!darkMode)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors relative"
+                className="p-2 rounded-lg max-md:hidden hover:bg-gray-100 transition-colors relative"
               >
                 {darkMode ? (
                   <Sun className="w-5 h-5 text-gray-600" />
@@ -149,7 +149,7 @@ const DashboardLayout = () => {
               </button>
 
               {/* Profile */}
-              <button className="border-2 border-[#552EA4] rounded-full hover:bg-gray-100 w-[40px] h-[40px] flex items-center justify-center transition-colors">
+              <button className="border-2 max-md:hidden border-[#552EA4] rounded-full hover:bg-gray-100 w-[40px] h-[40px] flex items-center justify-center transition-colors">
                 <User className="w-6 h-6 text-[#552EA4]" />
               </button>
             </div>
@@ -272,7 +272,7 @@ const DashboardLayout = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 pr-10 mt-8">
+        <div className="flex-1 md:pr-10 mt-8">
           <div
             className={`w-10/12 transition-all duration-300 ease-in-out
             ${!isMobile ? "ml-0 md:ml-56" : ""}
