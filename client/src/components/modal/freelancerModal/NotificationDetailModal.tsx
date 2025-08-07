@@ -1,10 +1,33 @@
+// import { AxiosError } from "axios";
+import { INotification } from "../../dashboard/NotificationInterface";
+// import axios from "../../../services/axiosInstance";
+// import { useState } from "react";
+
 interface INotificationDetailModal {
   setOpenDropdownId: () => void;
+  notification: INotification;
 }
 
 const NotificationDetailModal = ({
+  notification,
   setOpenDropdownId,
 }: INotificationDetailModal) => {
+  // const [bid, setBid] = useState();
+
+  // const BidFetch = async () => {
+  //   try {
+  //     const res = await axios.get("/projec");
+  //     setBid(res.data);
+  //     console.log(res);
+  //   } catch (err) {
+  //     const error = err as AxiosError;
+  //     console.error(error);
+  //   }
+  // };
+  // BidFetch();
+
+  // const notificationDetails = BidFetch.filter((bid)=> (bid.))
+
   return (
     <div className="bg-[#E1DEE8]/80  max-md:px-3 left-0 fixed top-0 py-10 z-50 h-screen w-screen">
       <div className="w-[400px] mx-auto">
@@ -17,13 +40,21 @@ const NotificationDetailModal = ({
             <ul className="">
               <li className="flex mt-4 pb-2 border-b border-[#A8A9B3] justify-between items-center">
                 <span className="text-[#6F757E] text-xs font-medium">
-                  Project title
+                  Message title
                 </span>{" "}
                 <p className="text-[#09080D] text-sm font-medium">
-                  Website Redesign Project
+                  {notification.title}
                 </p>
               </li>
-              <li className="flex mt-4 pb-2 border-b border-[#A8A9B3] justify-between items-center">
+              <li className="flex flex-col mt-4 pb-2 border-b border-[#A8A9B3] ">
+                <span className="text-[#6F757E] text-xs font-medium">
+                  Message
+                </span>{" "}
+                <p className="text-[#09080D] text-sm font-medium">
+                  {notification.message}
+                </p>
+              </li>
+              {/* <li className="flex mt-4 pb-2 border-b border-[#A8A9B3] justify-between items-center">
                 <span className="text-[#6F757E] text-xs font-medium">
                   Your bid
                 </span>{" "}
@@ -42,7 +73,7 @@ const NotificationDetailModal = ({
                 <p className="text-[#09080D] text-sm font-medium">
                   Olivia Ventures
                 </p>
-              </li>
+              </li> */}
             </ul>
           </div>
 
