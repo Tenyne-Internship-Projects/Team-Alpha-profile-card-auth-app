@@ -16,14 +16,14 @@ interface ISubmitBidForm {
 }
 
 interface IsubmitForm {
-  bidModal: boolean;
+  bidModal: boolean; 
   selectedProjectId?: string;
   setBidModalClose: () => void;
   onClose?: () => void;
   selectedTitle?: string;
 }
 
-const MAX_PROPOSAL_LENGTH = 1000;
+const MAX_PROPOSAL_LENGTH = 150;
 
 const SubmissionForm = ({
   bidModal,
@@ -144,7 +144,7 @@ IsubmitForm) => {
                 {...register("price", { required: true, valueAsNumber: true })}
                 type="number"
                 id="price"
-                className="my-2 border border-[#CEC4E2] py-3 px-5"
+                className="my-2 border border-[#CEC4E2] py-3 px-5 placeholder:text-gray-500"
                 placeholder="$"
               />
               <p className="text-[#6F757E] text-xs ">Project budget: $3000</p>
@@ -169,7 +169,7 @@ IsubmitForm) => {
                 id="timeLine"
                 {...register("timeLine", { required: true })}
                 placeholder="e.g. 2 weeks"
-                className="my-2 border border-[#CEC4E2] py-3 px-5"
+                className="my-2 border border-[#CEC4E2] py-3 px-5 placeholder:text-gray-500"
               />
               {errors.timeLine && (
                 <p className="text-[#FF0000] text-xs">Timeline is compulsory</p>
@@ -191,7 +191,7 @@ IsubmitForm) => {
                   maxLength: MAX_PROPOSAL_LENGTH,
                 })}
                 id="proposal"
-                className="w-full outline-none rounded-2xl h-[170px] py-3 px-5 my-2 border border-[#CEC4E2] "
+                className="w-full outline-none rounded-2xl h-[170px] py-3 px-5 placeholder:text-gray-500 my-2 border border-[#CEC4E2] "
                 placeholder="Describe your approach and relevant experience..."
                 maxLength={MAX_PROPOSAL_LENGTH}
               />
@@ -222,12 +222,12 @@ IsubmitForm) => {
                 {...register("profile", { required: true })}
                 type="text"
                 id="profile"
-                className="my-2 border border-[#CEC4E2] py-3 px-5"
-                placeholder="Enter your profile card link"
+                className="my-2 border border-[#CEC4E2] py-3 px-5 placeholder:text-gray-500"
+                placeholder="Enter your profile card link using http://..."
               />
               {errors.profile && (
                 <p className="text-[#FF0000] text-xs">
-                  Profile link is compulsory
+                  {errors.profile.message}
                 </p>
               )}
             </div>
