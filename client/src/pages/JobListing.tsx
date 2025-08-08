@@ -8,8 +8,8 @@ import {
   ChevronDown,
   ChevronUp,
   X,
-  Bell,
-  Sun,
+  // Bell,
+  // Sun,
   Heart,
 } from "lucide-react";
 import axios from "../services/axiosInstance";
@@ -17,6 +17,8 @@ import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { useAuth } from "../hooks/useAuth";
 import SubmissionForm from "../components/forms/SubmissionForm";
+import { AuthContextType } from "../types/user";
+import GenerateAvatar from "../components/ui/GenerateAvatar";
 
 // Types based on your data structure
 interface ClientProfile {
@@ -88,10 +90,11 @@ const JobListing = () => {
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
+  const user = useAuth() as AuthContextType;
   // const [applicationText, setApplicationText] = useState("");
   // const [jobs, setJobs] = useState(false);
   const navigate = useNavigate();
-  const user = useAuth();
+  // const user = useAuth();
   const [likedProjects, setLikedProjects] = useState<{ [id: string]: boolean }>(
     {}
   );
@@ -429,18 +432,19 @@ const JobListing = () => {
                   Dashboard
                 </button>
                 {/* <button type="button">Dashboard</button> */}
-                <button className="p-2 text-gray-400 hover:text-gray-600">
+                {/* <button className="p-2 text-gray-400 hover:text-gray-600">
                   <Bell className="h-5 w-5" />
                 </button>
                 <button className="p-2 text-gray-400 hover:text-gray-600">
                   <Sun className="h-5 w-5" />
-                </button>
-                <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                  <img
+                </button> */}
+                <div>
+                  {/* <img
                     src="/api/placeholder/32/32"
                     alt="Profile"
                     className="w-8 h-8 rounded-full"
-                  />
+                  /> */}
+                  {GenerateAvatar(user.user?.fullname ?? "User")}
                 </div>
               </div>
             </div>
