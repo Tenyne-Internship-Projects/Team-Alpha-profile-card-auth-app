@@ -25,6 +25,7 @@ const AddProjects = () => {
   const [skills, setSkills] = useState<string[]>([]);
   const [responsibilities, setResponsibilities] = useState<string[]>([]);
   const { user } = useAuth() as AuthContextType;
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -96,6 +97,7 @@ const AddProjects = () => {
       location: data.location,
     };
     console.log(formattedData);
+    setLoading(true);
     try {
       const response = await axios.post(
         `/project/create/${user?.id}`,
@@ -109,6 +111,8 @@ const AddProjects = () => {
     } catch (error) {
       // toast.error(error as string);
       console.error("Error creating project:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -515,10 +519,11 @@ const AddProjects = () => {
           </button> */}
           <button
             type="button"
+            disabled={loading}
             onClick={handleSubmit(onSubmit)}
             className="px-8 py-3 bg-purple-600 text-white rounded-lg font-medium hover:bg-purple-700 transition-colors"
           >
-            Publish Project
+            {loading ? "Publishing" : "Project Publish"}
           </button>
         </div>
       </div>
