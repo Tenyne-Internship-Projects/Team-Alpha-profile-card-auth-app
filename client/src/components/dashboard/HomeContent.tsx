@@ -59,6 +59,7 @@ const HomeContent = () => {
     try {
       const res = await axios.get("/freelancer-dashboard/payment-status");
       // setApplicationStat(res.data);
+
       setPaymentTotal(res.data.payments);
       console.log(paymentTotal);
     } catch (err) {
@@ -71,7 +72,7 @@ const HomeContent = () => {
     try {
       const res = await axios.get("/freelancer-dashboard/earnings-graph");
       setMonthlyEarnings(res.data.monthlyEarnings || []);
-      console.log(res.data);
+      console.log("payment", res);
     } catch (err) {
       const error = err as AxiosError;
       console.error(error);
@@ -172,11 +173,13 @@ const HomeContent = () => {
     },
   ];
 
+  // console.log(user.user?.fullname);
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="mb-6">
         <h1 className="text-3xl  font-bold text-gray-900 mb-2">
-          Welcome back, <p>{user?.user?.name}</p>
+          Welcome back, <p>{user?.user?.fullname}</p>
         </h1>
         {/* <p className="text-gray-600">
           Profile Visibility: <span>+12%</span> this week
