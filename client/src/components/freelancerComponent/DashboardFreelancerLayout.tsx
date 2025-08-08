@@ -20,6 +20,7 @@ const DashboardFreelancerLayout = () => {
   const [isMobile, setIsMobile] = useState(false);
   const { logout } = useAuth() as AuthContextType;
   const navigate = useNavigate();
+  const user = useAuth() as AuthContextType;
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -124,7 +125,7 @@ const DashboardFreelancerLayout = () => {
             >
               Job Listing
             </button>
-            <Bell className="text-black font-black w-7 h-10" />
+            {/* <Bell className="text-black font-black w-7 h-10" /> */}
             <div className="flex items-center gap-4">
               <div className="rounded-full  bg-white p-2">
                 <img
@@ -134,7 +135,7 @@ const DashboardFreelancerLayout = () => {
                 />
               </div>
               <div className="flex items-center gap-4">
-                <p className=" text-sm">Profile Name</p>{" "}
+                <p className=" text-sm">{user.user?.fullname}</p>{" "}
                 <ChevronDown className="w-[20px] h-[16px]" />{" "}
               </div>
             </div>

@@ -29,6 +29,7 @@ export interface InvoiceRecord {
     description: string;
     budget: number;
     tags: string[];
+    progressStatus: string;
   };
 }
 
@@ -40,13 +41,22 @@ const Employees: React.FC = () => {
   const [selectedApplicant, setSelectedApplicant] =
     useState<InvoiceRecord | null>(null);
 
+  // Option 1: Fetch with query parameters (Recommended)
   const fetchApplicants = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get("/bid");
+      // Add query parameter to filter on backend
+      const response = await axios.get("/bid", {
+        params: {
+          projectStatus: "pending", // or progressStatus: "pending"
+          // You can also add other filters here
+          // status: "pending", // for application status if needed
+        },
+      });
+
       setApplicants(response.data.data);
-      console.log(response.data.data);
+      console.log("Filtered applicants:", response.data.data);
     } catch (err) {
       const error = err as AxiosError;
       console.error(error);
@@ -57,16 +67,70 @@ const Employees: React.FC = () => {
     }
   }, []);
 
+  // Option 2: Alternative endpoint approach
+  // const fetchPendingApplicants = useCallback(async () => {
+  //   setLoading(true);
+  //   setError(null);
+  //   try {
+  //     // Use a dedicated endpoint for pending applications
+  //     const response = await axios.get("/bid/pending");
+  //     setApplicants(response.data.data);
+  //     console.log("Pending applicants:", response.data.data);
+  //   } catch (err) {
+  //     const error = err as AxiosError;
+  //     console.error(error);
+  //     setError(error.message || "Failed to fetch pending applicants.");
+  //     setApplicants([]);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, []);
+
+  // Option 3: Multiple filter parameters
+  // const fetchFilteredApplicants = useCallback(async () => {
+  //   setLoading(true);
+  //   setError(null);
+  //   try {
+  //     const response = await axios.get("/bid", {
+  //       params: {
+  //         projectStatus: "pending",
+  //         applicationStatus: "pending", // if you also want to filter by application status
+  //         limit: 50, // optional: limit results
+  //         page: 1, // optional: for pagination
+  //       }
+  //     });
+
+  //     setApplicants(response.data.data);
+  //     console.log("Filtered applicants:", response.data.data);
+  //   } catch (err) {
+  //     const error = err as AxiosError;
+  //     console.error(error);
+  //     setError(error.message || "Failed to fetch applicants.");
+  //     setApplicants([]);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, []);
+
   useEffect(() => {
     fetchApplicants();
+    // fetchPendingApplicants(); // Alternative
+    // fetchFilteredApplicants(); // Alternative with multiple filters
   }, [fetchApplicants]);
 
   const handleDecline = async (applicantId: string, status: string) => {
     try {
-      await axios.put(`/bid/${applicantId}`, { status });
+      // Update the API endpoint to match your backend
+      await axios.put(`/applications/${applicantId}`, { status }); // Changed from /bid/ to /applications/
+
+      // Remove from local state
       setApplicants((prev) => prev.filter((app) => app.id !== applicantId));
+
+      console.log(`Application ${applicantId} declined with status: ${status}`);
     } catch (err) {
       console.error("Failed to decline application:", err);
+      // Optionally show user-friendly error message
+      setError("Failed to decline application. Please try again.");
     }
   };
 
@@ -75,7 +139,21 @@ const Employees: React.FC = () => {
     setAcceptModal(true);
   };
 
-  // Group applicants by project
+  // Callback to refresh data after bid acceptance
+  const handleBidAccepted = useCallback((acceptedApplicantId: string) => {
+    // Remove accepted applicant and refresh data
+    setApplicants((prev) =>
+      prev.filter((app) => app.id !== acceptedApplicantId)
+    );
+
+    // Optionally refetch all data to ensure consistency
+    // fetchApplicants();
+  }, []);
+
+  // Since we're filtering on backend, we don't need frontend filtering
+  // const actualApplicant = applicants; // All applicants are already pending
+
+  // Group applicants by project (all should already be pending from backend)
   const applicantsByProject = applicants.reduce((acc, applicant) => {
     const projectId = applicant.project.id;
     if (!acc[projectId]) {
@@ -88,46 +166,135 @@ const Employees: React.FC = () => {
     return acc;
   }, {} as Record<string, { project: InvoiceRecord["project"]; applicants: InvoiceRecord[] }>);
 
+  // Loading state
   if (loading) {
     return (
-      <div className="p-6 text-center text-gray-500">Loading applicants...</div>
+      <div className="rounded-lg shadow-sm border border-gray-200">
+        <div className="p-8 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5A399D] mx-auto mb-4"></div>
+          <p className="text-gray-500">Loading pending applications...</p>
+        </div>
+      </div>
     );
   }
 
+  // Error state
   if (error) {
-    return <div className="p-6 text-center text-red-500">{error}</div>;
+    return (
+      <div className="rounded-lg shadow-sm border border-gray-200">
+        <div className="p-8 text-center">
+          <div className="text-red-500 mb-4">
+            <svg
+              className="w-16 h-16 mx-auto mb-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <p className="text-lg font-semibold">Error Loading Applications</p>
+          </div>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <button
+            onClick={fetchApplicants}
+            className="bg-[#5A399D] text-white px-4 py-2 rounded-md hover:bg-[#5A399D]/90 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
   }
 
+  // Empty state
   if (!loading && !error && applicants.length === 0) {
     return (
-      <div className="p-6 text-center text-gray-500">No applicants found.</div>
+      <div className="rounded-lg shadow-sm border border-gray-200">
+        <div className="p-8 text-center">
+          <div className="text-gray-400 mb-4">
+            <svg
+              className="w-16 h-16 mx-auto mb-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <p className="text-lg font-semibold text-gray-600">
+              No Pending Applications
+            </p>
+          </div>
+          <p className="text-gray-500 mb-4">
+            There are no pending applications for your projects at the moment.
+          </p>
+          <button
+            onClick={fetchApplicants}
+            className="bg-[#5A399D] text-white px-4 py-2 rounded-md hover:bg-[#5A399D]/90 transition-colors"
+          >
+            Refresh
+          </button>
+        </div>
+      </div>
     );
   }
 
   return (
-    <div className="rounded-lg relative shadow-sm border border-gray-200">
-      <div className="space-y-8">
+    <div className="rounded-lg  md:w-[950px] relative shadow-sm border border-gray-200">
+      {/* Header with summary */}
+      <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+        <h1 className="text-xl font-semibold text-gray-900">
+          Pending Applications
+        </h1>
+        <p className="text-sm text-gray-600 mt-1">
+          {applicants.length} pending application
+          {applicants.length !== 1 ? "s" : ""} across{" "}
+          {Object.keys(applicantsByProject).length} project
+          {Object.keys(applicantsByProject).length !== 1 ? "s" : ""}
+        </p>
+      </div>
+
+      <div className="space-y-8 ">
         {Object.values(applicantsByProject).map(
           ({ project, applicants: projectApplicants }) => (
             <div key={project.id} className="bg-white">
               {/* Project Header */}
               <div className="px-6 pt-4 pb-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900">
-                  {project.title}
-                </h2>
-                <div className="flex items-center mt-2">
-                  <p className="text-[#6F757E] text-xs">
-                    <span className="text-sm font-medium text-[#09080D]">
-                      {projectApplicants.length}
-                    </span>{" "}
-                    New bids received
-                  </p>
-                  <div className="w-[2.5px] h-5 bg-[#6F757E] mx-4"></div>
-                  <div className="flex gap-4 items-center">
-                    <h4 className="text-[#6F757E] text-xs">Budget:</h4>
-                    <p className="text-sm font-medium text-[#09080D]">
-                      ${project.budget.toLocaleString()}
-                    </p>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h2 className="text-lg font-semibold text-gray-900">
+                      {project.title}
+                    </h2>
+                    <div className="flex items-center mt-2">
+                      <p className="text-[#6F757E] text-xs">
+                        <span className="text-sm font-medium text-[#09080D]">
+                          {projectApplicants.length}
+                        </span>{" "}
+                        New bid{projectApplicants.length !== 1 ? "s" : ""}{" "}
+                        received
+                      </p>
+                      <div className="w-[2.5px] h-5 bg-[#6F757E] mx-4"></div>
+                      <div className="flex gap-4 items-center">
+                        <h4 className="text-[#6F757E] text-xs">Budget:</h4>
+                        <p className="text-sm font-medium text-[#09080D]">
+                          ${project.budget.toLocaleString()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                      {project.progressStatus}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -144,10 +311,10 @@ const Employees: React.FC = () => {
                         Proposal
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-[#050F24] uppercase tracking-wider">
-                        Bid
+                        Bid Amount
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-[#050F24] uppercase tracking-wider">
-                        Projects Completed
+                        Timeline
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-[#050F24] uppercase tracking-wider">
                         Actions
@@ -194,7 +361,7 @@ const Employees: React.FC = () => {
 
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">
-                            12 {/* This should come from the data */}
+                            {bidder.timeLine || "Not specified"}
                           </div>
                         </td>
 
@@ -210,7 +377,7 @@ const Employees: React.FC = () => {
                               onClick={() =>
                                 handleDecline(bidder.id, "rejected")
                               }
-                              className="border border-[#FF0000] cursor-pointer bg-[#CEC4E2] px-4 py-2 rounded-md text-[#FF0000] text-sm font-medium hover:bg-[#CEC4E2]/80 transition-colors"
+                              className="border border-[#FF0000] cursor-pointer bg-white px-4 py-2 rounded-md text-[#FF0000] text-sm font-medium hover:bg-red-50 transition-colors"
                             >
                               Decline
                             </button>
@@ -235,6 +402,7 @@ const Employees: React.FC = () => {
             setSelectedApplicant(null);
           }}
           applicants={[selectedApplicant]}
+          onBidAccepted={handleBidAccepted}
         />
       )}
     </div>
