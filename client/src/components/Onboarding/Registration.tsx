@@ -37,7 +37,7 @@ export default function Registration() {
   };
 
   const onSubmit = async (data: RegisterForm) => {
-    console.log(data);
+    // console.log(data);
     try {
       const res = await axios.post("/auth/register", data);
       // console.log(data);
